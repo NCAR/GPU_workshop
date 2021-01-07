@@ -1,23 +1,32 @@
+# Compilers and linkers
 CC=pgc++
 CUDACC=nvcc
+
+# Compilation flags
+CFLAGS= -g -O3 -std=c++11 -Wall
+CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
+
+# Linking Flags
 LDFLAGS=
-CFLAGS= -g -O3 -std=c++11 
-CUDALIB=/glade/u/apps/dav/opt/cuda/11.0.3
-CUDAFLAGS= -g -std=c++11 -O3 
+CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
-all: fma.exe
+# Description of necessary files and binaries
+# List of object files separated by spaces (e.g. main.o device.o)
+OBJECTS= main.o functions.o FMA.o 
+# The binary to be built by this Makefile
+BINARY= fma.exe
 
-fma.exe: main.o FMA.o functions.o 
-	$(CC) $(CFLAGS) $(LDFLAGS) -lcudart -lcublas -lrt -ldl -I${CUDALIB}/include/ -L${CUDALIB}/lib64/  -o fma.exe FMA.o main.o functions.o
 
-%.o: %.cpp
+all: $(BINARY) 
+
+$(BINARY): $(OBJECTS)
+	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) 
+
+%.o: %.cpp Makefile
 	$(CC) -c $(CFLAGS) $<
 
-%.o: %.cu
-	$(CUDACC) -c $(CUDAFLAGS) -I${CUDALIB}/lib64/ -L${CUDALIB}/include/ $<
+%.o: %.cu Makefile
+	$(CUDACC) -c $(CUDACFLAGS) $<
 
 clean:
 	rm *.o fma.exe
-
-run:
-	./fma.exe
