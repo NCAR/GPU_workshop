@@ -2,6 +2,9 @@
  * To contain functions that are common across all lessons
  */
 
+#define RANGE_MAX = 1.0 
+#define RANGE_MIN = -1.0
+
 /* Sets all values in array equal to val */
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val){
 	// p serves as another pointer to the start rows within array
