@@ -35,8 +35,8 @@ __host__ void gpuMult(float *h_A, float *h_B, float *h_C, const int ny, const in
 	cudaMemcpy(d_B, h_B, MSizeBytes, cudaMemcpyHostToDevice);
 
 	//Kernel Invoke Paramters (2D grid and blocks) 
-	int dimx = 16; 
-	int dimy = 16; 
+	int dimx = 32; 
+	int dimy = 32; 
 
 	dim3 block(dimx, dimy); //Block of 256 threads 
 	dim3 grid((nx+block.x-1)/block.x, (ny+block.y-1)/block.y); //grid dimensions 
@@ -52,7 +52,7 @@ __host__ void gpuMult(float *h_A, float *h_B, float *h_C, const int ny, const in
 	//Memory Release 
 	cudaFree(d_A); 
 	cudaFree(d_B); 
-	cudaFree(d_B);
+	cudaFree(d_C);
 	cudaDeviceReset(); 	
 
 }

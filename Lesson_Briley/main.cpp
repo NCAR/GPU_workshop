@@ -8,8 +8,9 @@ int main()
 	//input parameters 
 	int rows = 1<<10; //1024 elements
 	int cols = 1<<10;
-	const float A_val = 3.2f; //Arbitrary value to fill the A matrix 
-	const float B_val = 2.4f;  
+	const float A_val = 3.0f; //Arbitrary value to fill the A matrix 
+	const float B_val = 2.0f;  
+	const float Tol=1.0E-04; //Accuracy tolerance btwn CPU and GPU results
 
 	float *A, *B, *C, *D; 
 	float *gpuD;
@@ -21,7 +22,7 @@ int main()
 
 	t0=clock(); //start initialization time
 
-	//Memory Allocation on Host (static) 
+	//Memory Allocation on Host 
 	A = new float[rows*cols]; 
 	B = new float[rows*cols];
 	C = new float[rows*cols];
@@ -29,11 +30,12 @@ int main()
 	gpuD = new float[rows*cols]; //Space to hold GPU result on CPU while maintaining CPU D for value verification. 	
 
 	//InitializeMatrix
-	InitializeM(A, rows, cols, A_val); 
-	InitializeM(B, rows, cols, B_val);
-
+	InitializeMatrixSame(A, rows, cols, A_val); 
+	InitializeMatrixSame(B, rows, cols, B_val);
+		
+	InitializeMatrixSame(gpuD, rows, cols, B_val);
 	//Multiplication on CPU
-	cpuMMult(A, B, C, rows, cols);
+	cpuMMult(A, B, D, rows, cols);
 
 	t1 = clock(); 
         t_cpu = ((double)(t1-t0))/CLOCKS_PER_SEC;
@@ -41,11 +43,15 @@ int main()
 
 	t2 = clock(); 
 	//Multiplication on GPU 
-	
+	gpuMult(A,B,gpuD,rows,cols);	
 
 	t3 = clock();
 	t_gpu = ((double)(t3-t2))/CLOCKS_PER_SEC;
         printf("Data Transfer and execution on GPU executed in %f seconds. \n", t_gpu);
+	
+	//Result Verification
+	MatrixVerification(D,gpuD,rows,cols,Tol);	
+
 
 	//Cleaning up Memory Usage 
 	delete[] A; 
