@@ -2,8 +2,13 @@
  * To contain functions that are common across all lessons
  */
 
-#define RANGE_MAX = 1.0 
-#define RANGE_MIN = -1.0
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+
+#define RANGE_MAX 1.0 
+#define RANGE_MIN -1.0
 
 /* Sets all values in array equal to val */
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val){
@@ -22,13 +27,13 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 /* Sets all elements of array to a number between [-1,1] */
 void InitializeMatrixRand(float *array, const int ny, const int nx){
 	// p serves as another pointer to the start rows within array
-	float *p = temp;
+	float *p = array;
 
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			p[j] = ((float)rand() / (RAND_MAX + 1)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN);
+			p[j] = ((float)rand() / (RAND_MAX)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN);
 		}
 		// Advance p to the next row
 		p += nx;
@@ -49,9 +54,9 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 		{
 			if (fabs(p[j] - q[j]) > fTolerance)
 			{
-				cout << "Error: " << fabs(p[j] - q[j]) " > " << fTolerance  << endl;
-				cout << "\thostC[" << (i) << "][" << (j + 1) << "] = " << p[j] << endl;
-				cout << "\tgpuC[" << (i) << "][" << (j + 1) << "] = " << q[j] << endl;
+				printf("error: %f > %f", fabs(p[j]-q[j]),fTolerance);
+				printf("\t host_C[%d][%d]= %f", i,j, p[j]);
+				printf("\t GPU_C[%d][%d]= %f", i,j, q[j]);
 				return;
 			}
 		}
