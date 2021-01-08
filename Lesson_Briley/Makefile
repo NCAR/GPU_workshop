@@ -12,7 +12,7 @@ CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-OBJECTS= main.o functions.o FMA.o 
+OBJECTS= main.o functions.o common.o FMA.o 
 # The binary to be built by this Makefile
 BINARY= fma.exe
 
