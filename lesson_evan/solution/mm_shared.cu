@@ -16,6 +16,7 @@
 //const int default_dim = 8192;
 const int default_dim = 1024;
 const int block_size = 32; // The CUDA max is 1024 threads per block
+const int SHARED_SIZE = 1 << 10;
 const float A_val = 3.0f;
 const float B_val = 2.0f;
 const float tol = 1e-8;
@@ -31,20 +32,20 @@ void verifyResult(const float *res, const float *ref, int size) {
 }
 
 __global__ void mmul(const float *A, const float *B, float *C, int n, int m, int q) {
-  __shared__ float As[block_size][block_size];
-  __shared__ float Bs[block_size][block_size];
+  __shared__ float As[SHARED_SIZE];
+  __shared__ float Bs[SHARED_SIZE];
 
   int idx = threadIdx.x + blockDim.x * blockIdx.x;
   int idy = threadIdx.y + blockDim.y * blockIdx.y;
 
   float temp = 0;
-  for (int i = 0; i < q; i++) {
-    As[threadIdx.y][threadIdx.x] = A[idy * q + i + threadIdx.x];
-    Bs[threadIdx.y][threadIdx.x] = B[i * n + threadIdx.y * n + idx];
+  for (int i = 0; i < q; i += blockDim.x) {
+    As[threadIdx.y * blockDim.x + threadIdx.x] = A[idy * q + i + threadIdx.x];
+    Bs[threadIdx.y * blockDim.x + threadIdx.x] = B[i * n + threadIdx.y * n + idx];
     __syncthreads();
 
     for (int k = 0; k < blockDim.x; k++) {
-      temp += As[threadIdx.y][k] * Bs[k][threadIdx.x];
+      temp += As[threadIdx.y * blockDim.x + k] * Bs[k * blockDim.x + threadIdx.x];
     }
     __syncthreads();
   }
