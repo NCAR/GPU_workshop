@@ -12,9 +12,9 @@ CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-OBJECTS= FILL_THIS_OUT 
+OBJECTS= stencil.o host.o common.o 
 # The binary to be built by this Makefile
-BINARY= FILL_THIS_OUT
+BINARY= stencil.exe
 
 
 all: $(BINARY) 
@@ -25,8 +25,8 @@ $(BINARY): $(OBJECTS)
 %.o: %.cpp Makefile
 	$(CC) -c $(CFLAGS) $<
 
-%.o: %.cu Makefile
-	$(CUDACC) -c $(CUDACFLAGS) $<
+#%.o: %.cu Makefile
+#	$(CUDACC) -c $(CUDACFLAGS) $<
 
 clean:
-	rm *.o fma.exe
+	rm *.o $(BINARY)
