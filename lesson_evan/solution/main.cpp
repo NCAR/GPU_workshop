@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
   InitializeMatrixSame(h_B, p, q, MATMUL_B_VAL);
 
   // Calculate AxB=C on the host
-  cpuMatmul(h_A, h_B, h_C, m, p, q);
+  cpuMatmul(h_A, h_B, h_check, m, p, q);
 
   // Printout for debugging
   //PrintMatrix(h_check, m, q);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
   printf("Init took %f seconds. Begin compute.\n", t1sum);
   
-// Calcuate AxB=C on the device
+  // Calcuate AxB=C on the device
   gpuMatmul(h_A, h_B, h_C, m, p, q);
   
   t2 = clock();
