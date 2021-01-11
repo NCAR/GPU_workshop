@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <cuda.h> 
 
-__global__ void NaiveMult(float *d_A, float *d_B, float *d_C, const int ny, const int nx)
+
+__global__ void NaiveFMA(float *d_A, float *d_B, float *d_C,float *d_D, const int ny, const int nx)
 {
         int row = threadIdx.y+(blockIdx.y*blockDim.y);
         int col = threadIdx.x +(blockIdx.x*blockDim.x);
@@ -15,24 +16,25 @@ __global__ void NaiveMult(float *d_A, float *d_B, float *d_C, const int ny, cons
                 {
                         fSum += d_A[row*nx+k]*d_B[k*nx +col];
                 }
-                d_C[row*nx+col] = fSum;
+                d_D[row*nx+col] = fSum + d_C[row*nx+col];
         }
-
 }
  
-__host__ void gpuMult(float *h_A, float *h_B, float *h_C, const int ny, const int nx)
+__host__ void gpuFMA(float *h_A, float *h_B, float *h_C, float *h_D, const int ny, const int nx)
 { 
-	float *d_A, *d_B, *d_C; 
+	float *d_A, *d_B, *d_C, *d_D; ; 
 	const int MSizeBytes = ny*nx*sizeof(float); 
 
 	//Allocate memory on device 
 	cudaMalloc((void**)&d_A, MSizeBytes);		
 	cudaMalloc((void**)&d_B, MSizeBytes); 
 	cudaMalloc((void**)&d_C, MSizeBytes); 
+	cudaMalloc((void**)&d_D, MSizeBytes);
 
 	//Copy input data to device 
 	cudaMemcpy(d_A, h_A, MSizeBytes, cudaMemcpyHostToDevice); 
 	cudaMemcpy(d_B, h_B, MSizeBytes, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_C, h_C, MSizeBytes, cudaMemcpyHostToDevice);
 
 	//Kernel Invoke Paramters (2D grid and blocks) 
 	int dimx = 32; 
@@ -42,17 +44,19 @@ __host__ void gpuMult(float *h_A, float *h_B, float *h_C, const int ny, const in
 	dim3 grid((nx+block.x-1)/block.x, (ny+block.y-1)/block.y); //grid dimensions 
 
 	//Multiplication 
-	NaiveMult<< <grid, block>> >(d_A,d_B,d_C,ny,nx);	
+	NaiveFMA<< <grid, block>> >(d_A,d_B,d_C,d_D,ny,nx);	
 	
 	cudaDeviceSynchronize(); 
 	
 	//Copy Results back 
-	cudaMemcpy(h_C, d_C, MSizeBytes, cudaMemcpyDeviceToHost);
+	cudaMemcpy(h_D, d_D, MSizeBytes, cudaMemcpyDeviceToHost);
  
+
 	//Memory Release 
 	cudaFree(d_A); 
 	cudaFree(d_B); 
 	cudaFree(d_C);
+	cudaFree(d_D);
 	cudaDeviceReset(); 	
 
 }

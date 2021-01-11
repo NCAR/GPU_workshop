@@ -48,7 +48,7 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 	float *p = hostC;
 	float *q = gpuC;
 
-        printf("Verifying answers \n");
+	printf("Verifying Answers \n");
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)

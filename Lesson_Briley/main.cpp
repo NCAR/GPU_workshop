@@ -33,25 +33,24 @@ int main()
 	InitializeMatrixSame(A, rows, cols, A_val); 
 	InitializeMatrixSame(B, rows, cols, B_val);
 		
-	InitializeMatrixSame(gpuD, rows, cols, B_val);
 	//Multiplication on CPU
-	cpuMMult(A, B, D, rows, cols);
+	CPU_FMA(A, B,C, D, rows, cols);
 
 	t1 = clock(); 
         t_cpu = ((double)(t1-t0))/CLOCKS_PER_SEC;
         printf("Initialization and execution on CPU executed in %f seconds. \n", t_cpu);	
-
 	t2 = clock(); 
 	//Multiplication on GPU 
-	gpuMult(A,B,gpuD,rows,cols);	
+	gpuFMA(A,B,C,gpuD,rows,cols);	
 
 	t3 = clock();
 	t_gpu = ((double)(t3-t2))/CLOCKS_PER_SEC;
         printf("Data Transfer and execution on GPU executed in %f seconds. \n", t_gpu);
+
+	fflush(stdout); 	
 	
 	//Result Verification
 	MatrixVerification(D,gpuD,rows,cols,Tol);	
-
 
 	//Cleaning up Memory Usage 
 	delete[] A; 
@@ -62,4 +61,3 @@ int main()
 	
 	return 0; 
 }
- 
