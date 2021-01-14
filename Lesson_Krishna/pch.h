@@ -2,8 +2,8 @@
  * PreCompiled Header for this lesson
  * Contains the constants, headers, and function prototypes used in other files
  */
-//#include <stdio.h>
-//#include <time.h> 
+#include <stdio.h>
+#include <time.h> 
 
 #ifndef PCH_H_MATRIX_ADD
 #define PCH_H_MATRIX_ADD

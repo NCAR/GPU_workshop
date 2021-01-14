@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
   cpu_matrix_add(h_A, h_B, h_check, dx, dy);
 
   // Printout for debugging
-  // PrintMatrix(h_check, m, q);
+  // PrintMatrix(h_check, dx, dy);
 
   t1 = clock();
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
