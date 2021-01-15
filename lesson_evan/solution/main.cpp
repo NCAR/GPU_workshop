@@ -7,9 +7,11 @@
 
 int main(int argc, char* argv[]) {
   float *h_A, *h_B, *h_C, *h_check;
-  clock_t t0, t1, t2;
+  clock_t t0, t1, t2, t3, t4, t5, t6, t7;
   double t1sum = 0.0;
-  double t2sum = 0.0;
+  double t3sum = 0.0;
+  double t5sum = 0.0;
+  double t7sum = 0.0;
   int m, n, p, q;
 
   if (argc > 1 && argc < 6) {
@@ -40,30 +42,47 @@ int main(int argc, char* argv[]) {
   h_C = (float*)malloc(m*q*sizeof(float));
   h_check = (float*)malloc(m*q*sizeof(float));
   
-  // Init matrices
+  // Initialize matrices
   InitializeMatrixSame(h_A, m, n, MATMUL_A_VAL);
   InitializeMatrixSame(h_B, p, q, MATMUL_B_VAL);
-
-  // Calculate AxB=C on the host
-  cpuMatmul(h_A, h_B, h_check, m, p, q);
-
-  // Printout for debugging
-  //PrintMatrix(h_check, m, q);
 
   t1 = clock();
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
   printf("Init took %f seconds. Begin compute.\n", t1sum);
   
-  // Calcuate AxB=C on the device
-  gpuMatmul(h_A, h_B, h_C, m, p, q);
+  t2 = clock(); 
+  // Calculate AxB=C on the host
+  cpuMatmul(h_A, h_B, h_check, m, p, q);
+  t3 = clock();
+  t3sum = ((double)(t3-t2))/CLOCKS_PER_SEC;
+  printf("CPU done. Compute took %f seconds\n", t3sum);
   
-  t2 = clock();
-  t2sum = ((double)(t2-t1))/CLOCKS_PER_SEC;
-  printf("Done. Compute took %f seconds\n", t2sum);
+  // CUDA
+  
+  t4 = clock();
+  // Calcuate AxB=C on the device with CUDA
+  gpuMatmul(h_A, h_B, h_C, m, p, q);
 
+  t5 = clock();
+  t5sum = ((double)(t5-t4))/CLOCKS_PER_SEC;
+  printf("CUDA done. Compute took %f seconds\n", t5sum);
   // Check for correctness
   MatrixVerification(h_check, h_C, m, q, MATMUL_TOL);
-  
+
+  // OpenACC
+
+  // Reinitialize h_C matrix to erase previous result
+  InitializeMatrixSame(h_C, m, q, 0.0);
+  t6 = clock();
+  // Calculate AxB=C on the device with OpenACC
+  accMatmul(h_A, h_B, h_C, m, p, q);
+
+  t7 = clock();
+  t7sum = ((double)(t7-t6))/CLOCKS_PER_SEC;
+  printf("OpenACC done. Compute took %f seconds\n", t7sum);
+  // Check for correctness
+  MatrixVerification(h_check, h_C, m, q, MATMUL_TOL);
+
   // Cleanup
   free(h_A);
   free(h_B);

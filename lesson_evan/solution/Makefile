@@ -10,6 +10,12 @@ CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
 LDFLAGS=
 CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
+ifeq ($(_OPENACC),true)
+ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all
+else 
+ACCFLAGS= 
+endif
+
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
 #OBJECTS= main.o functions.o common.o FMA.o 
@@ -22,10 +28,10 @@ BINARY= matmul.exe
 all: $(BINARY) 
 
 $(BINARY): $(OBJECTS)
-	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) 
+	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) $(ACCFLAGS)
 
 %.o: %.cpp Makefile
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 %.o: %.cu Makefile
 	$(CUDACC) -c $(CUDACFLAGS) $<

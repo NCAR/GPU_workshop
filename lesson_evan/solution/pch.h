@@ -36,7 +36,10 @@ void InitializeMatrixRand(float *array, const int ny, const int nx);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 
-// Device routine
+// Device routine (CUDA wrapper)
 extern void gpuMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
+
+// OpenACC routine
+void accMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
 
 #endif // PCH_H_MATMUL
