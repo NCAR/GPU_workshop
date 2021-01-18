@@ -31,4 +31,6 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 
 void PrintMatrix(float *matrix, int ny, int nx);
 
-void copyMatrix(float *src, float *dest, const int ny, const int nx); 
+void copyMatrix(float *src, float *dest, const int ny, const int nx);
+
+void OpenAccMult(const float *A, const float *B, float *C, const int m, const int p, const int q); 
