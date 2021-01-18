@@ -1,5 +1,5 @@
 # Compilers and linkers
-CC=pgc++
+CC=nvc++
 CUDACC=nvcc
 
 # Compilation flags
@@ -12,23 +12,22 @@ CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-#OBJECTS= main.o functions.o common.o FMA.o 
-OBJECTS= main.o functions.o common.o matrix_add.o 
+OBJECTS= main.o common.o functions.o matrix_add.o 
 # The binary to be built by this Makefile
-#BINARY= fma.exe
 BINARY= matrix_add.exe
 
 
 all: $(BINARY) 
 
 $(BINARY): $(OBJECTS)
-	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) 
+	$(CC) -o $(BINARY) $(OBJECTS) $(ACCFLAGS) $(LDFLAGS) $(CUDALDFLAGS) 
 
 %.o: %.cpp Makefile
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 %.o: %.cu Makefile
 	$(CUDACC) -c $(CUDACFLAGS) $<
 
 clean:
 	rm *.o $(BINARY)
+

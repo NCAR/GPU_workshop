@@ -40,4 +40,8 @@ void PrintMatrix(float *matrix, int ny, int nx);
 extern void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
    const int dx, const int dy);
 
+// OpenACC function
+void openacc_matrix_add(const float *A, const float *B, float *C, const int dx, \
+const int dy); 
+
 #endif // PCH_H_MATRIX_ADD

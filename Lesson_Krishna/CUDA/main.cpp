@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
   cpu_matrix_add(h_A, h_B, h_check, dx, dy);
 
   // Printout for debugging
-  // PrintMatrix(h_check, dx, dy);
+  // PrintMatrix(h_check, 6, 6);
 
   t1 = clock();
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
@@ -45,6 +45,9 @@ int main(int argc, char* argv[]) {
   
   // Calcuate A+B=C on the device
   gpu_matrix_add(h_A, h_B, h_C, dx, dy);
+
+  //Printout for debugging
+  // PrintMatrix(h_C, 6, 6);
   
   t2 = clock();
   t2sum = ((double)(t2-t1))/CLOCKS_PER_SEC;
