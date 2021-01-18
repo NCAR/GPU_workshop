@@ -24,6 +24,7 @@ void accMatmul(const float *A, const float *B, float *C, const int m, const int 
       temp = 0.0;
 #pragma acc loop reduction(+:temp)
       for (int k = 0; k < p; k++) {
+#pragma acc cache(A[(i*p):p],B[(k*q):q])
         temp += A[i*p+k] * B[k*q+j];
       }
       C[i*q+j] = temp;
