@@ -127,5 +127,4 @@ __host__ void gpuMatmul(const float *h_A, const float *h_B, float *h_C, const in
   cudaFree(d_B);
   cudaFree(d_C);
   cudaCheckErrors("cudaFree failure");
-  cudaDeviceReset();
 }
