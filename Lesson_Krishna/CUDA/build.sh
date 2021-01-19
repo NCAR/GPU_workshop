@@ -1,5 +1,5 @@
 #!/bin/bash
-# Changed some lines for running on UD CRPL machines
+
 # Load the necessary modules (software)
 module purge
 module load ncarenv/1.2
@@ -13,5 +13,4 @@ export CUDA_ROOT_PATH="${NCAR_ROOT_CUDA}"
 # Remove any previous build attempts
 make clean
 # Do a build
-# Set _OPENACC=true to enable Openacc, otherwise set as false
-make _OPENACC=true
+make  

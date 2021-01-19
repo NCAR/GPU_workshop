@@ -1,25 +1,3 @@
-#CC=pgc++
-#CUDACC=nvcc
-#LDFLAGS=
-#CFLAGS= -g -O3 -std=c++11 
-#CUDALIB=/glade/u/apps/dav/opt/cuda/11.0.3
-#CUDAFLAGS= -g -std=c++11 -O3 
-
-#all: output.exe
-
-#output.exe: matrix_mul_solution.o  
-#	$(CUDACC)  matrix_mul_solution.o -o output.exe
-
-#%.o: %.cpp makefile
-#	$(CC) -c $(CFLAGS) $<
-
-#%.o: %.cu makefile
-#	$(CUDACC) -c $(CUDACFLAGS) $<
-#
-#clean:
-#	rm *.o output.exe
-
-
 
 # Compilers and linkers
 CC=pgc++
@@ -28,12 +6,17 @@ CUDACC=nvcc
 # Compilation flags
 CFLAGS= -g -O3 -std=c++11 -Wall
 CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
-#CUDAFLAGS= -g -std=c++11 -O3 
-
 
 # Linking Flags
 LDFLAGS=
 CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
+
+ifeq ($(_OPENACC),true)
+ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all
+else 
+ACCFLAGS= 
+endif
+
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
@@ -45,10 +28,10 @@ BINARY= output.exe
 all: $(BINARY)
 
 $(BINARY): $(OBJECTS)
-	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) 
+	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) $(ACCFLAGS)
 
 %.o: %.cpp Makefile
-	$(CC) -c $(CFLAGS) $<
+	$(CC) -c $(CFLAGS) $(ACCFLAGS)  $<
 
 %.o: %.cu Makefile
 	$(CUDACC) -c $(CUDACFLAGS) $<

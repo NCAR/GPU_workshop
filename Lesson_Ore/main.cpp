@@ -56,12 +56,28 @@ int main(int argc, char* argv[]) {
   //End timer for CPU Process
   t1 = clock();
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("Entire CPU process took %f seconds.... Starting GPU Process.\n", t1sum);
-
+  printf("Entire CPU process took %f seconds.... Starting OpenAcc Process.\n", t1sum);
 
   //Initialize check matrix to be used for verification
   h_check = (float*)malloc(m*q*sizeof(float));
   InitializeMatrixSame(h_check, m, q, MATMUL_B_VAL);
+
+
+  //OpenAcc matrix multiplication
+  //Start timer for CPU process
+  t0 = clock();
+
+  //carry out openacc matrix multiplication
+  OpenAccMult(h_A,h_B,h_check,m,p,q);
+
+  //stop timer
+  t1 = clock();
+  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
+  printf("Entire OpenAcc calculation took %f seconds....\n", t1sum);
+
+
+  // Check for correctness. Need to agree on a tolerance value
+  MatrixVerification(h_C, h_check, m,q,MATMUL_TOL);
 
   // Start timer for GPU process
   t0 = clock();

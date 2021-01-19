@@ -39,6 +39,7 @@ __host__ void gpuMult(float *h_A, float *h_B, float *h_check, const int m, const
 
   //carry out matrix multiplication on the GPUs
   mmul<<<grid,block>>>(d_A,d_B,d_C,m,n,q);
+  cudaDeviceSynchronize();
   cudaCheckErrors("Kernel execution failure or cudaMemcpy H2D failure");
   
 

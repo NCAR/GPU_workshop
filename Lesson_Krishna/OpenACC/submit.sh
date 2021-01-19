@@ -7,7 +7,7 @@
 #SBATCH --reservation=casper_8xV100
 #SBATCH --gres=gpu:v100:1
 #SBATCH --time=00:15:00
-#SBATCH --output=log.matrix_add_%j.out
+#SBATCH --output=logs/log.matrix_add_%j.out
 #SBATCH --job-name=GPU_matrix_add
 #SBATCH --mem=50G
 
@@ -25,4 +25,4 @@ nvidia-smi
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun ./matrix_add.exe
+srun nvprof -o matrix_add.nvvp ./matrix_add.exe

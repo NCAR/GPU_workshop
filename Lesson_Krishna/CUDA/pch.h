@@ -2,8 +2,8 @@
  * PreCompiled Header for this lesson
  * Contains the constants, headers, and function prototypes used in other files
  */
-//#include <stdio.h>
-//#include <time.h> 
+#include <stdio.h>
+#include <time.h> 
 
 #ifndef PCH_H_MATRIX_ADD
 #define PCH_H_MATRIX_ADD
@@ -39,5 +39,9 @@ void PrintMatrix(float *matrix, int ny, int nx);
 // Device routine
 extern void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
    const int dx, const int dy);
+
+// OpenACC function
+void openacc_matrix_add(const float *A, const float *B, float *C, const int dx, \
+const int dy); 
 
 #endif // PCH_H_MATRIX_ADD

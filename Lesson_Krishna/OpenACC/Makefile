@@ -1,40 +1,39 @@
 # Compilers and linkers
-CC=pgc++
+CC=nvc++
 CUDACC=nvcc
 
 # Compilation flags
 CFLAGS= -g -O3 -std=c++11 -Wall
 CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
 
+ifeq ($(_OPENACC),true)
+ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all -I${NVHPC_ROOT_PATH}/include
+else 
+ACCFLAGS=
+endif
+
 # Linking Flags
 LDFLAGS=
 CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
-ifeq ($(_OPENACC),true)
-ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all
-else 
-ACCFLAGS= 
-endif
-
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-#OBJECTS= main.o functions.o common.o FMA.o 
-OBJECTS= main.o functions.o common.o matmul.o 
+OBJECTS= main.o common.o functions.o matrix_add.o 
 # The binary to be built by this Makefile
-#BINARY= fma.exe
-BINARY= matmul.exe
+BINARY= matrix_add.exe
 
 
 all: $(BINARY) 
 
 $(BINARY): $(OBJECTS)
-	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) $(ACCFLAGS)
+	$(CC) -o $(BINARY) $(OBJECTS) $(ACCFLAGS) $(LDFLAGS) $(CUDALDFLAGS) 
 
 %.o: %.cpp Makefile
 	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
-%.o: %.cu Makefile
-	$(CUDACC) -c $(CUDACFLAGS) $<
+%.o: %.cc Makefile
+	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 clean:
 	rm *.o $(BINARY)
+
