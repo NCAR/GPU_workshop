@@ -57,7 +57,7 @@ int main(int argc, char* argv[]) {
 
   t5 = clock();
   t5sum = ((double)(t5-t4))/CLOCKS_PER_SEC;
-  printf("OpenACC done. Compute took %f seconds\n", t7sum);
+  printf("OpenACC done. Compute took %f seconds\n", t5sum);
   // Check for correctness
   MatrixVerification(h_check, h_C, m, q, MATMUL_TOL);
 
