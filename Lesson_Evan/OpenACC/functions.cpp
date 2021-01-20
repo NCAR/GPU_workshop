@@ -19,10 +19,9 @@ void accMatmul(const float *A, const float *B, float *C, const int m, const int 
   // Calculate AxB=C on the host
   float temp = 0.0;
 #pragma acc data copyin(A, B) copyout(C)
-#pragma acc parallel loop collapse(2) private(temp) reduction(+:temp)
+#pragma acc parallel loop tile(64,8) reduction(+:temp)
   for (int i = 0; i < m; i++) {
     for (int j = 0; j < q; j++) {
-#pragma acc cache(A[(i*p):p],B[(k*q):q])
       temp = 0.0;
 #pragma acc loop reduction(+:temp)
       for (int k = 0; k < p; k++) {
