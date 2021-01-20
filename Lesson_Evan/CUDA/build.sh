@@ -1,5 +1,4 @@
 #!/bin/bash
-# Changed some lines for running on UD CRPL machines
 # Load the necessary modules (software)
 module purge
 module load ncarenv/1.2
