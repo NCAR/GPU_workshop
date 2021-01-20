@@ -27,7 +27,7 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
     // Wait for tiles to be loaded in before doing computation
     __syncthreads();
 
-    // Do matrix multiplication on the small matrix in the current tile.
+    // Do matrix multiplication on the small matrix within the current tile.
     for (int j = 0; j < blockDim.x; j++) {
       tmp +=
           s_a[threadIdx.y * blockDim.x + j] * s_b[j * blockDim.x + threadIdx.x];
@@ -46,17 +46,18 @@ __host__ void gpuMatmul(const float *h_A, const float *h_B, float *h_C, const in
 {
   float *d_A, *d_B, *d_C;
 
-  // Allocate device matrices
+  // Allocate device matrices on GPU using cudaMalloc
   cudaMalloc(&d_A, m*p*sizeof(float));
   cudaMalloc(&d_B, p*q*sizeof(float));
   cudaMalloc(&d_C, m*q*sizeof(float));
   cudaCheckErrors("cudaMalloc failure");
-  // Copy host matrices A and B to the device
+  // Copy host matrices A and B to the device using cudaMemcpy
   cudaMemcpy(d_A, h_A, m*p*sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, h_B, p*q*sizeof(float), cudaMemcpyHostToDevice);
   cudaCheckErrors("cudaMemcpy H2D failture");
 
-  // Set threads per CUDA block dimension
+  // Set threads per CUDA block dimension. The maximum number
+  // of total threads is 1024.
   int thread_dim = BLOCK_SIZE;
   // Set blocks per grid dimension (assume thread_dim divides M and N evenly)
   int blocks_x = q / thread_dim;
@@ -65,10 +66,10 @@ __host__ void gpuMatmul(const float *h_A, const float *h_B, float *h_C, const in
   dim3 threads(thread_dim, thread_dim);
   dim3 blocks(blocks_x, blocks_y);
 
-  // Calcuate AxB=C on the device
+  // Launch the kernel to calculate AxB=C on the device
   SharedMatmul<<<blocks, threads>>>(d_A, d_B, d_C, m, p, q);
   cudaCheckErrors("kernel launch failure");
-  // Synchronize the device, then copy device C matrix to the host
+  // Synchronize the device, then copy device's C matrix to the host
   cudaDeviceSynchronize();
   cudaMemcpy(h_C, d_C, m*q*sizeof(float), cudaMemcpyDeviceToHost);
   cudaCheckErrors("Kernel execution failure or cudaMemcpy H2D failure");
