@@ -16,7 +16,6 @@ void cpuMatmul(const float *A, const float *B, float *C, const int m, const int 
 
 
 void accMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q) {
-  // Calculate AxB=C on the host
   float temp = 0.0;
 #pragma acc data copyin(A, B) copyout(C)
 #pragma acc parallel loop tile(64,8) reduction(+:temp)

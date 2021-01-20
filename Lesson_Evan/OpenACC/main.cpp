@@ -8,6 +8,7 @@ int main(int argc, char* argv[]) {
   double t5sum = 0.0;
   int m, n, p, q;
 
+  // Parse command line input (if any)
   if (argc > 1 && argc < 6) {
     m = atoi(argv[1]);
     n = atoi(argv[2]);
@@ -61,7 +62,7 @@ int main(int argc, char* argv[]) {
   // Check for correctness
   MatrixVerification(h_check, h_C, m, q, MATMUL_TOL);
 
-  // Cleanup
+  // Free the host matrices
   free(h_A);
   free(h_B);
   free(h_C);
