@@ -2,15 +2,17 @@
  * PreCompiled Header for this lesson
  * Contains the constants, headers, and function prototypes used in other files
  */
-//#include <stdio.h>
-//#include <time.h> 
-
 #ifndef PCH_H_MATMUL
 #define PCH_H_MATMUL
 
-//#define DEFAULT_DIM 8192
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+#include <math.h>
+
 #define DEFAULT_DIM 1024;
 #define BLOCK_SIZE 32 // The CUDA max is 1024 threads per block
+#define SHMEM_SIZE BLOCK_SIZE * BLOCK_SIZE
 #define MATMUL_A_VAL 3.0F
 #define MATMUL_B_VAL 2.0F
 #define MATMUL_TOL 1.0E-6F
