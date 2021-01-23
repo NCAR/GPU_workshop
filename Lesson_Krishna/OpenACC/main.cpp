@@ -4,7 +4,7 @@
 #include "pch.h"
 
 int main(int argc, char* argv[]) {
-  float *h_A, *h_B, *h_C, *h_check;
+  float *o_A, *o_B, *o_C, *o_check;
   clock_t t0, t1, t2;
   double t1sum = 0.0;
   double t2sum = 0.0;
@@ -24,46 +24,43 @@ int main(int argc, char* argv[]) {
   t0 = clock();
 
   // Allocate host matrices
-  h_A = (float*)malloc(dx*dy*sizeof(float));
-  h_B = (float*)malloc(dx*dy*sizeof(float));
-  h_C = (float*)malloc(dx*dy*sizeof(float));
-  h_check = (float*)malloc(dx*dy*sizeof(float));
+  o_A = (float*)malloc(dx*dy*sizeof(float));
+  o_B = (float*)malloc(dx*dy*sizeof(float));
+  o_C = (float*)malloc(dx*dy*sizeof(float));
+  o_check = (float*)malloc(dx*dy*sizeof(float));
   
   // Init matrices
-  InitializeMatrixSame(h_A, dx, dy, MATRIX_ADD_A_VAL);
-  InitializeMatrixSame(h_B, dx, dy, MATRIX_ADD_B_VAL);
+  InitializeMatrixSame(o_A, dx, dy, MATRIX_ADD_A_VAL);
+  InitializeMatrixSame(o_B, dx, dy, MATRIX_ADD_B_VAL);
 
   // Calculate A+B=C on the host
-  cpu_matrix_add(h_A, h_B, h_check, dx, dy);
+  cpu_matrix_add(o_A, o_B, o_check, dx, dy);
 
   // Printout for debugging
-  // PrintMatrix(h_check, 6, 6);
+  PrintMatrix(o_check, 6, 6);
 
   t1 = clock();
   t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
   printf("Init took %f seconds. Begin compute.\n", t1sum);
-  
-  // Calcuate A+B=C on the device
-  // gpu_matrix_add(h_A, h_B, h_C, dx, dy);
 
   // Calculate A+B=C on the device using OpenACC
-  openacc_matrix_add(h_A, h_B, h_C, dx, dy);
+  openacc_matrix_add(o_A, o_B, o_C, dx, dy);
 
   //Printout for debugging
-  // PrintMatrix(h_C, 6, 6);
+  PrintMatrix(o_C, 6, 6);
   
   t2 = clock();
   t2sum = ((double)(t2-t1))/CLOCKS_PER_SEC;
   printf("Done. Compute took %f seconds\n", t2sum);
 
   // Check for correctness
-  MatrixVerification(h_check, h_C, dx, dy, MATRIX_ADD_TOL);
+  MatrixVerification(o_check, o_C, dx, dy, MATRIX_ADD_TOL);
   
   // Cleanup
-  free(h_A);
-  free(h_B);
-  free(h_C);
-  free(h_check);
+  free(o_A);
+  free(o_B);
+  free(o_C);
+  free(o_check);
   return 0;
 }
 

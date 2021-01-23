@@ -25,4 +25,4 @@ nvidia-smi
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun nvprof -o matrix_add.nvvp ./matrix_add.exe
+srun nvprof -f -o matrix_add.nvvp ./matrix_add.exe

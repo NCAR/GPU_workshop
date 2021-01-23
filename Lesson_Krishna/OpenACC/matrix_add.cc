@@ -2,15 +2,15 @@
 #include "pch.h"
 #include <stdio.h>
  
-void openacc_matrix_add(const float *A, const float *B, float *C, const int dx, \
+void openacc_matrix_add(const float *o_A, const float *o_B, float *o_C, const int dx, \
 const int dy) {
-  #pragma acc data copyin(A[0:dx*dy], B[0:dx*dy]), copy(C[0:dx*dy]) 
+  #pragma acc data copyin(o_A[0:dx*dy], o_B[0:dx*dy]), copy(o_C[0:dx*dy]) 
   {
-    #pragma acc kernels
+    #pragma acc parallel loop collapse(2)
     for (int i = 0; i < dx; i++){
       for (int j = 0; j < dy; j++) {
         int idx = i*dx+j;
-        C[idx] = A[idx] + B[idx];
+        o_C[idx] = o_A[idx] + o_B[idx];
       }
     }
   }

@@ -14,18 +14,6 @@
 #define MATRIX_ADD_B_VAL 2.0F
 #define MATRIX_ADD_TOL 1.0E-6F
 
-#define cudaCheckErrors(msg) \
-  do { \
-    cudaError_t __err = cudaGetLastError(); \
-    if (__err != cudaSuccess) { \
-      fprintf(stderr, "Fatal error: %s (%s at %s:%d)\n", \
-        msg, cudaGetErrorString(__err), \
-        __FILE__, __LINE__); \
-      fprintf(stderr, "*** FAILED - ABORTING\n"); \
-      exit(1); \
-    } \
-  } while (0)
-
 // Host routine
 void cpu_matrix_add(const float *A, const float *B, float *C, const int dx,\
   const int dy);
@@ -36,11 +24,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 
-// Device routine
-extern void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
-   const int dx, const int dy);
-
-// OpenACC function
+// OpenACC routine
 void openacc_matrix_add(const float *A, const float *B, float *C, const int dx, \
 const int dy); 
 
