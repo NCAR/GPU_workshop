@@ -47,7 +47,7 @@ __host__ void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
   add_matrices<<<grid, block>>>(d_A, d_B, d_C, dx, dy);
   cudaCheckErrors("kernel launch failure");
 
-  // Block the CPU until GPU finished execution
+  // Block the CPU until GPU finishes execution
   cudaDeviceSynchronize();
 
   // Copy the result matrix C from device to host
