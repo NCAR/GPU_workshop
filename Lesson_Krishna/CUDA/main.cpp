@@ -17,19 +17,20 @@ int main(int argc, char* argv[]) {
     printf("Usage: ./executable dimX dimY\n");
     return -1;
   } else {
+    // set to default dimensions (1024) if no arguments are passed
     dx = DEFAULT_DIM;
     dy = DEFAULT_DIM;
   }
 
   t0 = clock();
 
-  // Allocate host matrices
+  // Allocate memory to host matrices
   h_A = (float*)malloc(dx*dy*sizeof(float));
   h_B = (float*)malloc(dx*dy*sizeof(float));
   h_C = (float*)malloc(dx*dy*sizeof(float));
   h_check = (float*)malloc(dx*dy*sizeof(float));
   
-  // Init matrices
+  // Init matrices with default values of 3.0 for matrix A and 2.0 for matrix B
   InitializeMatrixSame(h_A, dx, dy, MATRIX_ADD_A_VAL);
   InitializeMatrixSame(h_B, dx, dy, MATRIX_ADD_B_VAL);
 
@@ -46,7 +47,7 @@ int main(int argc, char* argv[]) {
   // Calcuate A+B=C on the device
   gpu_matrix_add(h_A, h_B, h_C, dx, dy);
 
-  //Printout for debugging
+  // Printout for debugging
   // PrintMatrix(h_C, 6, 6);
   
   t2 = clock();

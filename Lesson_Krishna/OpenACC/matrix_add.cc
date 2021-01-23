@@ -1,7 +1,9 @@
 #include <openacc.h>
 #include "pch.h"
 #include <stdio.h>
- 
+
+
+// Calculate A+B=C on the device
 void openacc_matrix_add(const float *o_A, const float *o_B, float *o_C, const int dx, \
 const int dy) {
   #pragma acc data copyin(o_A[0:dx*dy], o_B[0:dx*dy]), copy(o_C[0:dx*dy]) 
