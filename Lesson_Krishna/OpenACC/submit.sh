@@ -4,7 +4,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --account NTDD0002
 #SBATCH --partition=dav
-#SBATCH --reservation=casper_8xV100
+#SBATCH --reservation=TDD_4xV100
 #SBATCH --gres=gpu:v100:1
 #SBATCH --time=00:15:00
 #SBATCH --output=logs/log.matrix_add_%j.out
