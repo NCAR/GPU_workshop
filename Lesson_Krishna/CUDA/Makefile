@@ -20,10 +20,10 @@ BINARY= matrix_add.exe
 all: $(BINARY) 
 
 $(BINARY): $(OBJECTS)
-	$(CC) -o $(BINARY) $(OBJECTS) $(ACCFLAGS) $(LDFLAGS) $(CUDALDFLAGS) 
+	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(CUDALDFLAGS) 
 
 %.o: %.cpp Makefile
-	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
+	$(CC) -c $(CFLAGS) $<
 
 %.o: %.cu Makefile
 	$(CUDACC) -c $(CUDACFLAGS) $<
