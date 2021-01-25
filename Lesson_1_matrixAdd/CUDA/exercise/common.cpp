@@ -59,6 +59,10 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 				printf("\t GPU_C[%d][%d]= %f", i,j, q[j]);
 				return;
 			}
+                        else
+			{
+ 				printf("Verification passed");
+			}
 		}
 		p += nx;
 		q += nx;
