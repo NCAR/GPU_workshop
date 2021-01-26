@@ -13,7 +13,7 @@ const int dy)
     {
       for (int j = 0; j < dy; j++) 
       {
-        int idx = i*dx+j;
+        int idx = i*dy+j;
         o_C[idx] = o_A[idx] + o_B[idx];
       }
     }

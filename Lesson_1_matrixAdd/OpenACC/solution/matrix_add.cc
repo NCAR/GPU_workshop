@@ -11,7 +11,7 @@ const int dy) {
     #pragma acc parallel loop collapse(2)
     for (int i = 0; i < dx; i++){
       for (int j = 0; j < dy; j++) {
-        int idx = i*dx+j;
+        int idx = i*dy+j;
         o_C[idx] = o_A[idx] + o_B[idx];
       }
     }
