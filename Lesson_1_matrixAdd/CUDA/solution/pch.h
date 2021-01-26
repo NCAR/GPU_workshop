@@ -31,7 +31,7 @@ void cpu_matrix_add(const float *A, const float *B, float *C, const int dx,\
   const int dy);
 
 // Functions in common.cpp 
-void InitializeMatrixSame(float *array, const int ny, const int nx, const float val);
+void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);
 void InitializeMatrixRand(float *array, const int ny, const int nx);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);

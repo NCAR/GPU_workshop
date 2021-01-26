@@ -31,8 +31,8 @@ int main(int argc, char* argv[]) {
   h_check = (float*)malloc(dx*dy*sizeof(float));
   
   // Init matrices with default values of 3.0 for matrix A and 2.0 for matrix B
-  InitializeMatrixSame(h_A, dx, dy, MATRIX_ADD_A_VAL);
-  InitializeMatrixSame(h_B, dx, dy, MATRIX_ADD_B_VAL);
+  InitializeMatrixSame(h_A, dx, dy, MATRIX_ADD_A_VAL,"h_A");
+  InitializeMatrixSame(h_B, dx, dy, MATRIX_ADD_B_VAL,"h_B");
 
   // Calculate A+B=C on the host
   cpu_matrix_add(h_A, h_B, h_check, dx, dy);
