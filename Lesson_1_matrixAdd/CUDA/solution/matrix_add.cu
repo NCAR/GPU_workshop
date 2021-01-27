@@ -10,7 +10,7 @@ __global__ void add_matrices(float* m1, float* m2, float* sum, int m, int n){
     int idy = blockIdx.y * blockDim.y + threadIdx.y;
     
     // Calculate thread id
-    int index = idx*m+idy; 
+    int index = idx*n+idy; 
     if (idx < m && idy < n) sum[index] = m1[index]+m2[index];
 }
 
@@ -42,6 +42,10 @@ __host__ void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
   /* Calculate the grid dimensions based on the dimensions of the matrix,
     and dimensions of the block */
   dim3 grid((dx+block.x-1)/block.x, (dy+block.y-1)/block.y); 
+
+  printf("Kernel launch dimensions: \n");
+  printf("\tGrid size  : {%d, %d, %d} blocks.\n",grid.x, grid.y, grid.z);
+  printf("\tBlock size : {%d, %d, %d} threads.\n",block.x, block.y, block.z);
 
   // Calcuate A+B=C on the GPU
   add_matrices<<<grid, block>>>(d_A, d_B, d_C, dx, dy);
