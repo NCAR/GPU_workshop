@@ -28,7 +28,7 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 }
 
 /* Sets all elements of array to a number between [RANGE_MIN,RANGE_MAX] */
-void InitializeMatrixRand(float *array, const int ny, const int nx){
+void InitializeMatrixRand(float *array, const int ny, const int nx,const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -41,6 +41,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx){
 		// Advance p to the next row
 		p += nx;
 	}
+        printf("Initialized Random Matrix %s, %d X %d \n",name, ny, nx);
 }
 
 /* Compares the matrices element-wise and prints an error message if 

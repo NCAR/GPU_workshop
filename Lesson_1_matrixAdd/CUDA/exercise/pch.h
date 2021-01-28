@@ -10,9 +10,9 @@
 
 #define DEFAULT_DIM 1024;
 #define BLOCK_SIZE 32 // The CUDA max is 1024 threads per block
-#define MATRIX_ADD_A_VAL 3.0F
-#define MATRIX_ADD_B_VAL 2.0F
-#define MATRIX_ADD_TOL 1.0E-6F
+#define VERIF_TOL 1.0E-6F
+#define MAT_A_VAL 3.0F
+#define MAT_B_VAL 2.0F
 
 #define cudaCheckErrors(msg) \
   do { \
@@ -32,7 +32,7 @@ void cpu_matrix_add(const float *A, const float *B, float *C, const int dx,\
 
 // Functions in common.cpp 
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);
-void InitializeMatrixRand(float *array, const int ny, const int nx);
+void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 

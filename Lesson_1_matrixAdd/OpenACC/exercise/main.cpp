@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
   o_check = (float*)malloc(dx*dy*sizeof(float));
   
   // Init matrices
-  InitializeMatrixSame(o_A, dx, dy, MATRIX_ADD_A_VAL,"o_A");
-  InitializeMatrixSame(o_B, dx, dy, MATRIX_ADD_B_VAL,"o_A");
+  InitializeMatrixSame(o_A, dx, dy, MAT_A_VAL,"o_A");
+  InitializeMatrixSame(o_B, dx, dy, MAT_B_VAL,"o_A");
   
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
@@ -49,10 +49,6 @@ int main(int argc, char* argv[]) {
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Addition took %f seconds. \n", t1sum.count());
 
-  // Printout for debugging
-  printf("CPU Matrix Addition Results: \n");
-  PrintMatrix(o_check, dx, dy);
-
   // Calculate A+B=C on the device using OpenACC
   t0 = high_resolution_clock::now();
   openacc_matrix_add(o_A, o_B, o_C, dx, dy);
@@ -61,11 +57,14 @@ int main(int argc, char* argv[]) {
   printf("GPU Matrix Addition took %f seconds. \n", t1sum.count());
 
   //Printout for debugging
-  printf("GPU Matrix Addition Results: \n");
-  PrintMatrix(o_C, dx, dy);
-  
+    if (dx <= 6 && dy <= 6) {
+        printf("\nCPU Matrix Addition Results: \n");
+        PrintMatrix(o_check, dx, dy);
+        printf("\nGPU Matrix Addition Results: \n");
+        PrintMatrix(o_C, dx, dy);
+    } 
   // Check for correctness
-  MatrixVerification(o_check, o_C, dx, dy, MATRIX_ADD_TOL);
+  MatrixVerification(o_check, o_C, dx, dy, VERIF_TOL);
   
   // Cleanup
   free(o_A);

@@ -34,8 +34,8 @@ int main(int argc, char* argv[]) {
   o_check = (float*)malloc(dx*dy*sizeof(float));
   
   // Init matrices
-  InitializeMatrixSame(o_A, dx, dy, MATRIX_ADD_A_VAL,"o_A");
-  InitializeMatrixSame(o_B, dx, dy, MATRIX_ADD_B_VAL,"o_A");
+  InitializeMatrixSame(o_A, dx, dy, MAT_A_VAL,"o_A");
+  InitializeMatrixSame(o_B, dx, dy, MAT_B_VAL,"o_A");
   
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
   PrintMatrix(o_C, dx, dy);
   }
   // Check for correctness
-  MatrixVerification(o_check, o_C, dx, dy, MATRIX_ADD_TOL);
+  MatrixVerification(o_check, o_C, dx, dy, VERIF_TOL);
   
   // Cleanup
   free(o_A);
