@@ -22,7 +22,7 @@ module list
 export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo ${LD_LIBRARY_PATH}
 nvidia-smi
-deviceQuery
+/glade/u/apps/dav/opt/cuda/11.0.3/extras/demo_suite/deviceQuery 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
 srun nvprof ./matrix_add.exe 
