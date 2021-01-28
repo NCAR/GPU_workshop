@@ -2,11 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include "pch.h"
+#include <ctime>
+#include <chrono>
+#include <ratio> 
 
 int main(int argc, char* argv[]) {
+  using namespace std::chrono;
+
   float *h_A, *h_B, *h_C, *h_check;
-  clock_t t0, t1;
-  double t1sum = 0.0;
+  high_resolution_clock::time_point t0, t1;
+  duration<double> t1sum;
   int dx, dy; 
 
   if (argc > 1 && argc < 4) {
@@ -21,7 +26,7 @@ int main(int argc, char* argv[]) {
     dy = DEFAULT_DIM;
   }
 
-  t0 = clock();
+  t0 = high_resolution_clock::now();
 
   // Allocate memory to host matrices
   h_A = (float*)malloc(dx*dy*sizeof(float));
@@ -33,27 +38,27 @@ int main(int argc, char* argv[]) {
   InitializeMatrixSame(h_A, dx, dy, MATRIX_ADD_A_VAL,"h_A");
   InitializeMatrixSame(h_B, dx, dy, MATRIX_ADD_B_VAL,"h_B");
 
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("Init took %f seconds. Begin compute.\n", t1sum);
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("Init took %f seconds. Begin compute.\n", t1sum.count());
 
   // Calculate A+B=C on the host
-  t0 = clock();
+  t0 = high_resolution_clock::now();
   cpu_matrix_add(h_A, h_B, h_check, dx, dy);
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("CPU Matrix Addition took %f seconds.\n", t1sum);
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("CPU Matrix Addition took %f seconds.\n", t1sum.count());
 
   // Printout for debugging
   printf("CPU results: \n");
   PrintMatrix(h_check, dx, dy);
 
   // Calcuate A+B=C on the device
-  t0 = clock();
+  t0 = high_resolution_clock::now();
   gpu_matrix_add(h_A, h_B, h_C, dx, dy);
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("GPU Matrix Addition took %f seconds.\n", t1sum);
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("GPU Matrix Addition took %f seconds.\n", t1sum.count());
 
   // Printout for debugging
    printf("GPU results: \n");
