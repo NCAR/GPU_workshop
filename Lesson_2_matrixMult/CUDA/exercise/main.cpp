@@ -10,7 +10,7 @@
 int main(int argc, char* argv[]) {
   using namespace std::chrono;
 
-  float *h_A, *h_B, *h_C, *h_check;
+  float *h_A, *h_B, *cpu_C, *gpu_C;
   high_resolution_clock::time_point t0, t1;
   duration<double> t1sum;
   int m, n, p, q;
@@ -44,8 +44,8 @@ int main(int argc, char* argv[]) {
   // Allocate memory to host matrices
   h_A = (float*)malloc(m*n*sizeof(float));
   h_B = (float*)malloc(p*q*sizeof(float));
-  h_C = (float*)malloc(m*q*sizeof(float));
-  h_check = (float*)malloc(m*q*sizeof(float));
+  cpu_C = (float*)malloc(m*q*sizeof(float));
+  gpu_C = (float*)malloc(m*q*sizeof(float));
   
   // Init matrices with default values of 3.0 for matrix A and 2.0 for matrix B
   InitializeMatrixSame(h_A, m, n, MAT_A_VAL,"h_A");
@@ -57,14 +57,14 @@ int main(int argc, char* argv[]) {
 
   // Calculate A+B=C on the host
   t0 = high_resolution_clock::now();
-  cpuMatmul(h_A,h_B,h_C,m,p,q);
+  cpuMatmul(h_A,h_B,cpu_C,m,p,q);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Multiplication took %f seconds.\n", t1sum.count());
 
   // Calcuate A+B=C on the device
   t0 = high_resolution_clock::now();
-  gpuMult(h_A,h_B,h_check,m,n,p,q,BLOCK_SIZE);
+  gpuMult(h_A,h_B,gpu_C,m,n,p,q,BLOCK_SIZE);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("GPU Matrix Multiplication took %f seconds.\n", t1sum.count());
@@ -72,18 +72,18 @@ int main(int argc, char* argv[]) {
   // Printout for debugging
    if (m <= 6 && q <= 6) {
         printf("\nCPU Matrix Multiplication Results: \n");
-        PrintMatrix(h_C, m, q);
+        PrintMatrix(cpu_C, m, q);
         printf("\nGPU Matrix Multiplication Results: \n");
-        PrintMatrix(h_check, m, q);
+        PrintMatrix(gpu_C, m, q);
   } 
   // Check for correctness
-  MatrixVerification(h_check, h_C, m, q, VERIF_TOL);
+  MatrixVerification(gpu_C, cpu_C, m, q, VERIF_TOL);
   
   // Cleanup
   free(h_A);
   free(h_B);
-  free(h_C);
-  free(h_check);
+  free(cpu_C);
+  free(gpu_C);
   return 0;
 }
 

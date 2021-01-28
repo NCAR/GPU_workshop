@@ -17,7 +17,7 @@ __global__ void mmul( float *a, float *b, float *c, int m, int n, int q)
 
 
 
-__host__ void gpuMult(float *h_A, float *h_B, float *h_check, const int m, const int n, const int p, const int q, const int block_size)
+__host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const int n, const int p, const int q, const int block_size)
 {
   //declare variables to be used by GPU (device) for matrix multiplication
   float *d_A, *d_B, *d_C;
@@ -49,7 +49,7 @@ __host__ void gpuMult(float *h_A, float *h_B, float *h_check, const int m, const
   
 
   // Transefr results from device to host 
-  cudaMemcpy(h_check, d_C, sizeof(float)*m*q, cudaMemcpyDeviceToHost);
+  cudaMemcpy(gpu_C, d_C, sizeof(float)*m*q, cudaMemcpyDeviceToHost);
 
   // Cleanup
   cudaFree(d_A);
