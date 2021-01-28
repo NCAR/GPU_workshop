@@ -7,7 +7,7 @@
 #SBATCH --reservation=TDD_4xV100
 #SBATCH --gres=gpu:v100:1
 #SBATCH --time=00:15:00
-#SBATCH --output=logs/log.matrix_add_%j.out
+#SBATCH --output=log.matrix_add_%j.out
 #SBATCH --job-name=GPU_matrix_add
 #SBATCH --mem=50G
 

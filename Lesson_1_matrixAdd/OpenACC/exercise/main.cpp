@@ -2,12 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include "pch.h"
+#include <ctime>
+#include <chrono>
+#include <ratio> 
 
 int main(int argc, char* argv[]) {
+  using namespace std::chrono;
+
   float *o_A, *o_B, *o_C, *o_check;
-  clock_t t0, t1, t2;
-  double t1sum = 0.0;
-  double t2sum = 0.0;
+  high_resolution_clock::time_point t0, t1;
+  duration<double> t1sum;
   int dx, dy; 
 
   if (argc > 1 && argc < 4) {
@@ -17,11 +21,12 @@ int main(int argc, char* argv[]) {
     printf("Usage: ./executable dimX dimY\n");
     return -1;
   } else {
+    // set to default dimensions (1024) if no arguments are passed
     dx = DEFAULT_DIM;
     dy = DEFAULT_DIM;
   }
 
-  t0 = clock();
+  t0 = high_resolution_clock::now();
 
   // Allocate host matrices
   o_A = (float*)malloc(dx*dy*sizeof(float));
@@ -32,27 +37,28 @@ int main(int argc, char* argv[]) {
   // Init matrices
   InitializeMatrixSame(o_A, dx, dy, MATRIX_ADD_A_VAL,"o_A");
   InitializeMatrixSame(o_B, dx, dy, MATRIX_ADD_B_VAL,"o_A");
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("Init took %f seconds. Begin CPU compute.\n", t1sum);
+  
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("Init took %f seconds. Begin CPU compute.\n", t1sum.count());
 
   // Calculate A+B=C on the host
-  t0 = clock();
+  t0 = high_resolution_clock::now();
   cpu_matrix_add(o_A, o_B, o_check, dx, dy);
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("CPU Matrix Addition took %f seconds. \n", t1sum);
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("CPU Matrix Addition took %f seconds. \n", t1sum.count());
 
   // Printout for debugging
   printf("CPU Matrix Addition Results: \n");
   PrintMatrix(o_check, dx, dy);
 
   // Calculate A+B=C on the device using OpenACC
-  t0 = clock();
+  t0 = high_resolution_clock::now();
   openacc_matrix_add(o_A, o_B, o_C, dx, dy);
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("GPU Matrix Addition took %f seconds. \n", t1sum);
+  t1 = high_resolution_clock::now();
+  t1sum = duration_cast<duration<double>>(t1-t0);
+  printf("GPU Matrix Addition took %f seconds. \n", t1sum.count());
 
   //Printout for debugging
   printf("GPU Matrix Addition Results: \n");
