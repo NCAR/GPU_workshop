@@ -39,3 +39,6 @@
 *.ptx
 *.cubin
 *.fatbin
+
+# For the Nvidia Visual Profiler results
+*.nvvp
