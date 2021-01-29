@@ -30,7 +30,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 
-// OpenACC routine
-void accMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
+// Device routine
+void gpuMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
 
 #endif // PCH_H_MATMUL
