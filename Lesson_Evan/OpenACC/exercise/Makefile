@@ -1,5 +1,5 @@
 # Compilers and linkers
-CC=pgc++
+CC=nvc++
 
 # Compilation flags
 CFLAGS= -g -O3 -std=c++11 -Wall
@@ -15,7 +15,7 @@ endif
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-OBJECTS= main.o functions.o common.o
+OBJECTS= main.o functions.o common.o matmul.o
 # The binary to be built by this Makefile
 BINARY= matmul.exe
 
@@ -26,6 +26,9 @@ $(BINARY): $(OBJECTS)
 	$(CC) -o $(BINARY) $(OBJECTS) $(LDFLAGS) $(ACCFLAGS)
 
 %.o: %.cpp Makefile
+	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
+
+%.o: %.cc Makefile
 	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 clean:
