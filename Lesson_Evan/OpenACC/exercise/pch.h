@@ -11,6 +11,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <openacc.h>
+#include <ctime>
+#include <chrono>
+#include <ratio> 
 
 #define DEFAULT_DIM 1024;
 #define BLOCK_SIZE 32 // The CUDA max is 1024 threads per block

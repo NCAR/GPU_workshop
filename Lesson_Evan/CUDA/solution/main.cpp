@@ -1,11 +1,11 @@
 #include "pch.h"
 
 int main(int argc, char* argv[]) {
+  using namespace std::chrono;
+
   float *h_A, *h_B, *gpu_C, *cpu_C;
-  clock_t t0, t1, t2, t3, t4, t5;
-  double t1sum = 0.0;
-  double t3sum = 0.0;
-  double t5sum = 0.0;
+  high_resolution_clock::time_point t0, t1;
+  duration<double>time_sum;
   int m, n, p, q;
 
   // Parse command line input (if any)
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  t0 = clock();
+  t0 = high_resolution_clock::now();
 
   // Allocate host matrices
   h_A = (float*)malloc(m*n*sizeof(float));
@@ -41,24 +41,24 @@ int main(int argc, char* argv[]) {
   InitializeMatrixSame(h_A, m, n, MATMUL_A_VAL);
   InitializeMatrixSame(h_B, p, q, MATMUL_B_VAL);
 
-  t1 = clock();
-  t1sum = ((double)(t1-t0))/CLOCKS_PER_SEC;
-  printf("Init took %f seconds. Begin compute.\n", t1sum);
+  t1 = high_resolution_clock::now();
+  time_sum = duration_cast<duration<double>>(t1-t0);
+  printf("Init took %f seconds. Begin compute.\n", time_sum.count());
   
-  t2 = clock(); 
+  t0 = high_resolution_clock::now(); 
   // Calculate AxB=C on the host
   cpuMatmul(h_A, h_B, cpu_C, m, p, q);
-  t3 = clock();
-  t3sum = ((double)(t3-t2))/CLOCKS_PER_SEC;
-  printf("CPU done. Compute took %f seconds\n", t3sum);
+  t1 = high_resolution_clock::now();
+  time_sum = duration_cast<duration<double>>(t1-t0);
+  printf("CPU matrix multiplication took %f seconds\n", time_sum.count());
   
-  t4 = clock();
-  // Calcuate AxB=C on the device with CUDA
+  t0 = high_resolution_clock::now();
+  // Calcuate AxB=C on the device
   gpuMatmul(h_A, h_B, gpu_C, m, p, q);
 
-  t5 = clock();
-  t5sum = ((double)(t5-t4))/CLOCKS_PER_SEC;
-  printf("CUDA done. Compute took %f seconds\n", t5sum);
+  t1 = high_resolution_clock::now();
+  time_sum = duration_cast<duration<double>>(t1-t0);
+  printf("GPU matrix multiplication took %f seconds\n", time_sum.count());
   // Check for correctness
   MatrixVerification(cpu_C, gpu_C, m, q, MATMUL_TOL);
 
