@@ -42,7 +42,7 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
   c[row * q + col] = tmp;
 }
 
-__host__ void gpuMatmul(const float *h_A, const float *h_B, float *h_C, const int m, const int p, const int q)
+__host__ void gpuMatmul(const float *h_A, const float *h_B, float *gpu_C, const int m, const int p, const int q)
 {
   float *d_A, *d_B, *d_C;
 
@@ -71,7 +71,7 @@ __host__ void gpuMatmul(const float *h_A, const float *h_B, float *h_C, const in
   cudaCheckErrors("kernel launch failure");
   // Synchronize the device, then copy device's C matrix to the host
   cudaDeviceSynchronize();
-  cudaMemcpy(h_C, d_C, m*q*sizeof(float), cudaMemcpyDeviceToHost);
+  cudaMemcpy(gpu_C, d_C, m*q*sizeof(float), cudaMemcpyDeviceToHost);
   cudaCheckErrors("Kernel execution failure or cudaMemcpy H2D failure");
 
   // Free the device matrices
