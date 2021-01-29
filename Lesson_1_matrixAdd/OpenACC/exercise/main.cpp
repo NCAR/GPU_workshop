@@ -9,7 +9,7 @@
 int main(int argc, char* argv[]) {
   using namespace std::chrono;
 
-  float *o_A, *o_B, *o_C, *o_check;
+  float *h_A, *h_B, *cpu_C, *gpu_C;
   high_resolution_clock::time_point t0, t1;
   duration<double> t1sum;
   int dx, dy; 
@@ -29,14 +29,14 @@ int main(int argc, char* argv[]) {
   t0 = high_resolution_clock::now();
 
   // Allocate host matrices
-  o_A = (float*)malloc(dx*dy*sizeof(float));
-  o_B = (float*)malloc(dx*dy*sizeof(float));
-  o_C = (float*)malloc(dx*dy*sizeof(float));
-  o_check = (float*)malloc(dx*dy*sizeof(float));
+  h_A = (float*)malloc(dx*dy*sizeof(float));
+  h_B = (float*)malloc(dx*dy*sizeof(float));
+  cpu_C = (float*)malloc(dx*dy*sizeof(float));
+  gpu_C = (float*)malloc(dx*dy*sizeof(float));
   
   // Init matrices
-  InitializeMatrixSame(o_A, dx, dy, MAT_A_VAL,"o_A");
-  InitializeMatrixSame(o_B, dx, dy, MAT_B_VAL,"o_A");
+  InitializeMatrixSame(h_A, dx, dy, MAT_A_VAL,"h_A");
+  InitializeMatrixSame(h_B, dx, dy, MAT_B_VAL,"h_B");
   
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
@@ -44,14 +44,14 @@ int main(int argc, char* argv[]) {
 
   // Calculate A+B=C on the host
   t0 = high_resolution_clock::now();
-  cpu_matrix_add(o_A, o_B, o_check, dx, dy);
+  cpu_matrix_add(h_A, h_B, cpu_C, dx, dy);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Addition took %f seconds. \n", t1sum.count());
 
   // Calculate A+B=C on the device using OpenACC
   t0 = high_resolution_clock::now();
-  openacc_matrix_add(o_A, o_B, o_C, dx, dy);
+  openacc_matrix_add(h_A, h_B, gpu_C, dx, dy);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("GPU Matrix Addition took %f seconds. \n", t1sum.count());
@@ -59,18 +59,18 @@ int main(int argc, char* argv[]) {
   //Printout for debugging
     if (dx <= 6 && dy <= 6) {
         printf("\nCPU Matrix Addition Results: \n");
-        PrintMatrix(o_check, dx, dy);
+        PrintMatrix(cpu_C, dx, dy);
         printf("\nGPU Matrix Addition Results: \n");
-        PrintMatrix(o_C, dx, dy);
+        PrintMatrix(gpu_C, dx, dy);
     } 
   // Check for correctness
-  MatrixVerification(o_check, o_C, dx, dy, VERIF_TOL);
+  MatrixVerification(cpu_C, gpu_C, dx, dy, VERIF_TOL);
   
   // Cleanup
-  free(o_A);
-  free(o_B);
-  free(o_C);
-  free(o_check);
+  free(h_A);
+  free(h_B);
+  free(cpu_C);
+  free(gpu_C);
   return 0;
 }
 
