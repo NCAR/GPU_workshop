@@ -38,8 +38,8 @@ int main(int argc, char* argv[]) {
   cpu_C = (float*)malloc(m*q*sizeof(float));
   
   // Initialize host matrices
-  InitializeMatrixSame(h_A, m, n, MATMUL_A_VAL);
-  InitializeMatrixSame(h_B, p, q, MATMUL_B_VAL);
+  InitializeMatrixSame(h_A, m, n, MATMUL_A_VAL, "h_A");
+  InitializeMatrixSame(h_B, p, q, MATMUL_B_VAL, "h_B");
 
   t1 = high_resolution_clock::now();
   time_sum = duration_cast<duration<double>>(t1-t0);

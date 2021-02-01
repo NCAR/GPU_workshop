@@ -11,7 +11,7 @@
 #define RANGE_MIN -1.0
 
 /* Sets all values in array equal to val */
-void InitializeMatrixSame(float *array, const int ny, const int nx, const float val){
+void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -22,10 +22,13 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 		// Advance p to the next row
 		p += nx;
 	}
+        printf("Initialized Matrix %s, %d X %d \n",name, ny, nx);
+        
+      
 }
 
 /* Sets all elements of array to a number between [RANGE_MIN,RANGE_MAX] */
-void InitializeMatrixRand(float *array, const int ny, const int nx){
+void InitializeMatrixRand(float *array, const int ny, const int nx,const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -38,6 +41,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx){
 		// Advance p to the next row
 		p += nx;
 	}
+        printf("Initialized Random Matrix %s, %d X %d \n",name, ny, nx);
 }
 
 /* Compares the matrices element-wise and prints an error message if 
@@ -47,6 +51,7 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 	// Pointers for rows in each matrix
 	float *p = hostC;
 	float *q = gpuC;
+        bool PassFlag = 1;
 
 	for (int i = 0; i < ny; i++)
 	{
@@ -57,12 +62,17 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 				printf("error: %f > %f", fabs(p[j]-q[j]),fTolerance);
 				printf("\t host_C[%d][%d]= %f", i,j, p[j]);
 				printf("\t GPU_C[%d][%d]= %f", i,j, q[j]);
+                                PassFlag=0;
 				return;
 			}
 		}
 		p += nx;
 		q += nx;
 	}
+        if(PassFlag)
+                        {
+                                printf("Verification passed\n");
+                        }
 }
 
 void PrintMatrix(float *matrix, int ny, int nx){

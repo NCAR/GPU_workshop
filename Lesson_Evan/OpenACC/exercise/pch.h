@@ -25,8 +25,8 @@
 void cpuMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
 
 // Functions in common.cpp 
-void InitializeMatrixSame(float *array, const int ny, const int nx, const float val);
-void InitializeMatrixRand(float *array, const int ny, const int nx);
+void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);
+void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 
