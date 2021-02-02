@@ -4,7 +4,9 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --account NTDD0002
 #SBATCH --partition=dav
-#SBATCH --reservation=TDD_4xV100
+## This reservation is only active around the time we have
+##  a tutorial session
+#SBATCH --reservation=CSG_GPU_workshop1
 #SBATCH --gres=gpu:v100:1
 #SBATCH --time=00:02:00
 #SBATCH --output=log.matrix_add.out
