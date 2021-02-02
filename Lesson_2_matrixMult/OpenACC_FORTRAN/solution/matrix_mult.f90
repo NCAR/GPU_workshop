@@ -88,11 +88,11 @@ program matrix_mult
       call system_clock(t1)
 
 !$acc data copyin(a,b) copyout(c_gpu)
-!$acc parallel loop collapse(2)
+!$acc parallel loop collapse(2) reduction(+:tmp)
       do j=1,colsB
          do i=1,rowsA
             tmp = 0.0
-!$acc loop vector
+!$acc loop vector reduction(+:tmp)
             do k=1,rowsB
                 tmp = tmp + a(i,k) * b(k,j)
             enddo
