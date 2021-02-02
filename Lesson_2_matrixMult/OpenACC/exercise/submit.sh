@@ -25,4 +25,4 @@ nvidia-smi
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun nvprof ./matrix_mult.exe 
+srun ./matrix_mult.exe 
