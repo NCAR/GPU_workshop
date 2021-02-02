@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "pch.h"
 #include <ctime>
 #include <chrono>
 #include <ratio> 
+#include "pch.h"
 
 int main(int argc, char* argv[]) {
   using namespace std::chrono;
@@ -14,6 +14,7 @@ int main(int argc, char* argv[]) {
   duration<double> t1sum;
   int dx, dy; 
 
+  // Parse command line arguments
   if (argc > 1 && argc < 4) {
     dx = atoi(argv[1]);
     dy = atoi(argv[2]);
@@ -28,15 +29,15 @@ int main(int argc, char* argv[]) {
 
   t0 = high_resolution_clock::now();
 
-  // Allocate memory to host matrices
-  h_A = (float*)malloc(dx*dy*sizeof(float));
-  h_B = (float*)malloc(dx*dy*sizeof(float));
-  cpu_C = (float*)malloc(dx*dy*sizeof(float));
-  gpu_C = (float*)malloc(dx*dy*sizeof(float));
+  // 1. Allocate memory to host matrices
+  h_A = (float*)malloc(dy*dx*sizeof(float));
+  h_B = (float*)malloc(dy*dx*sizeof(float));
+  cpu_C = (float*)malloc(dy*dx*sizeof(float));
+  gpu_C = (float*)malloc(dy*dx*sizeof(float));
   
-  // Init matrices with default values of 3.0 for matrix A and 2.0 for matrix B
-  InitializeMatrixSame(h_A, dx, dy, MAT_A_VAL,"h_A");
-  InitializeMatrixSame(h_B, dx, dy, MAT_B_VAL,"h_B");
+  // 2. Init matrices with default values of 3.0 for matrix A and 2.0 for matrix B
+  InitializeMatrixSame(h_A, dy, dx, MAT_A_VAL,"h_A");
+  InitializeMatrixSame(h_B, dy, dx, MAT_B_VAL,"h_B");
 
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
@@ -44,14 +45,14 @@ int main(int argc, char* argv[]) {
 
   // Calculate A+B=C on the host
   t0 = high_resolution_clock::now();
-  cpu_matrix_add(h_A, h_B, cpu_C, dx, dy);
+  cpu_matrix_add(h_A, h_B, cpu_C, dy, dx);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Addition took %f seconds.\n", t1sum.count());
 
   // Calcuate A+B=C on the device
   t0 = high_resolution_clock::now();
-  gpu_matrix_add(h_A, h_B, gpu_C, dx, dy);
+  gpu_matrix_add(h_A, h_B, gpu_C, dy, dx);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("GPU Matrix Addition took %f seconds.\n", t1sum.count());
@@ -59,14 +60,15 @@ int main(int argc, char* argv[]) {
   // Printout for debugging
     if (dx <= 6 && dy <= 6) {
         printf("\nCPU Matrix Addition Results: \n");
-        PrintMatrix(cpu_C, dx, dy);
+        PrintMatrix(cpu_C, dy, dx);
         printf("\nGPU Matrix Addition Results: \n");
-        PrintMatrix(gpu_C, dx, dy);
+        PrintMatrix(gpu_C, dy, dx);
   } 
+
   // Check for correctness
-  MatrixVerification(cpu_C, gpu_C, dx, dy, VERIF_TOL);
+  MatrixVerification(cpu_C, gpu_C, dy, dx, VERIF_TOL);
   
-  // Cleanup
+  // 7. Free host memory
   free(h_A);
   free(h_B);
   free(cpu_C);

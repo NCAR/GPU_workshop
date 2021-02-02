@@ -27,8 +27,8 @@
   } while (0)
 
 // Host routine
-void cpu_matrix_add(const float *A, const float *B, float *C, const int dx,\
-  const int dy);
+void cpu_matrix_add(const float *A, const float *B, float *C, const int ny,\
+  const int nx);
 
 // Functions in common.cpp 
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);
@@ -38,10 +38,10 @@ void PrintMatrix(float *matrix, int ny, int nx);
 
 // Device routine
 extern void gpu_matrix_add(const float *h_A, const float *h_B, float *h_C,\
-   const int dx, const int dy);
+   const int ny, const int nx);
 
 // OpenACC function
-void openacc_matrix_add(const float *A, const float *B, float *C, const int dx, \
-const int dy); 
+void openacc_matrix_add(const float *A, const float *B, float *C, const int ny, \
+const int nx); 
 
 #endif // PCH_H_MATRIX_ADD
