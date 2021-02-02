@@ -4,13 +4,13 @@ For a workshop series presented by the Special Technical Projects Team part of t
 Created in Q1 of 2021 using NVIDIA High Performance Computing Software Development Kit 20.11 and CUDA 11.0.3. The code is written to build and run on UCAR's Casper HPC system.
 
 ## Team Members
-Supreeth Suresh - Software Engineer II CISL
-Cena Miller - Software Engineer II CISL
-Dylan Dickerson - Graduate Reserach Assistant CISL & University of Wyoming
-Evan MacBride - Student Assistant III CISL & University of Delaware
-Krishna Chemudupati - Student Assistant II CISL & University of Colorado Boulder
-Briley James - Student Assisstant III CISL & University of Wyoming
-Oreoluwa Babatunde - Student Assistant II & University of Wyoming
+* Supreeth Suresh - Software Engineer II CISL
+* Cena Miller - Software Engineer II CISL
+* Dylan Dickerson - Graduate Reserach Assistant CISL & University of Wyoming
+* Evan MacBride - Student Assistant III CISL & University of Delaware
+* Krishna Chemudupati - Student Assistant II CISL & University of Colorado Boulder
+* Briley James - Student Assisstant III CISL & University of Wyoming
+* Oreoluwa Babatunde - Student Assistant II & University of Wyoming
 
 # Instructions
 Any code in a leaf directory (e.g. "Lesson_1_matrixAdd/CUDA/solution") can be built using the `build.sh` script to set the environment and run the `make clean` and `make` commands. The executable can be submitted to the job scheduler on UCAR's Casper system (after building) by using `sbatch submit.sh`. The output can be examined within a file of the form `log.*_JobNum.out`
