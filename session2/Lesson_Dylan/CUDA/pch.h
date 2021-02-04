@@ -24,8 +24,8 @@
 // =======================
 // Functions in common.cpp
 // =======================
-void InitializeMatrixSame(float *array, const int ny, const int nx, const float val);
-void InitializeMatrixRand(float *array, const int ny, const int nx);
+void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);
+void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
 void copyMatrix(float *src, float *dest, const int ny, const int nx);
@@ -33,7 +33,7 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // =============
 // Host routines
 // =============
-void InitializeDiagDomMat(float *array, const int ny, const int nx);
+void InitializeDiagDomMat(float *array, const int ny, const int nx, const char *name);
 bool CheckDiagDomMat(float *array, const int ny, const int nx);
 float Jacobi_ErrorCalcCPU(const float *A, const float *b, const float *x, const int ny, const int nx);
 void Jacobi_naiveCPU(const float *A, const float *b, float *x, const int ny, const int nx, const float threshold);

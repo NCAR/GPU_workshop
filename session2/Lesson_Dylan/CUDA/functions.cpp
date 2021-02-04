@@ -1,4 +1,4 @@
-/* host.cpp
+/* functions.cpp
  * Contains the host-side functions specific to this problem
  */
 
@@ -8,12 +8,12 @@
 #include <math.h>
 #include "pch.h"
 
-void InitializeDiagDomMat(float *array, const int ny, const int nx){
+void InitializeDiagDomMat(float *array, const int ny, const int nx, const char *name){
 	float *p;
 	float rand_val = 0.0;
 	float sum = 0.0;
 	// First initialize the matrix with random numbers
-	InitializeMatrixRand(array, ny, nx);
+	InitializeMatrixRand(array, ny, nx, name);
         // Iterate through the diagonal elements and multiply
         // each by a random float to make it greater than the
         // other elements

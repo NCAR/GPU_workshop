@@ -22,4 +22,4 @@ echo ${LD_LIBRARY_PATH}
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun ./stencil
+srun ./acc_stencil.exe 

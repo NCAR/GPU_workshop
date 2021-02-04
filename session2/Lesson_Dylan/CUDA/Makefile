@@ -1,8 +1,8 @@
 # Compilers and linkers
-CC=pgc++
+CC=nvc++
 CUDACC=nvcc
 
-# Compilation flags
+# # Compilation flags
 CFLAGS= -g -O3 -std=c++11 -Wall
 CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
 
@@ -12,9 +12,9 @@ CUDALDFLAGS=-L${CUDA_ROOT_PATH}/lib64 -lcudart
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-OBJECTS= stencil.o host.o common.o 
+OBJECTS= main.o functions.o common.o 
 # The binary to be built by this Makefile
-BINARY= stencil.exe
+BINARY= cuda_stencil.exe
 
 
 all: $(BINARY) 
