@@ -1,6 +1,6 @@
 
-#ifndef Wkshp_head 
-#define Wkshp_head
+#ifndef pch 
+#define pch
 
 //Add headers that you want to pre-compile here 
 #include <stdio.h>

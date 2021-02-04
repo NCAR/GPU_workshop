@@ -1,4 +1,3 @@
-//#include "Wkshp_head.h"
 #include <cuda_runtime.h>
 #include <iostream> 
 #include <stdio.h>
