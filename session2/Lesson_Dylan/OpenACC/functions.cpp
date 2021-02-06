@@ -87,6 +87,6 @@ void Jacobi_naiveCPU(const float *A, const float *b, float *x, const int ny, con
 		// Check the error
 		error = Jacobi_ErrorCalcCPU(A, b, x, nx, ny);
 	}
-	printf("Jacobi exiting on itr %d with error %f\n", itr, error);
+	printf("CPU Jacobi exiting on itr %d with error %f\n", itr, error);
 	delete[] x_new;
 }

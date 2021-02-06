@@ -13,4 +13,5 @@ export CUDA_ROOT_PATH="${NCAR_ROOT_CUDA}"
 # Remove any previous build attempts
 make clean
 # Do a build
-make
+make _OPENACC=true
+#make

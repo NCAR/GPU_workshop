@@ -85,9 +85,24 @@ int main(int argc, char* argv[]){
 		PrintMatrix(h_b, rows, 1);
 		printf("hx\n");
 		PrintMatrix(h_x, rows, 1);
-		printf("gpux\n");
-		PrintMatrix(gpu_x, rows, 1);
 	}
+
+	// Calculate on device (GPU)
+	t0 = high_resolution_clock::now();
+        Jacobi_naiveACC(h_A, h_b, gpu_x, rows, cols, JACOBI_TOLERANCE);
+        t1 = high_resolution_clock::now();
+        t1sum = duration_cast<duration<double>>(t1-t0);
+        printf("ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
+
+        if (rows < 6){
+                printf("A\n");
+                PrintMatrix(h_A, rows, cols);
+                printf("b\n");
+                PrintMatrix(h_b, rows, 1);
+                printf("gpux\n");
+                PrintMatrix(gpu_x, rows, 1);
+        }
+
 
 	// Free host memory
 	free(h_A);

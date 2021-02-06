@@ -39,8 +39,10 @@ float Jacobi_ErrorCalcCPU(const float *A, const float *b, const float *x, const 
 void Jacobi_naiveCPU(const float *A, const float *b, float *x, const int ny, const int nx, const float threshold);
 
 // ==========================
-// Device and Global Routines
+// Device and OpenACC Routines
 // ==========================
-
+void copyMatrix_ACC(float *src, float *dest, const int ny, const int nx);
+float Jacobi_ErrorCalcACC(const float *A, const float *b, const float *x, const int ny, const int nx);
+void Jacobi_naiveACC(const float *A, const float *b, float *x, const int ny, const int nx, const float threshold);
 
 #endif // PCH_H_STENCIL
