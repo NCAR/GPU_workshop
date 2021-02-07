@@ -22,11 +22,10 @@
 
 int main(int argc, char* argv[]){
 	using namespace std::chrono;
-	float *h_A, *h_b, *h_x, *gpu_x;
+	float *h_A, *gpu_A;
         high_resolution_clock::time_point t0, t1;
         duration<double> t1sum;
         int rows, cols;
-	bool check;
 
 	// Parse command line arguments
 	if (argc > 1 && argc < 3){
@@ -41,73 +40,53 @@ int main(int argc, char* argv[]){
 	t0 = high_resolution_clock::now();
 	// 1. Allocate memory to host matrices
 	h_A = (float*)malloc(rows*cols*sizeof(float));
-	h_b = (float*)malloc(rows*sizeof(float));
-	h_x = (float*)malloc(rows*sizeof(float));
-	gpu_x = (float*)malloc(rows*sizeof(float));
+	gpu_A = (float*)malloc(rows*cols*sizeof(float));
 
-	// 2. Fill the A matrix so it's a strictly diagonally dominant matrix
-	InitializeDiagDomMat(h_A, rows, cols, "h_A");
-	check = CheckDiagDomMat(h_A, rows, cols);
-	if (!check) {
-		printf("Error: Matrix is not diagonally dominant\n");
-	}
-
-	// Fill x and b with random values
-	InitializeMatrixRand(h_b, 1, cols, "h_b");
-	InitializeMatrixRand(h_x, 1, cols, "h_x");
-	copyMatrix(h_x, gpu_x, 1, cols);
+	// 2. Fill the A matrices so that the j=0 row is 300 while the other
+	// three sides of the matrix are set to 0
+	InitializeMatrixSame(h_A, rows, cols, 0.0f, "h_A");  
+	InitializeMatrixSame(h_A, 1, cols, 300.0f, "h_A");
+	copyMatrix(h_A, gpu_A, rows, cols);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("Init took %f seconds. Begin compute.\n", t1sum.count());
 
 	if (rows < 6){
-		printf("A\n");
+		printf("h_A\n");
 		PrintMatrix(h_A, rows, cols);
-		printf("b\n");
-		PrintMatrix(h_b, rows, 1);
-		printf("hx\n");
-		PrintMatrix(h_x, rows, 1);
-		printf("gpux\n");
-		PrintMatrix(gpu_x, rows, 1);
+		printf("gpu_A\n");
+		PrintMatrix(gpu_A, rows, cols);
 	}
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
-	Jacobi_naiveCPU(h_A, h_b, h_x, rows, cols, JACOBI_TOLERANCE);
+	LaplaceJacobi_naiveCPU(h_A, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("CPU Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
 	if (rows < 6){
-		printf("A\n");
-		PrintMatrix(h_A, rows, cols);
-		printf("b\n");
-		PrintMatrix(h_b, rows, 1);
-		printf("hx\n");
-		PrintMatrix(h_x, rows, 1);
-	}
+                printf("h_A\n");
+                PrintMatrix(h_A, rows, cols);
+        }
 
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
-        Jacobi_naiveACC(h_A, h_b, gpu_x, rows, cols, JACOBI_TOLERANCE);
+        LaplaceJacobi_naiveACC(gpu_A, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
         t1 = high_resolution_clock::now();
         t1sum = duration_cast<duration<double>>(t1-t0);
         printf("ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
-        if (rows < 6){
-                printf("A\n");
-                PrintMatrix(h_A, rows, cols);
-                printf("b\n");
-                PrintMatrix(h_b, rows, 1);
-                printf("gpux\n");
-                PrintMatrix(gpu_x, rows, 1);
+	if (rows < 6){
+                printf("gpu_A\n");
+                PrintMatrix(gpu_A, rows, cols);
         }
 
+	// Verify results
+	MatrixVerification(h_A, gpu_A, rows, cols, VERIFY_TOL); 
 
 	// Free host memory
 	free(h_A);
-	free(h_b);
-	free(h_x);
-	free(gpu_x);
+	free(gpu_A);
 	return 0;
 }

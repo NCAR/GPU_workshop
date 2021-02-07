@@ -10,16 +10,14 @@
 #define V_SIZE 1024
 #define M_SIZE V_SIZE*V_SIZE
 
-// InitializeMatrixRand range for the values
-#define RANGE_MIN -1
-#define RANGE_MAX 1
-// InitializeDiagDomMat range for multiplier on diagonal elements
-#define DIAG_MIN 5
-#define DIAG_MAX 7
-
 // Max number of iterations to run the Jacobi algorithm for
 #define JACOBI_MAX_ITR 1000
+// Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
+// Verification tolerance
+#define VERIFY_TOL	 1.0E-6F
+
+#define Swap(x,y) {float* temp; temp = x; x = y; y = temp;}
 
 // =======================
 // Functions in common.cpp
@@ -33,16 +31,10 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // =============
 // Host routines
 // =============
-void InitializeDiagDomMat(float *array, const int ny, const int nx, const char *name);
-bool CheckDiagDomMat(float *array, const int ny, const int nx);
-float Jacobi_ErrorCalcCPU(const float *A, const float *b, const float *x, const int ny, const int nx);
-void Jacobi_naiveCPU(const float *A, const float *b, float *x, const int ny, const int nx, const float threshold);
+void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
 
 // ==========================
 // Device and OpenACC Routines
 // ==========================
-void copyMatrix_ACC(float *src, float *dest, const int ny, const int nx);
-float Jacobi_ErrorCalcACC(const float *A, const float *b, const float *x, const int ny, const int nx);
-void Jacobi_naiveACC(const float *A, const float *b, float *x, const int ny, const int nx, const float threshold);
-
+void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
 #endif // PCH_H_STENCIL
