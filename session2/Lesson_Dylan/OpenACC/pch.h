@@ -1,6 +1,7 @@
 /* pch.h
  * PreCompiled Header for this lesson
  * Contains the constants, headers, and function prototypes used in other files
+ * by: G. Dylan Dickerson (gdicker@ucar.edu)
  */
 
 #ifndef PCH_H_STENCIL
