@@ -1,15 +1,22 @@
-/* stencil.cpp
+/* main.cpp
  * Contains the main for the lesson
+ * by: G. Dylan Dickerson (gdicker@ucar.edu) and Supreeth Suresh (ssuresh@ucar.edu)
  */
 
 /*
- * The Jacobi method is an iterative solver for linear systems 
- * of equations of the form Ax=b where b is a vector of length N
- * A is a square matrix N by N, and x is a vector to be found of
- * length N. This method is guaranteed to converge for strictly
- * diagonally dominant (the absolute value of the entries on the
- * diagonal is greater than the sum of the absolute values of
- * the other entries on the same row)
+ * This lesson applies the Jacobi iterative solver to find the steady-state
+ * of a system defined by the Lapalce Equation (second derivatives equal to a
+ * constant) on a 2D grid (matrix). Given a boundary area where points aren't
+ * updated, the solver finds the steady-state of the interior (a.k.a. 
+ * non-boundary) points by doing repeated local averaging of the points above, 
+ * to the right, below, and to the left of each interior point. This can be
+ * interpreted as a version of the Jacobi iterative solver for a system Ax=b 
+ * (which has guaranteed convergence if A is diagonally dominant). If we think
+ * of a flattened vector (x) made from the points in M, then the coefficients
+ * from the local averaging can be thought of as the elements of A (see another
+ * source for a more complete explaination, but this A is diagonally dominant).
+ * One problem with the Jacobi method does mean that we need 2 versions of the
+ * M matrix to carry out the computation.
  */
 
 #include <stdio.h>
@@ -72,63 +79,63 @@ int main(int argc, char** argv){
 
 /*
 	using namespace std::chrono;
-	float *h_A, *gpu_A;
+	float *h_M, *gpu_M;
         high_resolution_clock::time_point t0, t1;
         duration<double> t1sum;
         int rows, cols;
 
 	t0 = high_resolution_clock::now();
 	// 1. Allocate memory to host matrices
-	h_A = (float*)malloc(rows*cols*sizeof(float));
-	gpu_A = (float*)malloc(rows*cols*sizeof(float));
+	h_M = (float*)malloc(rows*cols*sizeof(float));
+	gpu_M = (float*)malloc(rows*cols*sizeof(float));
 
 	// 2. Fill the A matrices so that the j=0 row is 300 while the other
 	// three sides of the matrix are set to 0
-	InitializeMatrixSame(h_A, rows, cols, 0.0f, "h_A");  
-	InitializeMatrixSame(h_A, 1, cols, 300.0f, "h_A");
-	copyMatrix(h_A, gpu_A, rows, cols);
+	InitializeMatrixSame(h_M, rows, cols, 0.0f, "h_M");  
+	InitializeMatrixSame(h_M, 1, cols, 300.0f, "h_M");
+	copyMatrix(h_M, gpu_M, rows, cols);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("Init took %f seconds. Begin compute.\n", t1sum.count());
 
 	if (rows < 6){
-		printf("h_A\n");
-		PrintMatrix(h_A, rows, cols);
-		printf("gpu_A\n");
-		PrintMatrix(gpu_A, rows, cols);
+		printf("h_M\n");
+		PrintMatrix(h_M, rows, cols);
+		printf("gpu_M\n");
+		PrintMatrix(gpu_M, rows, cols);
 	}
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
-	LaplaceJacobi_naiveCPU(h_A, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+	LaplaceJacobi_naiveCPU(h_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("CPU Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
 	if (rows < 6){
-                printf("h_A\n");
-                PrintMatrix(h_A, rows, cols);
+                printf("h_M\n");
+                PrintMatrix(h_M, rows, cols);
         }
 
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
-        LaplaceJacobi_naiveACC(gpu_A, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+        LaplaceJacobi_naiveACC(gpu_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
         t1 = high_resolution_clock::now();
         t1sum = duration_cast<duration<double>>(t1-t0);
         printf("ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
 	if (rows < 6){
-                printf("gpu_A\n");
-                PrintMatrix(gpu_A, rows, cols);
+                printf("gpu_M\n");
+                PrintMatrix(gpu_M, rows, cols);
         }
 
 	// Verify results
-	MatrixVerification(h_A, gpu_A, rows, cols, VERIFY_TOL); 
+	MatrixVerification(h_M, gpu_M, rows, cols, VERIFY_TOL); 
 
 
 	// Free host memory
-	free(h_A);
-	free(gpu_A);
+	free(h_M);
+	free(gpu_M);
 */
 	MPI_Finalize();
 	return 0;

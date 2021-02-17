@@ -1,5 +1,6 @@
 /* functions.cpp
  * Contains the host-side functions specific to this problem
+ * by G. Dylan Dickerson (gdicker@ucar.edu)
  */
 
 #include <float.h>
