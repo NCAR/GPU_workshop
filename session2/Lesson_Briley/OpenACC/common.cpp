@@ -11,7 +11,7 @@
 #define RANGE_MIN -1.0
 
 /* Sets all values in array equal to val */
-void InitializeMatrixSame(float *array, const int ny, const int nx, const float val){
+void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -21,11 +21,12 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 		}
 		// Advance p to the next row
 		p += nx;
-	}
+	} 
+	printf("Initialized Constant Matrix %s,%d x %d \n", name, ny, nx);
 }
 
 /* Sets all elements of array to a number between [-1,1] */
-void InitializeMatrixRand(float *array, const int ny, const int nx){
+void InitializeMatrixRand(float *array, const int ny, const int nx, const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -38,6 +39,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx){
 		// Advance p to the next row
 		p += nx;
 	}
+	printf("Initialized Random Matrix %s,%d x %d \n", name, ny, nx);
 }
 
 /* Compares the matrices element-wise and prints an error message if 
@@ -66,3 +68,32 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 	printf("Answers Verified \n"); 
 }
 
+void PrintMatrix(float *matrix, int ny, int nx){
+	if (ny <= 6 && nx <= 6)
+	{
+		float *p = matrix;
+
+		for (int i = 0; i < ny; i++)
+		{
+			for (int j = 0; j < nx; j++)
+			{
+				printf("%f\t",p[j]);
+			}
+			printf("\n");
+			fflush(stdout);
+			p += nx;
+		}
+	}
+}
+
+void copyMatrix(float *src, float *dest, const int ny, const int nx){
+	float *p = src;
+	float *q = dest;
+	for(int i=0; i<ny; i++){
+		for(int j=0; j<nx; j++){
+			q[j] = p[j];
+		}
+		p += nx;
+		q += nx;
+	}
+}
