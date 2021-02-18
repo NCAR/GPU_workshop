@@ -8,8 +8,8 @@ CFLAGS= -g -O3 -std=c++11 -Wall
 LDFLAGS=
 
 ifeq ($(OPENACC),true)
-#ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all -I${NVHPC_ROOT_PATH}/include
-ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all
+ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all -I${NVHPC_ROOT_PATH}/include
+#ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all
 else 
 ACCFLAGS= 
 endif
