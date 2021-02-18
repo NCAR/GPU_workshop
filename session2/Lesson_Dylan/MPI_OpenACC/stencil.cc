@@ -11,18 +11,20 @@
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
 void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold){
-	// Use an iterative Jacobi solver to find the steady-state of the differential equation
-	// of the Laplace eqution in 2 dimensions. M models the initial state of the system and
-	// is used to return the result in-place. M has a border of b entries that aren't updated
-	// by the Jacobi solver. For the iterative Jacobi method, the unknowns are a flattened
-	// version of the interior points. See another source for more information
-	//
-	// The result is solving a system of the form 
-	// 	M[i][j] = 1/4(M[i-1][j] + M[i][j+1] + M[i+1][j] + M[i][j-1])
+	/*
+	 * Use an iterative Jacobi solver to find the steady-state of
+	 * the differential equation of the Laplace equation in 2 dimensions.
+	 * M models the initial state of the system and is used to return the
+	 * result in-place. M has a border of b entries that aren't updated
+	 * by the Jacobi solver. For the iterative Jacobi method, the unknowns
+	 * are a flattened version of the interior points. See another source
+	 * for more information.
+	 */
 	int itr = 0;
 	float maxdiff = 0.0f;
 	float *M_new;
 
+	// Allocate the second version of the M matrix used for the computation
 	M_new = (float*)malloc(ny*nx*sizeof(float));
 
 	#pragma acc data copy(M[0:ny*nx]) create(M_new[0:ny*nx])
