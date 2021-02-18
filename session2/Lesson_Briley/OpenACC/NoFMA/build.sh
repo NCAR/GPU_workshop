@@ -14,4 +14,5 @@ export CUDA_ROOT_PATH="${NCAR_ROOT_CUDA}"
 make clean
 # Do a build
 # Set OPENACC=true to enable Openacc,set useFMA=true to enable fma operations, otherwise set as false
-make OPENACC=true useFMA=true
+make OPENACC=true useFMA=false
+
