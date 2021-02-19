@@ -15,7 +15,7 @@ endif
 # List of object files separated by spaces (e.g. main.o device.o)
 OBJECTS= main.o functions.o common.o stencil.o 
 # The binary to be built by this Makefile
-BINARY= acc_stencil.exe
+BINARY= mpi_acc_stencil.exe
 
 
 all: $(BINARY) 
@@ -30,4 +30,4 @@ $(BINARY): $(OBJECTS)
 	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 clean:
-	rm *.o $(BINARY) *.out
+	rm *.o $(BINARY)

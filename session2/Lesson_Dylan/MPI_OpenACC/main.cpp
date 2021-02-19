@@ -28,6 +28,8 @@
 #include <mpi.h>
 #include <math.h>
 #include <algorithm>
+#include <thread>
+#include <unistd.h>
 #include "pch.h"
 
 using namespace std;
@@ -104,14 +106,16 @@ int main(int argc, char** argv){
 	// Obtain the direct neighbor ranks
 	MPI_Cart_shift(cartComm, 0, 1, neighbors + DIR_LEFT, neighbors + DIR_RIGHT);
 	MPI_Cart_shift(cartComm, 1, 1, neighbors + DIR_TOP, neighbors + DIR_BOTTOM);
-	printf("Rank:%d \t Coords(x,y):(%d,%d) \t Neighbors(top, right, bottom, left):(%2d, %2d, %2d, %2d) \n", rank, coords[0], coords[1], neighbors[0], neighbors[1], neighbors[2], neighbors[3]); fflush(stdout);
+	//printf("Rank:%d \t Coords(x,y):(%d,%d) \t Neighbors(top, right, bottom, left):(%2d, %2d, %2d, %2d) \n", rank, coords[0], coords[1], neighbors[0], neighbors[1], neighbors[2], neighbors[3]); fflush(stdout);
 
 	// Have rank 0 print out some general info about this setup
 	if(rank == 0){
 		printf("Global matrix size %d by %d is being divided across %d processes\n", rows, cols, nprocs);
 		printf("Processes are laid out in a Cartesian grid with %d processes in each dimension\n", topo);
 		printf("Each thread is working on sub-matrices %d by %d with a border of 1 extra cell along each edge\n", perProcessDim, perProcessDim);
+		printf("------------------------------------------------------------------------------\n\n");
 	}
+	fflush(stdout); sleep(1);
 	
 	float *h_M, *gpu_M;
         high_resolution_clock::time_point t0, t1;
@@ -127,30 +131,31 @@ int main(int argc, char** argv){
 	// three sides of the matrix are set to 0
 	InitializeMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
 	// Copy those results into the GPU matrix
-	//copyMatrix(h_M, gpu_M, l_rows, l_cols);
-	copy(h_M, h_M+(l_rows*l_cols), gpu_M);
+	std::copy(h_M, h_M+(l_rows*l_cols), gpu_M);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count());
+	printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count()); fflush(stdout);
 
 	if (l_rows < 6){
-		printf("rank:%d h_M\n", rank);
+		printf("Rank:%d Post Init h_M\n", rank);
 		PrintMatrix(h_M, l_rows, l_cols);
-		printf("rank:%d: gpu_M\n", rank);
-		PrintMatrix(gpu_M, l_rows, l_cols);
+		//printf("Rank:%d: gpu_M\n", rank);
+		//PrintMatrix(gpu_M, l_rows, l_cols);
 	}
+	fflush(stdout); sleep(1);
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
 	LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE, rank, coords, neighbors);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("CPU Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
+	printf("Rank:%d MPI-CPU Jacobi Iterative Solver took %f seconds.\n", rank,t1sum.count()); fflush(stdout);
 
 	if (l_rows < 6){
-                printf("rank:%d h_M\n");
+                printf("Rank:%d Post LaplaceJacobi_MPICPU h_M\n", rank);
                 PrintMatrix(h_M, l_rows, l_cols);
         }
+	fflush(stdout); sleep(1);
 
 /*
 	// Calculate on device (GPU)
@@ -172,7 +177,8 @@ int main(int argc, char** argv){
 	// Free host memory
 	free(h_M);
 	free(gpu_M);
-
+	
+	fflush(stdout); sleep(1);
 	MPI_Finalize();
 	return 0;
 }
