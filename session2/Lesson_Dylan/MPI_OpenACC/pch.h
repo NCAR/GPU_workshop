@@ -11,8 +11,6 @@
 #define V_SIZE 1024
 #define M_SIZE V_SIZE*V_SIZE
 
-#define TOPO 4
-
 #define DEFAULT_DOMAIN_SIZE_PER_RANK 256
 
 #define DIR_TOP				0
@@ -44,6 +42,8 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // Host routines
 // =============
 void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
+void InitializeMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
+void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors);
 
 // ==========================
 // Device and OpenACC Routines

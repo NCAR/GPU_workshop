@@ -25,23 +25,41 @@
 #include <ctime>
 #include <chrono>
 #include <ratio> 
-#include "pch.h"
 #include <mpi.h>
-#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include "pch.h"
 
 using namespace std;
+using namespace chrono;
 
 int main(int argc, char** argv){
-	int rank, size;
-	int usePeriods[2] = {0, 0};
-	int newCoords[2];
+	int rows, cols, // The dimensions of the global matrix
+	    status, // return from MPI calls
+	    rank, nprocs,
+	    oldrank,
+	    topo;  // number of processes in each dimension of grid
+
+	//1. Start the MPI and get rank and number of processes
+	//printf("DEBUG:Pre mpi init\n"); fflush(stdout);
 	MPI_Comm cartComm = MPI_COMM_WORLD;
-	MPI_Init(&argc,&argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_size(MPI_COMM_WORLD, &size);
-	int rows, cols;
-	int topo;
-	int oldrank = rank;
+	status = MPI_Init(&argc,&argv);
+	if (status != MPI_SUCCESS){
+		printf("ERROR: MPI_Init returned %d and not MPI_SUCCESS\n", status);
+		exit(1);
+	}
+	status = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+	if (status != MPI_SUCCESS){
+		printf("ERROR: MPI_Comm_rank returned %d and not MPI_SUCCESS\n", status);
+		exit(1);
+	}
+	status = MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+	if (status != MPI_SUCCESS){
+		printf("ERROR: MPI_Comm_size returned %d and not MPI_SUCCESS\n", status);
+		exit(1);
+	}
+	//printf("DEBUG:Post mpi init\n"); fflush(stdout);
+	oldrank = rank;
 
 	// Parse command line arguments
 	if (argc > 1 && argc < 4){
@@ -50,21 +68,34 @@ int main(int argc, char** argv){
 	} else if (argc >= 4) {
 		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks \n");
 	} else {
-		// set default dimensions 8192x8192
+		// set default dimensions 1024x1024
 		rows = cols = V_SIZE;
-		topo = sqrt(size);
+		topo = sqrt(nprocs);
 	}
 	
-	int neighbors[4];
-	int dimSize[2] = {size/topo,size/topo};
-	int topIndex[2];
+	int perProcessDim, // The number of interior points each process gets in each dimension
+	    l_rows, l_cols; // The actual number of rows/cols per process
+	// Ensure each process has the same values for rows, cols, and topo
+	status = MPI_Bcast(&rows, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	status = MPI_Bcast(&cols, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	status = MPI_Bcast(&topo, 1, MPI_INT, 0, MPI_COMM_WORLD);
+	perProcessDim = (int)sqrt((rows*cols)/nprocs);
+	// Add 2 for the ghost area in each dimension
+	l_rows = l_cols = perProcessDim+2;
 
-	// Create a carthesian communicator
+	// 2. Create the Carteisian grid
+	int dimSize[2] = {nprocs/topo, nprocs/topo};  // Number of processes in each dimension
+	int usePeriods[2] = {0, 0}; // Set the grid to not repeat in each dimension
+	int coords[2]; // Holds the coordinates of this rank in the cartesian grid
+	int neighbors[4]; // Holds the ranks of the neighboring processes
+
+	//printf("DEBUG:Pre mpi cart create\n"); fflush(stdout);
+	// Create a cartesian communicator
 	MPI_Cart_create(MPI_COMM_WORLD, 2, dimSize, usePeriods, 0, &cartComm);
+	//printf("DEBUG:Post mpi cart create\n"); fflush(stdout);
 
 	// Obtain the 2D coordinates in the new communicator
-	MPI_Cart_coords(cartComm, rank, 2, newCoords);
-	topIndex = {newCoords[0],newCoords[1]};
+	MPI_Cart_coords(cartComm, rank, 2, coords);
 	if ((rank) != oldrank)
 	{
 		printf("Rank change: from %d to %d\n", oldrank, rank);
@@ -73,50 +104,55 @@ int main(int argc, char** argv){
 	// Obtain the direct neighbor ranks
 	MPI_Cart_shift(cartComm, 0, 1, neighbors + DIR_LEFT, neighbors + DIR_RIGHT);
 	MPI_Cart_shift(cartComm, 1, 1, neighbors + DIR_TOP, neighbors + DIR_BOTTOM);
+	printf("Rank:%d \t Coords(x,y):(%d,%d) \t Neighbors(top, right, bottom, left):(%2d, %2d, %2d, %2d) \n", rank, coords[0], coords[1], neighbors[0], neighbors[1], neighbors[2], neighbors[3]); fflush(stdout);
 
-	printf("Rank: %d \t Neighbors(top, right, bottom, left): %2d, %2d, %2d, %2d \n", rank, neighbors[0], neighbors[1], neighbors[2], neighbors[3]);
-
-
-/*
-	using namespace std::chrono;
+	// Have rank 0 print out some general info about this setup
+	if(rank == 0){
+		printf("Global matrix size %d by %d is being divided across %d processes\n", rows, cols, nprocs);
+		printf("Processes are laid out in a Cartesian grid with %d processes in each dimension\n", topo);
+		printf("Each thread is working on sub-matrices %d by %d with a border of 1 extra cell along each edge\n", perProcessDim, perProcessDim);
+	}
+	
 	float *h_M, *gpu_M;
         high_resolution_clock::time_point t0, t1;
-        duration<double> t1sum;
-        int rows, cols;
+	duration<double> t1sum;
 
 	t0 = high_resolution_clock::now();
-	// 1. Allocate memory to host matrices
-	h_M = (float*)malloc(rows*cols*sizeof(float));
-	gpu_M = (float*)malloc(rows*cols*sizeof(float));
+	// 3. Allocate memory for the submatrix on each process
+	// Each dimension is padded with the size of the ghost area
+	h_M = (float*)malloc(l_rows*l_cols*sizeof(float));
+	gpu_M = (float*)malloc(l_rows*l_cols*sizeof(float));
 
-	// 2. Fill the A matrices so that the j=0 row is 300 while the other
+	// 4. Fill the A matrices so that the j=0 row is 300 while the other
 	// three sides of the matrix are set to 0
-	InitializeMatrixSame(h_M, rows, cols, 0.0f, "h_M");  
-	InitializeMatrixSame(h_M, 1, cols, 300.0f, "h_M");
-	copyMatrix(h_M, gpu_M, rows, cols);
+	InitializeMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
+	// Copy those results into the GPU matrix
+	//copyMatrix(h_M, gpu_M, l_rows, l_cols);
+	copy(h_M, h_M+(l_rows*l_cols), gpu_M);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("Init took %f seconds. Begin compute.\n", t1sum.count());
+	printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count());
 
-	if (rows < 6){
-		printf("h_M\n");
-		PrintMatrix(h_M, rows, cols);
-		printf("gpu_M\n");
-		PrintMatrix(gpu_M, rows, cols);
+	if (l_rows < 6){
+		printf("rank:%d h_M\n", rank);
+		PrintMatrix(h_M, l_rows, l_cols);
+		printf("rank:%d: gpu_M\n", rank);
+		PrintMatrix(gpu_M, l_rows, l_cols);
 	}
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
-	LaplaceJacobi_naiveCPU(h_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+	LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE, rank, coords, neighbors);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("CPU Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
-	if (rows < 6){
-                printf("h_M\n");
-                PrintMatrix(h_M, rows, cols);
+	if (l_rows < 6){
+                printf("rank:%d h_M\n");
+                PrintMatrix(h_M, l_rows, l_cols);
         }
 
+/*
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
         LaplaceJacobi_naiveACC(gpu_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
@@ -132,11 +168,11 @@ int main(int argc, char** argv){
 	// Verify results
 	MatrixVerification(h_M, gpu_M, rows, cols, VERIFY_TOL); 
 
-
+*/
 	// Free host memory
 	free(h_M);
 	free(gpu_M);
-*/
+
 	MPI_Finalize();
 	return 0;
 }
