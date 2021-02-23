@@ -21,7 +21,7 @@ export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo ${LD_LIBRARY_PATH}
 nvidia-smi
 
-export PGI_COMPARE=abs=6,summary,file="/glade/scratch/macbride/workshop21/GPU_workshop/session2/Lesson_Evan/PCAST/pgi_compare/pcast_compare.dat",outputfile="/glade/scratch/macbride/workshop21/GPU_workshop/session2/Lesson_Evan/PCAST/pgi_compare/pcast_compare.out"
+export PGI_COMPARE=abs=6,summary
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"

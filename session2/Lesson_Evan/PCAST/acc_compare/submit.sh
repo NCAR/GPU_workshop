@@ -21,7 +21,7 @@ export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo ${LD_LIBRARY_PATH}
 nvidia-smi
 
-export PGI_COMPARE=rel=6,summary
+export PGI_COMPARE=abs=6,summary
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"

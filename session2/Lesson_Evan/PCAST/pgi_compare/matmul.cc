@@ -16,7 +16,7 @@ void gpuMatmul(const float *restrict A, const float *restrict B, float *restrict
         C[i*q+j] = temp;
         }
       }
-    #pragma pgi compare(C[0:m*q])
+    pgi_compare(C, "float", m*q, "C", "matmul.cc", "gpuMatmul", 20);
     }
   }
 }
