@@ -72,6 +72,34 @@ void InitializeMatrix_MPI(float *M, const int ny, const int nx, const int rank, 
 	}
 }
 
+void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank){
+	// Pointers for rows in each matrix
+	float *p = hostC;
+	float *q = gpuC;
+        bool PassFlag = 1;
+
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			if (fabs(p[j] - q[j]) > fTolerance)
+			{
+				printf("Rank:%d error: %f > %f", rank, fabs(p[j]-q[j]),fTolerance);
+				printf("\tRank:%d host_M[%d][%d]= %f", rank, i,j, p[j]);
+				printf("\tRank:%d GPU_M[%d][%d]= %f", rank, i,j, q[j]);
+                                PassFlag=0;
+				return;
+			}
+		}
+		p += nx;
+		q += nx;
+	}
+        if(PassFlag)
+	{
+		printf("Rank:%d Verification passed\n", rank);
+        }
+}
+
 void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors){
 /*
  * Performs the same calculations as naiveCPU, but also does a halo exchange

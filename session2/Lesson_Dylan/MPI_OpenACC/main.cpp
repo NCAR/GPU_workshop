@@ -143,6 +143,8 @@ int main(int argc, char** argv){
 		//PrintMatrix(gpu_M, l_rows, l_cols);
 	}
 	fflush(stdout); sleep(1);
+	if (rank == 0) printf("\n");
+	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
@@ -156,24 +158,27 @@ int main(int argc, char** argv){
                 PrintMatrix(h_M, l_rows, l_cols);
         }
 	fflush(stdout); sleep(1);
+	if (rank == 0) printf("\n");
+	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
-/*
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
-        LaplaceJacobi_naiveACC(gpu_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+        LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE, rank, coords, neighbors);
         t1 = high_resolution_clock::now();
         t1sum = duration_cast<duration<double>>(t1-t0);
-        printf("ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
+        printf("MPI-ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
 
-	if (rows < 6){
-                printf("gpu_M\n");
-                PrintMatrix(gpu_M, rows, cols);
+	if (l_rows < 6){
+                printf("Rank:%d Post LaplaceJacobi_MPIACC gpu_M\n",rank);
+                PrintMatrix(gpu_M, l_rows, l_cols);
         }
+	fflush(stdout); sleep(1);
+	if (rank == 0) printf("\n");
+	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
 	// Verify results
-	MatrixVerification(h_M, gpu_M, rows, cols, VERIFY_TOL); 
+	MatrixVerification_MPI(h_M, gpu_M, l_rows, l_cols, VERIFY_TOL, rank); 
 
-*/
 	// Free host memory
 	free(h_M);
 	free(gpu_M);

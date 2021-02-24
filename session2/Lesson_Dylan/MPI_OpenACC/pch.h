@@ -43,10 +43,12 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // =============
 void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
 void InitializeMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
+void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank);
 void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors);
 
 // ==========================
 // Device and OpenACC Routines
 // ==========================
 void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
+void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors);
 #endif // PCH_H_STENCIL

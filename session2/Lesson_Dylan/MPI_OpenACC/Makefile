@@ -6,7 +6,7 @@ MPICC=mpic++
 CFLAGS= -g -O3 -std=c++11 -Wall
 
 ifeq ($(_OPENACC),true)
-ACCFLAGS= -acc -ta=tesla,cc60,cc70,managed -Minfo=all -I${NVHPC_ROOT_PATH}/include
+ACCFLAGS= -acc -ta=tesla,cc60,cc70,managed -Minfo=accel -I${NVHPC_ROOT_PATH}/include
 else 
 ACCFLAGS=
 endif
@@ -27,7 +27,7 @@ $(BINARY): $(OBJECTS)
 	$(MPICC) -c $(CFLAGS) $<
 
 %.o: %.cc Makefile
-	$(CC) -c $(CFLAGS) $(ACCFLAGS) $<
+	$(MPICC) -c $(CFLAGS) $(ACCFLAGS) $<
 
 clean:
 	rm *.o $(BINARY)
