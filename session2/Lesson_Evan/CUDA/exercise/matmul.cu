@@ -3,43 +3,27 @@
 #include "pch.h"
 
 __global__ void SharedMatmul(const float *a, const float *b, float *c, const int m, const int p, const int q) {
-  // Compute each thread's global row and column index
-  int row = blockIdx.y * blockDim.y + threadIdx.y;
-  int col = blockIdx.x * blockDim.x + threadIdx.x;
+  // Compute each thread's global row and column index.
 
   // Statically allocate a tile of shared memory. Tile size should equal block size.
-  __shared__ float s_a[SHMEM_SIZE];
-  __shared__ float s_b[SHMEM_SIZE];
 
   // Declare a temporary variable to accumulate calculated elements
-  // for the C matrix
-  float tmp = 0.0;
+  // for the C matrix.
 
-  // Sweep tiles of size blockDim.x across matrices A and B
+  // Sweep tiles of size blockDim.x across matrices A and B.
+
   // For matrix A, keep the row invariant and iterate through columns.
   // For matrix B, keep the column invariant and iterate through rows.
-  for (int i = 0; i < p; i += blockDim.x) {
-    // Load in elements from A and B into shared memory for this tile.
-    int shared_index = threadIdx.y * blockDim.x + threadIdx.x;
-    s_a[shared_index] = a[row * p + i + threadIdx.x];
-    s_b[shared_index] = b[i * q + threadIdx.y * q + col];
 
-    // Wait for tiles to be loaded in before doing computation
-    __syncthreads();
+  // Load in elements from A and B into shared memory into each tile.
 
-    // Do matrix multiplication on the small matrix within the current tile.
-    for (int j = 0; j < blockDim.x; j++) {
-      tmp +=
-          s_a[threadIdx.y * blockDim.x + j] * s_b[j * blockDim.x + threadIdx.x];
-    }
+  // Wait for tiles to be loaded in before doing computation.
 
-    // Wait for all threads to finish using current tiles before loading in new
-    // ones
-    __syncthreads();
-  }
+  // Do matrix multiplication on the small matrix within the current tile.
 
-  // Write resulting calculation as an element of the C matrix
-  c[row * q + col] = tmp;
+  // Wait for all threads to finish using current tiles before loading in new ones.
+
+  // Write resulting calculations as elements of the C matrix.
 }
 
 __host__ void gpuMatmul(const float *h_A, const float *h_B, float *gpu_C, const int m, const int p, const int q)
