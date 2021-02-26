@@ -32,7 +32,9 @@ int main(int argc, char* argv[]){
 	float *h_M, *gpu_M;
         high_resolution_clock::time_point t0, t1;
         duration<double> t1sum;
-        int rows, cols;
+        int rows, cols,
+	    cpu_itr, gpu_itr;
+	float cpu_err, gpu_err;
 
 	// Parse command line arguments
 	if (argc > 1 && argc < 3){
@@ -51,6 +53,7 @@ int main(int argc, char* argv[]){
 
 	// 2. Fill the A matrices so that the j=0 row is 300 while the other
 	// three sides of the matrix are set to 0
+	printf("Abusing the `InitializeMatrixSame` function from common.cpp\n");
 	InitializeMatrixSame(h_M, rows, cols, 0.0f, "h_M");  
 	InitializeMatrixSame(h_M, 1, cols, 300.0f, "h_M");
 	copyMatrix(h_M, gpu_M, rows, cols);
@@ -67,7 +70,7 @@ int main(int argc, char* argv[]){
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
-	LaplaceJacobi_naiveCPU(h_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+	LaplaceJacobi_naiveCPU(h_M, 1, rows, cols, cpu_itr, cpu_err);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
 	printf("CPU Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
@@ -79,7 +82,7 @@ int main(int argc, char* argv[]){
 
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
-        LaplaceJacobi_naiveACC(gpu_M, 1, rows, cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE);
+        LaplaceJacobi_naiveACC(gpu_M, 1, rows, cols, gpu_itr, gpu_err); 
         t1 = high_resolution_clock::now();
         t1sum = duration_cast<duration<double>>(t1-t0);
         printf("ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());

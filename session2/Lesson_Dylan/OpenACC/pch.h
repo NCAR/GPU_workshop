@@ -32,10 +32,10 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // =============
 // Host routines
 // =============
-void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
+void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, int& itr, float& maxdiff);
 
 // ==========================
 // Device and OpenACC Routines
 // ==========================
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
+void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, int& itr, float& maxdiff);
 #endif // PCH_H_STENCIL

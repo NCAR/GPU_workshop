@@ -12,7 +12,7 @@
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold){
+void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, int& itr, float& error){
 	/*
 	 * Use an iterative Jacobi solver to find the steady-state of
 	 * the differential equation of the Laplace equation in 2 dimensions.
@@ -22,7 +22,7 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, c
 	 * are a flattened version of the interior points. See another source
 	 * for more information.
 	 */
-	int itr = 0;
+	itr = 0;
 	float maxdiff = 0.0f;
 	float *M_new;
 
@@ -54,8 +54,9 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, c
 			}
 		}
 		} // acc end parallel
-	} while(itr < max_itr && maxdiff > threshold);
+	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
 	} // acc end data
-	printf("ACC Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", itr, max_itr, maxdiff, threshold);
+	printf("ACC Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", itr, JACOBI_MAX_ITR, maxdiff, JACOBI_TOLERANCE);
+	error = maxdiff;
 	free(M_new);
 }
