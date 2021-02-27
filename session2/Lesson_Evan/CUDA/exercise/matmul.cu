@@ -7,9 +7,10 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
   // int row = ???
   // int col = ???
 
-  // Statically allocate a tile of shared memory. Tile size should equal block size.
-  // __shared__ float s_a[???];
-  // __shared__ float s_b[???];
+  // Statically allocate a tile of shared memory. Tile size should equal the
+  // number of threads per block.
+  // ??? float s_a[???];
+  // ??? float s_b[???];
 
   // Declare a temporary variable to accumulate calculated elements
   // for the C matrix.
