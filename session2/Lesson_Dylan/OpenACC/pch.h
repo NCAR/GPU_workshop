@@ -18,7 +18,12 @@
 // Verification tolerance
 #define VERIFY_TOL	 1.0E-6F
 
-#define Swap(x,y) {float* temp; temp = x; x = y; y = temp;}
+// Convinience struct to return values from LapalceJacobi_x
+struct LJ_return
+{
+	int itr;
+	float error;
+};
 
 // =======================
 // Functions in common.cpp
@@ -32,10 +37,10 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx);
 // =============
 // Host routines
 // =============
-void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, int& itr, float& maxdiff);
+LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx);
 
 // ==========================
 // Device and OpenACC Routines
 // ==========================
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, int& itr, float& maxdiff);
+LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx);
 #endif // PCH_H_STENCIL

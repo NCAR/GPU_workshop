@@ -12,7 +12,7 @@
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, int& itr, float& error){
+LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx){
 	/*
 	 * Use an iterative Jacobi solver to find the steady-state of
 	 * the differential equation of the Laplace equation in 2 dimensions.
@@ -22,9 +22,10 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, i
 	 * are a flattened version of the interior points. See another source
 	 * for more information.
 	 */
-	itr = 0;
+	int itr = 0;
 	float maxdiff = 0.0f;
 	float *M_new;
+	LJ_return ret;
 
 	// Allocate the second version of the M matrix used for the computation
 	M_new = (float*)malloc(ny*nx*sizeof(float));
@@ -38,8 +39,8 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, i
 		{
 		// Update M_new with M
 		#pragma acc loop collapse(2)
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
 							M[(i+1)*nx+j]+M[i*nx+j-1]);
 			}
@@ -47,8 +48,8 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, i
 
 		// Check for convergence while copying values into M
 		#pragma acc loop collapse(2) reduction(max:maxdiff)
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
 				M[i*nx+j] = M_new[i*nx+j];
 			}
@@ -56,7 +57,11 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, i
 		} // acc end parallel
 	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
 	} // acc end data
-	printf("ACC Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", itr, JACOBI_MAX_ITR, maxdiff, JACOBI_TOLERANCE);
-	error = maxdiff;
+	
+	// Free malloc'd memory
 	free(M_new);
+	// Fill in the return value
+	ret.itr = itr;
+	ret.error = maxdiff;
+	return ret;
 }
