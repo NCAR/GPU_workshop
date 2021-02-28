@@ -13,7 +13,7 @@
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold){
+LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx){
 	/*
 	 * Use an iterative Jacobi solver to find the steady-state of
 	 * the differential equation of the Laplace equation in 2 dimensions.
@@ -26,6 +26,7 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, c
 	int itr = 0;
 	float maxdiff = 0.0f;
 	float *M_new;
+	LJ_return ret;
 
 	// Allocate the second version of the M matrix used for the computation
 	M_new = (float*)malloc(ny*nx*sizeof(float));
@@ -39,8 +40,8 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, c
 		{
 		// Update M_new with M
 		#pragma acc loop collapse(2)
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
 							M[(i+1)*nx+j]+M[i*nx+j-1]);
 			}
@@ -48,20 +49,26 @@ void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, c
 
 		// Check for convergence while copying values into M
 		#pragma acc loop collapse(2) reduction(max:maxdiff)
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
 				M[i*nx+j] = M_new[i*nx+j];
 			}
 		}
 		} // acc end parallel
-	} while(itr < max_itr && maxdiff > threshold);
+	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
 	} // acc end data
-	printf("ACC Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", itr, max_itr, maxdiff, threshold);
+	
+	// Free malloc'd memory
 	free(M_new);
+	// Fill in the return value
+	ret.itr = itr;
+	ret.error = maxdiff;
+	return ret;
 }
 
-void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors){
+LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
+			  const int rank, const int *coord, const int *neighbors){
 /*
  * Performs the same calculations as naiveCPU, but also does a halo exchange
  * at the end of each iteration to update the ghost areas and uses OpenACC pragmas
@@ -76,14 +83,13 @@ void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_it
 	// M_new is the version of M that is updated in the body of the loop before
 	// being copied back into M at the end of an iteration
 	float *M_new;
-	// Change to a single send buffer?
-	// Arrays used to send the ghost area values to each neighbor
-	float *send_top, *send_right, *send_bot, *send_left;
-	// Change to a single receive buffer?
-	// Arrays used to receive the ghost area values from each neighbor
-	float *recv_top, *recv_right, *recv_bot, *recv_left;
+	LJ_return ret;
 
 	// MPI Specific Variables
+	// Arrays used to send the ghost area values to each neighbor
+	float *send_top, *send_right, *send_bot, *send_left;
+	// Arrays used to receive the ghost area values from each neighbor
+	float *recv_top, *recv_right, *recv_bot, *recv_left;
 	// Holds the statuses returned by MPI_Waitall related to a Irecv/Isend pair
 	MPI_Status status[2];
 	// Groups Irecv/Isend calls together from the sender's perspective and are
@@ -205,7 +211,7 @@ void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_it
 {			
 			MPI_Irecv(recv_left, nx-2, MPI_FLOAT, neighbors[DIR_LEFT], tag_r, MPI_COMM_WORLD, requestL);
 			MPI_Isend(send_left, nx-2, MPI_FLOAT, neighbors[DIR_LEFT], tag_l, MPI_COMM_WORLD, requestL+1);
-}
+}			//printf("Rank:%d End left exchange\n", rank);fflush(stdout);
 			//printf("Rank:%d End left exchange\n", rank);fflush(stdout);
 		}
 
@@ -283,7 +289,7 @@ void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_it
 		MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
 		
 		//printf("Rank:%d Completed transfer and iteration %d\n",rank, itr); fflush(stdout);
-	} while(itr < max_itr && g_maxdiff > threshold);
+	} while(itr < JACOBI_MAX_ITR && g_maxdiff > JACOBI_TOLERANCE);
 
 #pragma acc exit data copyout(M[0:matsz]) delete(M_new[0:matsz])
 #pragma acc exit data delete(send_top[0:buffsz_x], send_right[0:buffsz_y])
@@ -291,7 +297,7 @@ void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_it
 #pragma acc exit data delete(recv_top[0:buffsz_x], recv_right[0:buffsz_y])
 #pragma acc exit data delete(recv_bot[0:buffsz_x], recv_left[0:buffsz_y])
 
-	//printf("Rank:%d MPI-CPU Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", rank, itr, max_itr, maxdiff, threshold);
+	//printf("Rank:%d MPI-ACC Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", rank, itr, JACOBI_MAX_ITR, maxdiff, JACOBI_TOLERANCE);
 
 	// Free malloc'ed memory
 	free(M_new);
@@ -303,4 +309,9 @@ void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_it
 	free(recv_right);
 	free(recv_bot);
 	free(recv_left);	
+
+	// Fill in the return value
+	ret.itr = itr;
+	ret.error = maxdiff;
+	return ret;
 }

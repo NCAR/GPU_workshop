@@ -42,6 +42,8 @@ int main(int argc, char** argv){
 	    oldrank,
 	    topo;  // number of processes in each dimension of grid
 
+	LJ_return cpu_ret, gpu_ret;
+
 	//1. Start the MPI and get rank and number of processes
 	//printf("DEBUG:Pre mpi init\n"); fflush(stdout);
 	MPI_Comm cartComm = MPI_COMM_WORLD;
@@ -84,6 +86,8 @@ int main(int argc, char** argv){
 	perProcessDim = (int)sqrt((rows*cols)/nprocs);
 	// Add 2 for the ghost area in each dimension
 	l_rows = l_cols = perProcessDim+2;
+	rows += 2;
+	cols += 2;
 
 	// 2. Create the Carteisian grid
 	int dimSize[2] = {nprocs/topo, nprocs/topo};  // Number of processes in each dimension
@@ -110,9 +114,10 @@ int main(int argc, char** argv){
 
 	// Have rank 0 print out some general info about this setup
 	if(rank == 0){
-		printf("Global matrix size %d by %d is being divided across %d processes\n", rows, cols, nprocs);
+		printf("Global matrix with %d by %d interior points is being divided across %d processes\n", rows-2, cols-2, nprocs);
+		printf("(Actual global size is %d by %d with border)\n", rows, cols);
 		printf("Processes are laid out in a Cartesian grid with %d processes in each dimension\n", topo);
-		printf("Each thread is working on sub-matrices %d by %d with a border of 1 extra cell along each edge\n", perProcessDim, perProcessDim);
+		printf("Each thread is working on sub-matrices with %d by %d interior points\n", perProcessDim, perProcessDim);
 		printf("------------------------------------------------------------------------------\n\n");
 	}
 	fflush(stdout); sleep(1);
@@ -127,9 +132,9 @@ int main(int argc, char** argv){
 	h_M = (float*)malloc(l_rows*l_cols*sizeof(float));
 	gpu_M = (float*)malloc(l_rows*l_cols*sizeof(float));
 
-	// 4. Fill the A matrices so that the j=0 row is 300 while the other
+	// 4. Fill the M matrices so that the j=0 row is 300 while the other
 	// three sides of the matrix are set to 0
-	InitializeMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
+	InitializeLJMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
 	// Copy those results into the GPU matrix
 	std::copy(h_M, h_M+(l_rows*l_cols), gpu_M);
 	t1 = high_resolution_clock::now();
@@ -148,10 +153,11 @@ int main(int argc, char** argv){
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
-	LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE, rank, coords, neighbors);
+	cpu_ret = LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, rank, coords, neighbors);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("Rank:%d MPI-CPU Jacobi Iterative Solver took %f seconds.\n", rank,t1sum.count()); fflush(stdout);
+	//printf("Rank:%d MPI-CPU LaplaceJacobi Iterative Solver took %f seconds.\n", rank,t1sum.count()); fflush(stdout);
+	printf("Rank:%d MPI-CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n",rank,t1sum.count(),cpu_ret.itr,cpu_ret.error);fflush(stdout);
 
 	if (l_rows < 6){
                 printf("Rank:%d Post LaplaceJacobi_MPICPU h_M\n", rank);
@@ -161,12 +167,14 @@ int main(int argc, char** argv){
 	if (rank == 0) printf("\n");
 	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
+
 	// Calculate on device (GPU)
 	t0 = high_resolution_clock::now();
-        LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, JACOBI_MAX_ITR, JACOBI_TOLERANCE, rank, coords, neighbors);
+        gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, coords, neighbors);
         t1 = high_resolution_clock::now();
         t1sum = duration_cast<duration<double>>(t1-t0);
-        printf("MPI-ACC Jacobi Iterative Solver took %f seconds.\n",t1sum.count());
+	printf("Rank:%d MPI-ACC LaplaceJacobi Iterative Solver took %f seconds.\n", rank,t1sum.count()); fflush(stdout);
+	printf("Rank:%d MPI-CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n",rank,t1sum.count(),gpu_ret.itr,gpu_ret.error);fflush(stdout);
 
 	if (l_rows < 6){
                 printf("Rank:%d Post LaplaceJacobi_MPIACC gpu_M\n",rank);

@@ -27,7 +27,12 @@
 // Verification tolerance
 #define VERIFY_TOL	 1.0E-6F
 
-#define Swap(x,y) {float* temp; temp = x; x = y; y = temp;}
+// Convinience struct to return values from LapalceJacobi_x
+struct LJ_return
+{
+	int itr;
+	float error;
+};
 
 // =======================
 // Functions in common.cpp
@@ -36,19 +41,20 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
-void copyMatrix(float *src, float *dest, const int ny, const int nx);
+void InitializeLJMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
+void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank);
 
 // =============
 // Host routines
 // =============
-void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
-void InitializeMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
-void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank);
-void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors);
+LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx);
+LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
+			       const int rank, const int *coord, const int *neighbors);
 
 // ==========================
 // Device and OpenACC Routines
 // ==========================
-void LaplaceJacobi_naiveACC(float *M, const int b, const int ny, const int nx, const int max_itr, const float threshold);
-void LaplaceJacobi_MPIACC(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors);
+LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx);
+LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
+			       const int rank, const int *coord, const int *neighbors);
 #endif // PCH_H_STENCIL

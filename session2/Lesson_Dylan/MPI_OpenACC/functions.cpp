@@ -13,94 +13,56 @@
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
-void LaplaceJacobi_naiveCPU(float *M, const int b, const int ny, const int nx, const int
-max_itr, const float threshold){
-	// Use an iterative Jacobi solver to find the steady-state of the differential equation
-	// of the Laplace eqution in 2 dimensions. M models the initial state of the system and
-	// is used to return the result in-place. M has a border of b entries that aren't updated
-	// by the Jacobi solver. For the iterative Jacobi method, the unknowns are a flattened
-	// version of the interior points. See another source for more information
-	//
-	// The result is solving a system of the form 
-	// 	M[i][j] = 1/4(M[i-1][j] + M[i][j+1] + M[i+1][j] + M[i][j-1])
+LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
+	/*
+	 * Use an iterative Jacobi solver to find the steady-state of
+	 * the differential equation of the Laplace equation in 2 dimensions.
+	 * M models the initial state of the system and is used to return the
+	 * result in-place. M has a border of b entries that aren't updated
+	 * by the Jacobi solver. For the iterative Jacobi method, the unknowns
+	 * are a flattened version of the interior points. See another source
+	 * for more information.
+	 */
 	int itr = 0;
 	float maxdiff = 0.0f;
 	float *M_new;
+	LJ_return ret;
 
+	// Allocate the second version of the M matrix used for the computation
 	M_new = (float*)malloc(ny*nx*sizeof(float));
 
 	do {
 		maxdiff = 0.0f;
 		itr++;
 		// Update M_new with M
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
 							M[(i+1)*nx+j]+M[i*nx+j-1]);
 			}
 		}
 
 		// Check for convergence while copying values into M
-		for(int i=b; i<ny-b; i++){
-			for(int j=b; j<nx-b; j++){
+		for(int i=1; i<ny-1; i++){
+			for(int j=1; j<nx-1; j++){
 				maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
 				M[i*nx+j] = M_new[i*nx+j];
 			}
 		}
-	} while(itr < max_itr && maxdiff > threshold);
-	//printf("CPU Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", itr, max_itr, maxdiff, threshold);
+	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	
+	// Free malloc'd memory
 	free(M_new);
+	
+	// Fill in the return value
+	ret.itr = itr;
+	ret.error = maxdiff;
+	return ret;
+
 }
 
-void InitializeMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords){
-/*
- * Use the coordinates of the process to determine if it is in the top row and
- * set the top row of the local matrix to 300.0f if so. Otherwise all values are
- * filled with 0.0f 
- */
-	int startRow = 0;
-	if(coords[1] == 0){ // if in the first row
-		for(int j=0; j<nx; j++){
-			M[j] = 300.0f;
-		}
-		startRow = 1;
-	}
-	for(int i=startRow; i<ny; i++){
-		for(int j=0; j<nx; j++){
-			M[i*nx+j] = 0.0f;
-		}
-	}
-}
-
-void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank){
-	// Pointers for rows in each matrix
-	float *p = hostC;
-	float *q = gpuC;
-        bool PassFlag = 1;
-
-	for (int i = 0; i < ny; i++)
-	{
-		for (int j = 0; j < nx; j++)
-		{
-			if (fabs(p[j] - q[j]) > fTolerance)
-			{
-				printf("Rank:%d error: %f > %f", rank, fabs(p[j]-q[j]),fTolerance);
-				printf("\tRank:%d host_M[%d][%d]= %f", rank, i,j, p[j]);
-				printf("\tRank:%d GPU_M[%d][%d]= %f", rank, i,j, q[j]);
-                                PassFlag=0;
-				return;
-			}
-		}
-		p += nx;
-		q += nx;
-	}
-        if(PassFlag)
-	{
-		printf("Rank:%d Verification passed\n", rank);
-        }
-}
-
-void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_itr, const float threshold, const int rank, const int *coord, const int *neighbors){
+LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
+			  const int rank, const int *coord, const int *neighbors){
 /*
  * Performs the same calculations as naiveCPU, but also does a halo exchange
  * at the end of each iteration to update the ghost areas
@@ -113,14 +75,13 @@ void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_it
 	// M_new is the version of M that is updated in the body of the loop before
 	// being copied back into M at the end of an iteration
 	float *M_new;
-	// Change to a single send buffer?
-	// Arrays used to send the ghost area values to each neighbor
-	float *send_top, *send_right, *send_bot, *send_left;
-	// Change to a single receive buffer?
-	// Arrays used to receive the ghost area values from each neighbor
-	float *recv_top, *recv_right, *recv_bot, *recv_left;
+	LJ_return ret;
 
 	// MPI Specific Variables
+	// Arrays used to send the ghost area values to each neighbor
+	float *send_top, *send_right, *send_bot, *send_left;
+	// Arrays used to receive the ghost area values from each neighbor
+	float *recv_top, *recv_right, *recv_bot, *recv_left;
 	// Holds the statuses returned by MPI_Waitall related to a Irecv/Isend pair
 	MPI_Status status[2];
 	// Groups Irecv/Isend calls together from the sender's perspective and are
@@ -296,7 +257,7 @@ void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_it
 		MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
 		
 		//printf("Rank:%d Completed transfer and iteration %d\n",rank, itr); fflush(stdout);
-	} while(itr < max_itr && g_maxdiff > threshold);
+	} while(itr < JACOBI_MAX_ITR && g_maxdiff > JACOBI_TOLERANCE);
 
 	//printf("Rank:%d MPI-CPU Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", rank, itr, max_itr, maxdiff, threshold);
 
@@ -310,4 +271,9 @@ void LaplaceJacobi_MPICPU(float *M, const int ny, const int nx, const int max_it
 	free(recv_right);
 	free(recv_bot);
 	free(recv_left);	
+
+	// Fill in the return value
+	ret.itr = itr;
+	ret.error = maxdiff;
+	return ret;
 }

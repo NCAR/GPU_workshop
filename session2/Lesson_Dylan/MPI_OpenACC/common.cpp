@@ -104,3 +104,51 @@ void copyMatrix(float *src, float *dest, const int ny, const int nx){
 		q += nx;
 	}
 }
+
+void InitializeLJMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords){
+/*
+ * Use the coordinates of the process to determine if it is in the top row and
+ * set the top row of the local matrix to 300.0f if so. Otherwise all values are
+ * filled with 0.0f 
+ */
+	int startRow = 0;
+	if(coords[1] == 0){ // if in the first row
+		for(int j=0; j<nx; j++){
+			M[j] = 300.0f;
+		}
+		startRow = 1;
+	}
+	for(int i=startRow; i<ny; i++){
+		for(int j=0; j<nx; j++){
+			M[i*nx+j] = 0.0f;
+		}
+	}
+}
+
+void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank){
+	// Pointers for rows in each matrix
+	float *p = hostC;
+	float *q = gpuC;
+        bool PassFlag = 1;
+
+	for (int i = 0; i < ny; i++)
+	{
+		for (int j = 0; j < nx; j++)
+		{
+			if (fabs(p[j] - q[j]) > fTolerance)
+			{
+				printf("Rank:%d error: %f > %f", rank, fabs(p[j]-q[j]),fTolerance);
+				printf("\tRank:%d host_M[%d][%d]= %f", rank, i,j, p[j]);
+				printf("\tRank:%d GPU_M[%d][%d]= %f", rank, i,j, q[j]);
+                                PassFlag=0;
+				return;
+			}
+		}
+		p += nx;
+		q += nx;
+	}
+        if(PassFlag)
+	{
+		printf("Rank:%d Verification passed\n", rank);
+        }
+}

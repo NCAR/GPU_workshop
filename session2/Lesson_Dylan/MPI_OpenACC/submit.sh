@@ -25,11 +25,11 @@ nvidia-smi
 export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo -e "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 
-export NV_ACC_TIME=1
+#export NV_ACC_TIME=1
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
 #mpirun -n 16 ./mpi_acc_stencil.exe 4096 4 
-#mpirun -n 16 ./mpi_acc_stencil.exe 8192 4
+#mpirun -n 16 nvprof ./mpi_acc_stencil.exe 8192 4
 mpirun -n 4 ./mpi_acc_stencil.exe 6 2
 echo -e "\nEnd of code output:\n-------------\n"
