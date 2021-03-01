@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <ctime>
-#include <chrono>
 #include <cuda.h>
 #include <mma.h>
 
@@ -11,7 +10,7 @@
 
 #define M 16
 
-#define M_TILES 256
+#define M_TILES 1024
 
 #define M_TOTAL (M * M_TILES)
 #define WARP_SIZE 32
@@ -74,7 +73,6 @@ __global__ void fma_tensor(half *A, half *B, half *C, half *D)
 
 int main()
 {
-	std::chrono::high_resolution_clock::time_point t0, t1;
 	half *h_A, *h_B, *d_A, *d_B;
 	half *h_C, *h_D, *d_C, *d_D;
 
@@ -84,7 +82,10 @@ int main()
 	h_D = new half[M_TOTAL*M_TOTAL];
 	
 	InitMatrix(h_A, h_B, h_C);
-	
+	printf("Matrices are size:\n");
+	printf("h_A: %d x %d\n", M_TOTAL, M_TOTAL);	
+	printf("h_B: %d x %d\n", M_TOTAL, M_TOTAL);	
+	printf("h_C: %d x %d\n", M_TOTAL, M_TOTAL);	
 	int MSizeBytesHalf;
 	
 	MSizeBytesHalf = sizeof(half) * M_TOTAL * M_TOTAL;
@@ -99,8 +100,8 @@ int main()
 	cudaMemcpy(d_C, h_C, MSizeBytesHalf, cudaMemcpyHostToDevice); 
 
 	//Kernel Invoke Paramters (2D grid and blocks) 
-	int dimx = 4; 
-	int dimy = 4; 
+	int dimx = 16; 
+	int dimy = 16; 
 
 	dim3 block(dimx, dimy); //Block of 256 threads 
 	dim3 grid((M_TOTAL+block.x-1)/block.x, (M_TOTAL+block.y-1)/block.y); //grid dimensions 
@@ -108,16 +109,22 @@ int main()
 	printf("Value of block %d \t %d \n",block.x,block.y);
 	printf("Value of grid %d \t %d \n",grid.x,grid.y);
 
-	t0 = std::chrono::high_resolution_clock::now();
+	// Record time using CUDA events
+	cudaEvent_t start,stop;
+	cudaEventCreate(&start);
+	cudaEventCreate(&stop);
 	
+	cudaEventRecord(start);
 	fma_tensor<<<block, grid>>>(d_A,d_B,d_C,d_D);
-
+	cudaEventRecord(stop);
 	cudaDeviceSynchronize(); 
+	cudaEventSynchronize(stop);
 
-	t1 = std::chrono::high_resolution_clock::now();
-	std::chrono::duration<double> t1sum = std::chrono::duration_cast<std::chrono::duration<double>>(t1-t0);
-	printf("Tensor execution took %f ms \n",t1sum.count()*1000);
-	printf("TFLOPS: %.2f\n", ((double)M_TOTAL * M_TOTAL* M_TOTAL * 2) / t1sum.count()*1000 / 1e9);
+	float milliseconds = 0;
+	cudaEventElapsedTime(&milliseconds, start, stop);
+	printf("Tensor FMA execution took %f ms \n", milliseconds);
+	cudaEventDestroy(start);
+	cudaEventDestroy(stop);
 	cudaMemcpy(h_D, d_D, MSizeBytesHalf, cudaMemcpyDeviceToHost);
 
 	cudaFree(d_A);
