@@ -21,12 +21,14 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 		}
 		// Advance p to the next row
 		p += nx;
-	} 
-	printf("Initialized Constant Matrix %s,%d x %d \n", name, ny, nx);
+	}
+        printf("Initialized Matrix %s, %d X %d \n",name, ny, nx);
+        
+      
 }
 
-/* Sets all elements of array to a number between [-1,1] */
-void InitializeMatrixRand(float *array, const int ny, const int nx, const char* name){
+/* Sets all elements of array to a number between [RANGE_MIN,RANGE_MAX] */
+void InitializeMatrixRand(float *array, const int ny, const int nx,const char* name){
 	// p serves as another pointer to the start rows within array
 	float *p = array;
 
@@ -39,7 +41,7 @@ void InitializeMatrixRand(float *array, const int ny, const int nx, const char* 
 		// Advance p to the next row
 		p += nx;
 	}
-	printf("Initialized Random Matrix %s,%d x %d \n", name, ny, nx);
+        printf("Initialized Random Matrix %s, %d X %d \n",name, ny, nx);
 }
 
 /* Compares the matrices element-wise and prints an error message if 
@@ -49,23 +51,40 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 	// Pointers for rows in each matrix
 	float *p = hostC;
 	float *q = gpuC;
+        float *err = (float*)malloc(ny*nx*sizeof(float));
+        bool PassFlag = 1;
+        float maxErr = 0.0;
+        float tmpErr = 0.0;
+        float avgErr = 0.0;
 
 	for (int i = 0; i < ny; i++)
 	{
 		for (int j = 0; j < nx; j++)
 		{
-			if (fabs(p[j] - q[j]) > fTolerance)
-			{
-				printf("error: %f > %f", fabs(p[j]-q[j]),fTolerance);
-				printf("\t host_C[%d][%d]= %f", i,j, p[j]);
-				printf("\t GPU_C[%d][%d]= %f", i,j, q[j]);
-				return;
-			}
+                   
+                   tmpErr = fabs(p[j] - q[j]);
+                   err[j] = tmpErr;
+                   avgErr += tmpErr;
+                   if(tmpErr > maxErr) {
+                      maxErr = tmpErr;
+                   }
+
+	           if (fabs(p[j] - q[j]) > fTolerance){
+                      PassFlag=0;
+	 	   }
 		}
 		p += nx;
 		q += nx;
+              err += nx;
 	}
-	printf("Answers Verified \n"); 
+        if(PassFlag){
+           printf("Verification passed\n");
+        } else {
+           printf("Verification failed\n");
+        }
+        printf("\nAverage Error: %f", avgErr/(nx*ny));
+        printf("\nMax Error    : %f", maxErr);
+                      
 }
 
 void PrintMatrix(float *matrix, int ny, int nx){
