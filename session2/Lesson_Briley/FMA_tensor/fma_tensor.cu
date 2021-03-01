@@ -116,8 +116,8 @@ int main()
 
 	t1 = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> t1sum = std::chrono::duration_cast<std::chrono::duration<double>>(t1-t0);
-	printf("Tensor execution took %f seconds \n",t1sum.count());
-
+	printf("Tensor execution took %f ms \n",t1sum.count()*1000);
+	printf("TFLOPS: %.2f\n", ((double)M_TOTAL * M_TOTAL* M_TOTAL * 2) / t1sum.count()*1000 / 1e9);
 	cudaMemcpy(h_D, d_D, MSizeBytesHalf, cudaMemcpyDeviceToHost);
 
 	cudaFree(d_A);
