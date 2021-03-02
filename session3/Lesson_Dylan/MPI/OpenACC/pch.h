@@ -54,6 +54,7 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
 // ==========================
 // Device and OpenACC Routines
 // ==========================
+void mapGPUToMPIRanks(int rank);
 LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx);
 LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 			       const int rank, const int *coord, const int *neighbors);

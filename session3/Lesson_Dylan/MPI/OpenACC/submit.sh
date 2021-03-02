@@ -1,12 +1,11 @@
 #!/bin/bash -l
 # Batch directives
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=16
+#SBATCH --nodes=2
+#SBATCH --ntasks-per-node=8
+#SBATCH --gres=gpu:v100:4
 #SBATCH --account NTDD0002
 #SBATCH --partition=dav
-##SBATCH --reservation=casper_8xV100
-#SBATCH --reservation=TDD_4xV100
-#SBATCH --gres=gpu:v100:1
+#SBATCH --reservation=GPU_workshop_2
 #SBATCH --time=00:15:00
 #SBATCH --output=log.stncl_%j.out
 #SBATCH --job-name=GPU_stncl
@@ -31,5 +30,5 @@ echo -e "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 echo -e "\nBeginning code output:\n-------------\n"
 #mpirun -n 16 ./mpi_acc_stencil.exe 4096 4 
 #mpirun -n 16 nvprof ./mpi_acc_stencil.exe 8192 4
-mpirun -n 4 ./mpi_acc_stencil.exe 6 2
+mpirun -n 16 ./mpi_acc_stencil.exe 4096 4
 echo -e "\nEnd of code output:\n-------------\n"

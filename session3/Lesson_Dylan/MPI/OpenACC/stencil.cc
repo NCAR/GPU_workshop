@@ -9,9 +9,17 @@
 #include <math.h>
 #include <algorithm>
 #include <mpi.h>
+#include <openacc.h>
 #include "pch.h"
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
+
+void mapGPUToMPIRanks(int rank){
+	// Get device count
+	const int num_dev = acc_get_num_devices(acc_device_nvidia);
+	const int dev_id = rank % num_dev;
+	acc_set_device_num(dev_id, acc_device_nvidia);
+}
 
 LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx){
 	/*

@@ -30,6 +30,7 @@
 #include <algorithm>
 #include <thread>
 #include <unistd.h>
+#include <openacc.h>
 #include "pch.h"
 
 using namespace std;
@@ -121,6 +122,9 @@ int main(int argc, char** argv){
 		printf("------------------------------------------------------------------------------\n\n");
 	}
 	fflush(stdout); sleep(1);
+
+	acc_init(acc_device_nvidia);
+	mapGPUToMPIRanks(rank);
 	
 	float *gpu_M;
         high_resolution_clock::time_point t0, t1;
