@@ -64,7 +64,7 @@ LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx){
 			}
 		}
 		} // acc end parallel
-	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	} while(maxdiff > JACOBI_TOLERANCE);
 	} // acc end data
 	
 	// Free malloc'd memory
@@ -297,7 +297,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 		MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
 		
 		//printf("Rank:%d Completed transfer and iteration %d\n",rank, itr); fflush(stdout);
-	} while(itr < JACOBI_MAX_ITR && g_maxdiff > JACOBI_TOLERANCE);
+	} while(g_maxdiff > JACOBI_TOLERANCE);
 
 #pragma acc exit data copyout(M[0:matsz]) delete(M_new[0:matsz])
 #pragma acc exit data delete(send_top[0:buffsz_x], send_right[0:buffsz_y])

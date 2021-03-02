@@ -20,8 +20,6 @@
 
 #define HasNeighbor(neighbors, dir)	(neighbors[dir] != MPI_PROC_NULL)
 
-// Max number of iterations to run the Jacobi algorithm for
-#define JACOBI_MAX_ITR 1000
 // Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
 // Verification tolerance

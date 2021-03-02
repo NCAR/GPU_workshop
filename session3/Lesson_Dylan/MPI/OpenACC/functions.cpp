@@ -49,7 +49,7 @@ LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
 				M[i*nx+j] = M_new[i*nx+j];
 			}
 		}
-	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	} while(maxdiff > JACOBI_TOLERANCE);
 	
 	// Free malloc'd memory
 	free(M_new);
@@ -257,7 +257,7 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
 		MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
 		
 		//printf("Rank:%d Completed transfer and iteration %d\n",rank, itr); fflush(stdout);
-	} while(itr < JACOBI_MAX_ITR && g_maxdiff > JACOBI_TOLERANCE);
+	} while(g_maxdiff > JACOBI_TOLERANCE);
 
 	//printf("Rank:%d MPI-CPU Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", rank, itr, max_itr, maxdiff, threshold);
 

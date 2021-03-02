@@ -11,8 +11,6 @@
 #define V_SIZE 1024
 #define M_SIZE V_SIZE*V_SIZE
 
-// Max number of iterations to run the Jacobi algorithm for
-#define JACOBI_MAX_ITR 1000
 // Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
 // Verification tolerance

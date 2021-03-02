@@ -47,7 +47,7 @@ LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
 				M[i*nx+j] = M_new[i*nx+j];
 			}
 		}
-	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	} while(maxdiff > JACOBI_TOLERANCE);
 	
 	// Free malloc'd memory
 	free(M_new);

@@ -49,7 +49,7 @@ LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
 				M[i*nx+j] = M_new[i*nx+j];
 			}
 		}
-	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	} while(maxdiff > JACOBI_TOLERANCE);
 	
 	// Free malloc'd memory
 	free(M_new);
@@ -257,7 +257,7 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
 		MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
 		
 		//printf("Rank:%d Completed transfer and iteration %d\n",rank, itr); fflush(stdout);
-	} while(itr < JACOBI_MAX_ITR && g_maxdiff > JACOBI_TOLERANCE);
+	} while(g_maxdiff > JACOBI_TOLERANCE);
 
 	//printf("Rank:%d MPI-CPU Jacobi exiting on itr=%d of max_itr=%d with error=%f vs threshold=%f\n", rank, itr, max_itr, maxdiff, threshold);
 
@@ -293,6 +293,7 @@ void Verify_MPIvsOneThread(float *global_M, const int g_ny, const int g_nx, floa
 		recv_buff = (float*)malloc(l_ny*l_nx*sizeof(float));
 
 		// Initialize mpi_M and fill with values from rank 0
+		printf("Abusing the `InitializeMatrixSame` function from common.cpp\n");
 		InitializeMatrixSame(mpi_M, g_ny, g_nx, 0.0f, "mpi_M");
 		InitializeMatrixSame(mpi_M, 1, g_nx, 300.0f, "mpi_M");
 		for(int i=1; i<l_ny-1; i++){
@@ -320,12 +321,12 @@ void Verify_MPIvsOneThread(float *global_M, const int g_ny, const int g_nx, floa
 			}
 		}
 
-		if (g_nx <= 6){
-			printf("Global Matrix\n");
-			PrintMatrix(global_M, g_ny, g_nx);
-			printf("MPI as global\n");
-			PrintMatrix(mpi_M, g_ny, g_nx);
-		}
+		//if (g_nx <= 6){
+		//	printf("Global Matrix\n");
+		//	PrintMatrix(global_M, g_ny, g_nx);
+		//	printf("MPI as global\n");
+		//	PrintMatrix(mpi_M, g_ny, g_nx);
+		//}
 
 		// Check if the matrix passes verification
 		MatrixVerification(global_M, mpi_M, g_ny, g_nx, VERIFY_TOL);

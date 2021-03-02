@@ -55,7 +55,7 @@ LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx){
 			}
 		}
 		} // acc end parallel
-	} while(itr < JACOBI_MAX_ITR && maxdiff > JACOBI_TOLERANCE);
+	} while(maxdiff > JACOBI_TOLERANCE);
 	} // acc end data
 	
 	// Free malloc'd memory
