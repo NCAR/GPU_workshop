@@ -71,11 +71,22 @@ int main(int argc, char** argv){
 		rows = cols = atoi(argv[1]);
 		topo = atoi(argv[2]);
 	} else if (argc >= 4) {
-		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks \n");
+		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+		exit(1);
 	} else {
 		// set default dimensions 1024x1024
 		rows = cols = V_SIZE;
 		topo = sqrt(nprocs);
+	}
+	if (rows % topo != 0){
+		printf("ERROR: topology doesn't evenly divide the dimension given\n");
+		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+		exit(1);
+	}
+	if (topo*topo != nprocs){
+		printf("ERROR: Topology given isn't the square root of the number of ranks given\n");
+		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+		exit(1);
 	}
 	
 	int perProcessDim, // The number of interior points each process gets in each dimension

@@ -58,12 +58,24 @@ int main(int argc, char** argv){
 		rows = cols = atoi(argv[1]);
 		topo = atoi(argv[2]);
 	} else if (argc >= 4) {
-		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks \n");
+		printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+		exit(1);
 	} else {
 		// set default dimensions 1024x1024
 		rows = cols = V_SIZE;
 		topo = sqrt(nprocs);
 	}
+	// Check input arguments
+	if (rows % topo != 0){
+                printf("ERROR: topology doesn't evenly divide the dimension given\n");
+                printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+                exit(1);
+        }
+        if (topo*topo != nprocs){
+                printf("ERROR: Topology given isn't the square root of the number of ranks given\n");
+                printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
+                exit(1);
+        }
 	
 	int perProcessDim, // The number of interior points each process gets in each dimension
 	    l_rows, l_cols; // The actual number of rows/cols per process
@@ -107,12 +119,13 @@ int main(int argc, char** argv){
 		printf("Processes are laid out in a Cartesian grid with %d processes in each dimension\n", topo);
 		printf("Each thread is working on sub-matrices with %d by %d interior points\n", perProcessDim, perProcessDim);
 		printf("------------------------------------------------------------------------------\n\n");
+		fflush(stdout);
 	}
-	fflush(stdout); sleep(1);
 	
 	float *h_M, *global_M;
         high_resolution_clock::time_point t0, t1;
 	duration<double> t1sum;
+	float elapsedT, maxT, minT;
 
 	t0 = high_resolution_clock::now();
 	// 3. Allocate memory for the submatrix on each process
@@ -124,30 +137,42 @@ int main(int argc, char** argv){
 	// Copy those results into the GPU matrix
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count()); fflush(stdout);
+	elapsedT = t1sum.count();
+	MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+	if (rank == 0){
+		printf("Max init time were %f seconds. Begin compute\n", maxT);
+		fflush(stdout);
+	} MPI_Barrier(MPI_COMM_WORLD);
+	//printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count()); fflush(stdout);
 
-	if (l_rows < 6){
-		printf("Rank:%d Post Init h_M\n", rank);
-		PrintMatrix(h_M, l_rows, l_cols);
-	}
-	fflush(stdout); sleep(1);
-	if (rank == 0) printf("\n");
-	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
+	//if (l_rows < 6){
+	//	printf("Rank:%d Post Init h_M\n", rank);
+	//	PrintMatrix(h_M, l_rows, l_cols);
+	//}
+	//fflush(stdout); sleep(1);
+	//if (rank == 0) printf("\n");
+	//fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
 	// Calculate on host (CPU)
 	t0 = high_resolution_clock::now();
 	mpi_ret = LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, rank, coords, neighbors);
 	t1 = high_resolution_clock::now();
 	t1sum = duration_cast<duration<double>>(t1-t0);
-	printf("Rank:%d MPI-CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n",rank,t1sum.count(),mpi_ret.itr,mpi_ret.error);fflush(stdout);
+	elapsedT = t1sum.count();
+	MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+	if (rank == 0){
+		printf("Max MPI CPU compute time were %f seconds.\n", maxT);
+		fflush(stdout);
+	} MPI_Barrier(MPI_COMM_WORLD);
+	//printf("Rank:%d MPI-CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n",rank,t1sum.count(),mpi_ret.itr,mpi_ret.error);fflush(stdout);
 
-	if (l_rows < 6){
-                printf("Rank:%d Post LaplaceJacobi_MPICPU h_M\n", rank);
-                PrintMatrix(h_M, l_rows, l_cols);
-        }
-	fflush(stdout); sleep(1);
-	if (rank == 0) printf("\n");
-	fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
+	//if (l_rows < 6){
+        //        printf("Rank:%d Post LaplaceJacobi_MPICPU h_M\n", rank);
+        //        PrintMatrix(h_M, l_rows, l_cols);
+        //}
+	//fflush(stdout); sleep(1);
+	//if (rank == 0) printf("\n");
+	//fflush(stdout); sleep(1); MPI_Barrier(MPI_COMM_WORLD);
 
 // Uncomment the following lines to compare against the single thread version
 /*
@@ -159,7 +184,13 @@ int main(int argc, char** argv){
 		cpu_ret = LaplaceJacobi_naiveCPU(global_M, rows, cols);
 		t1 = high_resolution_clock::now();
 		t1sum = duration_cast<duration<double>>(t1-t0);
-		printf("Rank:%d One Thread CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n\n",rank,t1sum.count(),cpu_ret.itr,cpu_ret.error);fflush(stdout);
+		elapsedT = t1sum.count();
+		MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+		MPI_Reduce(&elapsedT, &minT, 1, MPI_FLOAT, MPI_MIN, 0, MPI_COMM_WORLD);
+		if (rank == 0){
+			printf("Max/Min one thread CPU compute time were %f/%f seconds.\n", maxT, minT);
+		} MPI_Barrier(MPI_COMM_WORLD);
+		//printf("Rank:%d One Thread CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n\n",rank,t1sum.count(),cpu_ret.itr,cpu_ret.error);fflush(stdout);
 	}
 
 	Verify_MPIvsOneThread(global_M, rows, cols, h_M, l_rows, l_cols, 
