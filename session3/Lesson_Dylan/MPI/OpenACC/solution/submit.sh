@@ -1,6 +1,6 @@
 #!/bin/bash -l
 # Batch directives
-#SBATCH --nodes=2
+#SBATCH --nodes=1
 #SBATCH --ntasks-per-node=8
 #SBATCH --gres=gpu:v100:4
 #SBATCH --account NTDD0002
