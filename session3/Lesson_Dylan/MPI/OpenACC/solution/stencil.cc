@@ -17,17 +17,19 @@
 void mapGPUToMPIRanks(int rank){
     // Get device count
     const int num_dev = acc_get_num_devices(acc_device_nvidia);
+    // Pin this rank to a GPU
     const int dev_id = rank % num_dev;
     acc_set_device_num(dev_id, acc_device_nvidia);
 }
 
 
 LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
-                               const int rank, const int *coord, const int *neighbors){
+                               const int rank, const int *neighbors){
 /*
  * Performs the same calculations as naiveCPU, but also does a halo exchange
  * at the end of each iteration to update the ghost areas and uses OpenACC pragmas
  */
+    // Convenience sizes
     int matsz = ny*nx,
         buffsz_x = nx-2,
         buffsz_y = ny-2;
@@ -89,7 +91,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         }
 
         // Perform halo exchange
-        if(HasNeighbor(neighbors, DIR_TOP)){ 
+        if(HasNeighbor(neighbors, DIR_TOP)){
             // Copy the values from the top row of the interior
 #pragma acc parallel loop present(send_top[0:buffsz_x], M_new[0:matsz])
             for(int j=1; j<nx-1; j++){
@@ -138,7 +140,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 }
         }
 
-        // Wait for the values and fill in the correct areas of M_new
+        // Wait to receive the values and fill in the correct areas of M_new
         if(HasNeighbor(neighbors, DIR_TOP)){ // Fill the values in the top row
             MPI_Waitall(2, requestT, status);
 #pragma acc parallel loop present(recv_top[0:buffsz_x], M_new[0:matsz])  

@@ -31,6 +31,7 @@
 #include <thread>
 #include <unistd.h>
 #include "pch.h"
+// Include the header for openacc functions
 
 using namespace std;
 using namespace chrono;
@@ -41,7 +42,7 @@ int main(int argc, char** argv){
         rank, nprocs,
         topo;  // number of processes in each dimension of grid
 
-    LJ_return cpu_ret, mpi_ret;
+    LJ_return gpu_ret;
 
     // Start the MPI and get rank and number of processes
     MPI_Comm cartComm = MPI_COMM_WORLD;
@@ -111,19 +112,24 @@ int main(int argc, char** argv){
         printf("------------------------------------------------------------------------------\n\n");
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
+
+    // Initialize acc and map ranks to GPUs
+    acc_init(acc_device_nvidia);
+// Call function from pch.h to map MPI ranks to GPUs
     
-    float *h_M, *global_M;
+
+    float *gpu_M;
     double t0, t1; 
     double elapsedT, maxT;
 
     t0 = MPI_Wtime(); 
     // Allocate memory for the submatrix on each process
     // Each dimension is padded with the size of the ghost area
-    h_M = (float*)malloc(l_rows*l_cols*sizeof(float));
+    gpu_M = (float*)malloc(l_rows*l_cols*sizeof(float));
 
     // Fill the M matrices so that the j=0 row is 300 while the other
     // three sides of the matrix are set to 0
-    InitializeLJMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
+    InitializeLJMatrix_MPI(gpu_M, l_rows, l_cols, rank, coords);
     t1 = MPI_Wtime();
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
@@ -132,40 +138,20 @@ int main(int argc, char** argv){
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 
-    // Calculate on host (CPU)
+    // Calculate on device (GPU)
     t0 = MPI_Wtime();
-    mpi_ret = LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, rank, neighbors);
+// Fill in arguments to the LaplaceJacobi function (use local rows and cols)
+    gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, neighbors);
     t1 = MPI_Wtime();
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0){
-        printf("Max MPI CPU compute time was %f seconds for %d iterations to reach %f error.\n", maxT, mpi_ret.itr, mpi_ret.error);
+        printf("Max MPI ACC compute time was %f seconds for %d iterations to reach %f error.\n", maxT, gpu_ret.itr, gpu_ret.error);
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 
-// Uncomment the following lines to compare against the single thread version
-/*
-    if (rank == 0){
-        global_M = (float*)malloc(rows*cols*sizeof(float));
-        InitializeMatrixSame(global_M, rows, cols, 0.0f, "global_M");
-        InitializeMatrixSame(global_M, 1, cols, 300.0f, "global_M");
-        t0 = MPI_Wtime(); 
-        cpu_ret = LaplaceJacobi_naiveCPU(global_M, rows, cols);
-        t1 = MPI_Wtime();
-        elapsedT = t1 - t0;
-        MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
-        if (rank == 0){
-            printf("Max one thread CPU compute time was %f seconds for %d iterations to reach %f error.\n", maxT, mpi_ret.itr, mpi_ret.error);
-        }
-    } MPI_Barrier(MPI_COMM_WORLD);
-
-    Verify_MPIvsOneThread(global_M, rows, cols, h_M, l_rows, l_cols, 
-                  perProcessDim, rank, nprocs, coords);
-    if (rank == 0){ free(global_M);}
-*/
-    
     // Free host memory
-    free(h_M);
+    free(gpu_M);
     
     MPI_Finalize();
     return 0;

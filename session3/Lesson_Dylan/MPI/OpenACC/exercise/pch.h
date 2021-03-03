@@ -39,6 +39,7 @@ void InitializeMatrixSame(float *array, const int ny, const int nx, const float 
 void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
 void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance);
 void PrintMatrix(float *matrix, int ny, int nx);
+// MPI functions
 void InitializeLJMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
 void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank);
 
@@ -52,5 +53,5 @@ void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int n
 void mapGPUToMPIRanks(int rank);
 LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx);
 LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
-                               const int rank, const int *coord, const int *neighbors);
+                               const int rank, const int *neighbors);
 #endif // PCH_H_STENCIL

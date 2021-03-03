@@ -75,7 +75,7 @@ int main(int argc, char** argv){
     }
     
     int perProcessDim, // The number of interior points each process gets in each dimension
-        l_rows, l_cols; // The actual number of rows/cols per process
+        l_rows, l_cols; // The actual (local) number of rows/cols per process
     // Ensure each process has the same values for rows, cols, and topo
     status = MPI_Bcast(&rows, 1, MPI_INT, 0, MPI_COMM_WORLD);
     status = MPI_Bcast(&cols, 1, MPI_INT, 0, MPI_COMM_WORLD);
@@ -83,6 +83,7 @@ int main(int argc, char** argv){
     perProcessDim = (int)sqrt((rows*cols)/nprocs);
     // Add 2 for the ghost area in each dimension
     l_rows = l_cols = perProcessDim+2;
+    // Add 2 for the border along the outer edges
     rows += 2;
     cols += 2;
 
@@ -138,7 +139,7 @@ int main(int argc, char** argv){
 
     // Calculate on device (GPU)
     t0 = MPI_Wtime();
-    gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, coords, neighbors);
+    gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, neighbors);
     t1 = MPI_Wtime();
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
