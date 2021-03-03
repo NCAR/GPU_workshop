@@ -72,11 +72,19 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     // Make M_new a copy of M, this helps for the last loop inside the do-while
     std::copy(M, M+(ny*nx), M_new);
 
-#pragma acc enter data copyin(M[0:ny*nx], M_new[0:ny*nx])
+#pragma acc enter data copyin(M[0:ny*nx]) create(M_new[0:ny*nx])
 #pragma acc enter data create(send_top[0:(nx-2)], recv_top[0:nx-2])
 #pragma acc enter data create(send_right[0:(ny-2)], recv_right[0:ny-2])
 #pragma acc enter data create(send_bot[0:(nx-2)], recv_bot[0:nx-2])
 #pragma acc enter data create(send_left[0:(ny-2)], recv_left[0:ny-2])
+
+    // Make M_new a copy of M, this helps for the last loop inside the do-while
+#pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
+    for(int i=1; i<ny-1; i++){
+        for(int j=1; j<nx-1; j++){
+            M_new[i*nx+j] = M[i*nx+j];
+        }
+    }
     do {
         maxdiff = 0.0f;
         itr++;
@@ -109,7 +117,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
             for(int j=1; j<nx-1; j++){
                 send_bot[j-1] = M_new[(ny-2)*nx+j];
             }
-#pragma acc host_data use_device(recv_top, send_top)
+#pragma acc host_data use_device(recv_bot, send_bot)
 {
             MPI_Irecv(recv_bot, nx-2, MPI_FLOAT, neighbors[DIR_BOTTOM], tag_t, MPI_COMM_WORLD, requestB);
             MPI_Isend(send_bot, nx-2, MPI_FLOAT, neighbors[DIR_BOTTOM], tag_b, MPI_COMM_WORLD, requestB+1);
@@ -121,7 +129,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
             for(int i=1; i<ny-1; i++){
                 send_right[i-1] = M_new[i*nx+(nx-2)];
             }
-#pragma acc host_data use_device(recv_top, send_top)
+#pragma acc host_data use_device(recv_right, send_right)
 {
             MPI_Irecv(recv_right, nx-2, MPI_FLOAT, neighbors[DIR_RIGHT], tag_l, MPI_COMM_WORLD, requestR);
             MPI_Isend(send_right, nx-2, MPI_FLOAT, neighbors[DIR_RIGHT], tag_r, MPI_COMM_WORLD, requestR+1);
@@ -133,7 +141,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
             for(int i=1; i<ny-1; i++){
                 send_left[i-1] = M_new[i*nx+1];
             }
-#pragma acc host_data use_device(recv_top, send_top)
+#pragma acc host_data use_device(recv_left, send_left)
 {
             MPI_Irecv(recv_left, nx-2, MPI_FLOAT, neighbors[DIR_LEFT], tag_r, MPI_COMM_WORLD, requestL);
             MPI_Isend(send_left, nx-2, MPI_FLOAT, neighbors[DIR_LEFT], tag_l, MPI_COMM_WORLD, requestL+1);
