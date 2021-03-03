@@ -191,11 +191,6 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     } while(g_maxdiff > JACOBI_TOLERANCE);
 
 // Add pragmas to copyout data and delete other arrays for unstructured data region
-#pragma acc exit data copyout(M[0:matsz]) delete(M_new[0:matsz])
-#pragma acc exit data delete(send_top[0:buffsz_x], send_right[0:buffsz_y])
-#pragma acc exit data delete(send_bot[0:buffsz_x], send_left[0:buffsz_y])
-#pragma acc exit data delete(recv_top[0:buffsz_x], recv_right[0:buffsz_y])
-#pragma acc exit data delete(recv_bot[0:buffsz_x], recv_left[0:buffsz_y])
 
     // Free malloc'ed memory
     free(M_new);
