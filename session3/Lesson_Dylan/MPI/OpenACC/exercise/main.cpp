@@ -141,7 +141,7 @@ int main(int argc, char** argv){
     // Calculate on device (GPU)
     t0 = MPI_Wtime();
 // Fill in arguments to the LaplaceJacobi function (use local rows and cols)
-    gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, neighbors);
+    gpu_ret = LaplaceJacobi_MPIACC();
     t1 = MPI_Wtime();
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
