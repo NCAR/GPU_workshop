@@ -49,6 +49,7 @@ int main(int argc, char** argv){
     status = MPI_Init(&argc,&argv);
     status = MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     status = MPI_Comm_size(MPI_COMM_WORLD, &nprocs);
+
     // Parse command line arguments
     if (argc > 1 && argc < 4){
         rows = cols = atoi(argv[1]);
@@ -61,6 +62,7 @@ int main(int argc, char** argv){
         rows = cols = V_SIZE;
         topo = sqrt(nprocs);
     }
+    // Check input arguments
     if (rows % topo != 0){
         printf("ERROR: topology doesn't evenly divide the dimension given\n");
         printf("Usage: mpirun -n <ranks> ./executable dimension topology \n note: topology*topology should be equal to number of ranks and topology should evenly divide dimension \n");
@@ -115,10 +117,10 @@ int main(int argc, char** argv){
     mapGPUToMPIRanks(rank);
     
     float *gpu_M;
-    high_resolution_clock::time_point t0, t1;
-    duration<double> t1sum;
+    double t0, t1; 
+    double elapsedT, maxT;
 
-    t0 = high_resolution_clock::now();
+    t0 = MPI_Wtime(); 
     // Allocate memory for the submatrix on each process
     // Each dimension is padded with the size of the ghost area
     gpu_M = (float*)malloc(l_rows*l_cols*sizeof(float));
@@ -126,16 +128,24 @@ int main(int argc, char** argv){
     // Fill the M matrices so that the j=0 row is 300 while the other
     // three sides of the matrix are set to 0
     InitializeLJMatrix_MPI(gpu_M, l_rows, l_cols, rank, coords);
-    t1 = high_resolution_clock::now();
-    t1sum = duration_cast<duration<double>>(t1-t0);
-    printf("Rank:%d Init took %f seconds. Begin compute.\n", rank, t1sum.count()); fflush(stdout);
+    t1 = MPI_Wtime();
+    elapsedT = t1 - t0;
+    MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0){
+        printf("Max init time was %f seconds. Begin compute\n", maxT);
+        fflush(stdout);
+    } MPI_Barrier(MPI_COMM_WORLD);
 
     // Calculate on device (GPU)
-    t0 = high_resolution_clock::now();
+    t0 = MPI_Wtime();
     gpu_ret = LaplaceJacobi_MPIACC(gpu_M, l_rows, l_cols, rank, coords, neighbors);
-    t1 = high_resolution_clock::now();
-    t1sum = duration_cast<duration<double>>(t1-t0);
-    printf("Rank:%d MPI-ACC LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n",rank,t1sum.count(),gpu_ret.itr,gpu_ret.error);fflush(stdout);
+    t1 = MPI_Wtime();
+    elapsedT = t1 - t0;
+    MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
+    if (rank == 0){
+        printf("Max MPI ACC compute time was %f seconds for %d iterations to reach %f error.\n", maxT, gpu_ret.itr, gpu_ret.error);
+        fflush(stdout);
+    } MPI_Barrier(MPI_COMM_WORLD);
 
     // Free host memory
     free(gpu_M);

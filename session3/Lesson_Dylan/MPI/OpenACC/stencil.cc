@@ -84,10 +84,10 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         for(int i=1; i<ny-1; i++){
             for(int j=1; j<nx-1; j++){
                 M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
-                            M[(i+1)*nx+j]+M[i*nx+j-1]);
+                                        M[(i+1)*nx+j]+M[i*nx+j-1]);
             }
         }
-        
+
         // Perform halo exchange
         if(HasNeighbor(neighbors, DIR_TOP)){ 
             // Copy the values from the top row of the interior
@@ -167,6 +167,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
                 M_new[i*nx] = recv_left[i-1];
             }
         }
+        // End the halo exchange section
 
         // Check for convergence while copying values into M
 #pragma acc parallel loop collapse(2) reduction(max:maxdiff) \
@@ -200,6 +201,6 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
     // Fill in the return value
     ret.itr = itr;
-    ret.error = maxdiff;
+    ret.error = g_maxdiff;
     return ret;
 }

@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
     cpu_ret = LaplaceJacobi_naiveCPU(h_M, rows, cols);
     t1 = high_resolution_clock::now();
     t1sum = duration_cast<duration<double>>(t1-t0);
-    printf("CPU LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n", t1sum.count(),cpu_ret.itr,cpu_ret.error);
+    printf("CPU compute time was %f seconds for %d iterations to reach %f error.\n", t1sum.count(), cpu_ret.itr, cpu_ret.error);
 
     if (rows < 6){
         printf("h_M\n");
@@ -90,7 +90,7 @@ int main(int argc, char* argv[]){
     gpu_ret = LaplaceJacobi_naiveACC(gpu_M, rows, cols); 
     t1 = high_resolution_clock::now();
     t1sum = duration_cast<duration<double>>(t1-t0);
-    printf("ACC LaplaceJacobi Iterative Solver took %f secs for %d iterations to achieve error of %f\n", t1sum.count(),gpu_ret.itr,gpu_ret.error);
+    printf("ACC compute time was %f seconds for %d iterations to reach %f error.\n", t1sum.count(), gpu_ret.itr, gpu_ret.error);
 
     if (rows < 6){
         printf("gpu_M\n");

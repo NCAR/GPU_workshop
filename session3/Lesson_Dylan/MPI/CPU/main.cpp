@@ -112,36 +112,33 @@ int main(int argc, char** argv){
     } MPI_Barrier(MPI_COMM_WORLD);
     
     float *h_M, *global_M;
-    high_resolution_clock::time_point t0, t1;
-    duration<double> t1sum;
-    float elapsedT, maxT, minT;
+    double t0, t1; 
+    double elapsedT, maxT;
 
-    t0 = high_resolution_clock::now();
+    t0 = MPI_Wtime(); 
     // Allocate memory for the submatrix on each process
+    // Each dimension is padded with the size of the ghost area
     h_M = (float*)malloc(l_rows*l_cols*sizeof(float));
 
     // Fill the M matrices so that the j=0 row is 300 while the other
     // three sides of the matrix are set to 0
     InitializeLJMatrix_MPI(h_M, l_rows, l_cols, rank, coords);
-    // Copy those results into the GPU matrix
-    t1 = high_resolution_clock::now();
-    t1sum = duration_cast<duration<double>>(t1-t0);
-    elapsedT = t1sum.count();
-    MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+    t1 = MPI_Wtime();
+    elapsedT = t1 - t0;
+    MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0){
         printf("Max init time was %f seconds. Begin compute\n", maxT);
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 
     // Calculate on host (CPU)
-    t0 = high_resolution_clock::now();
+    t0 = MPI_Wtime();
     mpi_ret = LaplaceJacobi_MPICPU(h_M, l_rows, l_cols, rank, coords, neighbors);
-    t1 = high_resolution_clock::now();
-    t1sum = duration_cast<duration<double>>(t1-t0);
-    elapsedT = t1sum.count();
-    MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+    t1 = MPI_Wtime();
+    elapsedT = t1 - t0;
+    MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0){
-        printf("Max MPI CPU compute time was %f seconds.\n", maxT);
+        printf("Max MPI CPU compute time was %f seconds for %d iterations to reach %f error.\n", maxT, mpi_ret.itr, mpi_ret.error);
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 
@@ -151,16 +148,15 @@ int main(int argc, char** argv){
         global_M = (float*)malloc(rows*cols*sizeof(float));
         InitializeMatrixSame(global_M, rows, cols, 0.0f, "global_M");
         InitializeMatrixSame(global_M, 1, cols, 300.0f, "global_M");
-        t0 = high_resolution_clock::now();
+        t0 = MPI_Wtime(); 
         cpu_ret = LaplaceJacobi_naiveCPU(global_M, rows, cols);
-        t1 = high_resolution_clock::now();
-        t1sum = duration_cast<duration<double>>(t1-t0);
-        elapsedT = t1sum.count();
-        MPI_Reduce(&elapsedT, &maxT, 1, MPI_FLOAT, MPI_MAX, 0, MPI_COMM_WORLD);
+        t1 = MPI_Wtime();
+        elapsedT = t1 - t0;
+        MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
         if (rank == 0){
-            printf("Max one thread CPU compute time was %f seconds.\n", maxT);
-        } MPI_Barrier(MPI_COMM_WORLD);
-    }
+            printf("Max one thread CPU compute time was %f seconds for %d iterations to reach %f error.\n", maxT, mpi_ret.itr, mpi_ret.error);
+        }
+    } MPI_Barrier(MPI_COMM_WORLD);
 
     Verify_MPIvsOneThread(global_M, rows, cols, h_M, l_rows, l_cols, 
                   perProcessDim, rank, nprocs, coords);
@@ -170,7 +166,6 @@ int main(int argc, char** argv){
     // Free host memory
     free(h_M);
     
-    fflush(stdout); sleep(1);
     MPI_Finalize();
     return 0;
 }

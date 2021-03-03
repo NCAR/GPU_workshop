@@ -13,7 +13,7 @@ endif
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
-OBJECTS= main.o functions.o common.o stencil.o 
+OBJECTS= main.o common.o stencil.o 
 # The binary to be built by this Makefile
 BINARY= mpi_acc_stencil.exe
 

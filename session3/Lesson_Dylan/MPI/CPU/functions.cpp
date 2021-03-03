@@ -13,13 +13,63 @@
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
+LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
+    /*
+     * Use an iterative Jacobi solver to find the steady-state of
+     * the differential equation of the Laplace equation in 2 dimensions.
+     * M models the initial state of the system and is used to return the
+     * result in-place. M has a border of b entries that aren't updated
+     * by the Jacobi solver. For the iterative Jacobi method, the unknowns
+     * are a flattened version of the interior points. See another source
+     * for more information.
+     */
+    int itr = 0;
+    float maxdiff = 0.0f;
+    float *M_new;
+    LJ_return ret;
+
+    // Allocate the second version of the M matrix used for the computation
+    M_new = (float*)malloc(ny*nx*sizeof(float));
+
+    do {
+        maxdiff = 0.0f;
+        itr++;
+        // Update M_new with M
+        for(int i=1; i<ny-1; i++){
+            for(int j=1; j<nx-1; j++){
+                M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
+                            M[(i+1)*nx+j]+M[i*nx+j-1]);
+            }
+        }
+
+        // Check for convergence while copying values into M
+        for(int i=1; i<ny-1; i++){
+            for(int j=1; j<nx-1; j++){
+                maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
+                M[i*nx+j] = M_new[i*nx+j];
+            }
+        }
+    } while(maxdiff > JACOBI_TOLERANCE);
+    
+    // Free malloc'd memory
+    free(M_new);
+    
+    // Fill in the return value
+    ret.itr = itr;
+    ret.error = maxdiff;
+    return ret;
+}
+
+
 LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
                                const int rank, const int *coord, const int *neighbors){
 /*
  * Performs the same calculations as naiveCPU, but also does a halo exchange
  * at the end of each iteration to update the ghost areas
  */
-
+    int matsz = ny*nx,
+        buffsz_x = nx-2,
+        buffsz_y = ny-2;
     int itr = 0;
     float maxdiff = 0.0f, // The error for this process
           g_maxdiff=0.0f; // The max error over all processes
@@ -46,15 +96,15 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
     int tag_t = DIR_TOP, tag_b=DIR_BOTTOM, tag_r=DIR_RIGHT, tag_l=DIR_LEFT;
 
     // Allocate local arrays
-    M_new = (float*)malloc(ny*nx*sizeof(float));
-    send_top = (float*)malloc((nx-2)*sizeof(float));
-    send_right = (float*)malloc((ny-2)*sizeof(float));
-    send_bot = (float*)malloc((nx-2)*sizeof(float));
-    send_left = (float*)malloc((ny-2)*sizeof(float));
-    recv_top = (float*)malloc((nx-2)*sizeof(float));
-    recv_right = (float*)malloc((ny-2)*sizeof(float));
-    recv_bot = (float*)malloc((nx-2)*sizeof(float));
-    recv_left = (float*)malloc((ny-2)*sizeof(float));
+    M_new = (float*)malloc(matsz*sizeof(float));
+    send_top = (float*)malloc(buffsz_x*sizeof(float));
+    send_right = (float*)malloc(buffsz_y*sizeof(float));
+    send_bot = (float*)malloc(buffsz_x*sizeof(float));
+    send_left = (float*)malloc(buffsz_y*sizeof(float));
+    recv_top = (float*)malloc(buffsz_x*sizeof(float));
+    recv_right = (float*)malloc(buffsz_y*sizeof(float));
+    recv_bot = (float*)malloc(buffsz_x*sizeof(float));
+    recv_left = (float*)malloc(buffsz_y*sizeof(float));
 
     // Make M_new a copy of M, this helps for the last loop inside the do-while
     std::copy(M, M+(ny*nx), M_new);
@@ -62,6 +112,7 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
     do {
         maxdiff = 0.0f;
         itr++;
+
         // Update M_new with M
         for(int i=1; i<ny-1; i++){
             for(int j=1; j<nx-1; j++){
@@ -162,7 +213,7 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
 
     // Fill in the return value
     ret.itr = itr;
-    ret.error = maxdiff;
+    ret.error = g_maxdiff;
     return ret;
 }
 

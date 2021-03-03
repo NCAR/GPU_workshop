@@ -56,5 +56,4 @@ LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx){
     ret.itr = itr;
     ret.error = maxdiff;
     return ret;
-
 }
