@@ -69,10 +69,8 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
     recv_left = (float*)malloc(buffsz_y*sizeof(float));
 
-    // Make M_new a copy of M, this helps for the last loop inside the do-while
-    std::copy(M, M+(ny*nx), M_new);
 
-#pragma acc enter data copyin(M[0:ny*nx]) create(M_new[0:ny*nx])
+#pragma acc enter data copyin(M[0:ny*nx], M_new[0:ny*nx])
 #pragma acc enter data create(send_top[0:(nx-2)], recv_top[0:nx-2])
 #pragma acc enter data create(send_right[0:(ny-2)], recv_right[0:ny-2])
 #pragma acc enter data create(send_bot[0:(nx-2)], recv_bot[0:nx-2])
@@ -80,11 +78,12 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
     // Make M_new a copy of M, this helps for the last loop inside the do-while
 #pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
-    for(int i=1; i<ny-1; i++){
-        for(int j=1; j<nx-1; j++){
+    for(int i=0; i<ny; i++){
+        for(int j=0; j<nx; j++){
             M_new[i*nx+j] = M[i*nx+j];
         }
     }
+
     do {
         maxdiff = 0.0f;
         itr++;

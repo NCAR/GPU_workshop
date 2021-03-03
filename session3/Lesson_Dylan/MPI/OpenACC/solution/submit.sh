@@ -24,9 +24,16 @@ nvidia-smi
 export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo -e "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 
-export NV_ACC_TIME=1
+#export NV_ACC_TIME=1
+export UCX_TLS=rc,sm,cuda_copy,cuda_ipc
+export OMPI_MCA_pml=ucx
+export OMPI_MCA_btl=self,vader,tcp,smcuda
+export UCX_MEMTYPE_CACHE=n
+#export UCX_RNDV_SCHEME=get_zcopy
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
 mpirun -n 16 ./mpi_acc_stencil.exe 64 4
+#mpirun  -n 16 nvprof --print-gpu-trace --profile-api-trace none --kernels "::LaplaceJacobi_MPIACC:2"  --metrics "achieved_occupancy,gld_transactions,gst_transactions,flop_count_sp"  ./mpi_acc_stencil.exe 64 4
+#mpirun  -n 16 nvprof --devices 0 --print-gpu-trace --profile-api-trace none --kernels "::LaplaceJacobi_MPIACC:2"  --metrics "achieved_occupancy,gld_transactions,gst_transactions,flop_count_sp"  ./mpi_acc_stencil.exe 16384 4
 echo -e "\nEnd of code output:\n-------------\n"

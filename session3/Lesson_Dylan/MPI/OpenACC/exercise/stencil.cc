@@ -69,10 +69,16 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
     recv_left = (float*)malloc(buffsz_y*sizeof(float));
 
-    // Make M_new a copy of M, this helps for the last loop inside the do-while
-    std::copy(M, M+(ny*nx), M_new);
 
 // Add pragmas to copyin data and create other arrays for unstructured data region
+
+    // Make M_new a copy of M, this helps for the last loop inside the do-while
+
+    for(int i=0; i<ny; i++){
+        for(int j=0; j<nx; j++){
+            M_new[i*nx+j] = M[i*nx+j];
+        }
+    }
 
     do {
         maxdiff = 0.0f;

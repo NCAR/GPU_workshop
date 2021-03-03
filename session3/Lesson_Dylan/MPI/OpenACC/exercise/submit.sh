@@ -24,7 +24,12 @@ nvidia-smi
 export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo -e "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 
-export NV_ACC_TIME=1
+#export NV_ACC_TIME=1
+export UCX_TLS=rc,sm,cuda_copy,cuda_ipc
+export OMPI_MCA_pml=ucx
+export OMPI_MCA_btl=self,vader,tcp,smcuda
+export UCX_MEMTYPE_CACHE=n
+#export UCX_RNDV_SCHEME=get_zcopy
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
