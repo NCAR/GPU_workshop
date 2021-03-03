@@ -13,23 +13,23 @@
 
 #define DEFAULT_DOMAIN_SIZE_PER_RANK 256
 
-#define DIR_TOP				0
-#define DIR_RIGHT			1
-#define DIR_BOTTOM			2
-#define DIR_LEFT			3
+#define DIR_TOP             0
+#define DIR_RIGHT           1
+#define DIR_BOTTOM          2
+#define DIR_LEFT            3
 
-#define HasNeighbor(neighbors, dir)	(neighbors[dir] != MPI_PROC_NULL)
+#define HasNeighbor(neighbors, dir) (neighbors[dir] != MPI_PROC_NULL)
 
 // Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
 // Verification tolerance
-#define VERIFY_TOL	 1.0E-6F
+#define VERIFY_TOL   1.0E-6F
 
 // Convinience struct to return values from LapalceJacobi_x
 struct LJ_return
 {
-	int itr;
-	float error;
+    int itr;
+    float error;
 };
 
 // =======================
@@ -45,9 +45,6 @@ void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int n
 // =============
 // Host routines
 // =============
-LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx);
-LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
-			       const int rank, const int *coord, const int *neighbors);
 
 // ==========================
 // Device and OpenACC Routines
@@ -55,5 +52,5 @@ LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
 void mapGPUToMPIRanks(int rank);
 LJ_return LaplaceJacobi_naiveACC(float *M, const int ny, const int nx);
 LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
-			       const int rank, const int *coord, const int *neighbors);
+                               const int rank, const int *coord, const int *neighbors);
 #endif // PCH_H_STENCIL

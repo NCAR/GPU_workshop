@@ -14,13 +14,13 @@
 // Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
 // Verification tolerance
-#define VERIFY_TOL	 1.0E-6F
+#define VERIFY_TOL   1.0E-6F
 
 // Convinience struct to return values from LapalceJacobi_x
 struct LJ_return
 {
-	int itr;
-	float error;
+    int itr;
+    float error;
 };
 
 // =======================

@@ -46,9 +46,8 @@ void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int n
 // =============
 // Host routines
 // =============
-LJ_return LaplaceJacobi_naiveCPU(float *M, const int ny, const int nx);
 LJ_return LaplaceJacobi_MPICPU(float *M, const int ny, const int nx,
-			       const int rank, const int *coord, const int *neighbors);
+				               const int rank, const int *coord, const int *neighbors);
 void Verify_MPIvsOneThread(float *global_M, const int g_ny, const int g_nx, float *local_M, const int l_ny, const int l_nx, const int pointsPerDim, const int rank, const int nprocs, int *coords);
 
 // ==========================
