@@ -2,7 +2,6 @@
  * by: G. Dylan Dickerson (gdicker@ucar.edu)
  */
 
-#include <openacc.h>
 #include <float.h>
 #include <stdlib.h>
 #include <stdio.h>
