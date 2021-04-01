@@ -30,10 +30,10 @@ program matrix_add
    call system_clock(count_max=count_max, count_rate=count_rate)
 
       call system_clock(t1)
-
+      !Allocate memory on the Host for all matricies
       allocate( a(rows,cols), b(rows,cols), c_cpu(rows,cols), c_gpu(rows,cols) )
 
-! Initialize matrices
+! Initialize matrices with constant value defined in variable MAT_x_VAL
       do j=1,cols
          do i=1,rows
             a(i,j) = MAT_A_VAL
@@ -46,7 +46,7 @@ program matrix_add
       secs = real(dt)/real(count_rate)
       write(*,"('Initialized Mat A & B, sizes ',i6,' x ',i6,' in ',f12.5,' secs')") rows,cols, secs
 
-! Compute matrix addition on CPU
+! Compute matrix addition on CPU (C= A+B) 
 
       call system_clock(t1)
       do j=1,cols
@@ -76,7 +76,7 @@ program matrix_add
       secs = real(dt)/real(count_rate)
       write(*,"('GPU Matrix Addition completed in ',f12.5,' secs')") secs
 
-! Verify GPU results against CPU
+! Verify GPU results against CPU results for correctness
       ver_flag = 1
       jloop: do j=1,cols
          do i=1,rows
@@ -95,6 +95,7 @@ program matrix_add
       if(ver_flag) then
          write(*,"('Verification passed')")
       end if
+!Cleanup Memory
       deallocate(a, b,c_cpu,c_gpu)
 end program matrix_add
 

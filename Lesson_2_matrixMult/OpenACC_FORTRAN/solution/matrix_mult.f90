@@ -30,6 +30,7 @@ program matrix_mult
         read(colsAChar,*)colsA
         read(rowsBChar,*)rowsB
         read(colsBChar,*)colsB
+        !Check if the multiplication is possible 
         if(colsA .NE. rowsB) then
           write(*,*)'ERROR, Inner dimension mismatch. # Columns of Mat A must equal # Rows of Mat B'
           write(*,*)'Usage: ./matrix_mult.exe rowsA colsA rowsB colsB'
@@ -40,6 +41,7 @@ program matrix_mult
         stop
    endif
 
+!Initialize timing information
    call system_clock(count_max=count_max, count_rate=count_rate)
 
       call system_clock(t1)
@@ -143,6 +145,7 @@ program matrix_mult
       if(ver_flag) then
          write(*,"('Verification passed')")
       end if
+!Release Memory to cleanup program
       deallocate(a, b,c_cpu,c_gpu)
 end program matrix_mult
 

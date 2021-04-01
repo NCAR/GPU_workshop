@@ -55,14 +55,14 @@ int main(int argc, char* argv[]) {
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("Init took %f seconds. Begin compute.\n", t1sum.count());
 
-  // Calculate A+B=C on the host
+  // Calculate A*B=C on the host
   t0 = high_resolution_clock::now();
   cpuMatmul(h_A,h_B,cpu_C,m,p,q);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Multiplication took %f seconds.\n", t1sum.count());
 
-  // Calcuate A+B=C on the device
+  // Calcuate A*B=C on the device
   t0 = high_resolution_clock::now();
   gpuMult(h_A,h_B,gpu_C,m,n,p,q,BLOCK_SIZE);
   t1 = high_resolution_clock::now();
