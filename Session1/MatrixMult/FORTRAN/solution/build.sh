@@ -13,5 +13,4 @@ export NVHPC_ROOT_PATH="${NCAR_ROOT_NVHPC}/Linux_x86_64/20.11/compilers"
 # Remove any previous build attempts
 make clean
 # Do a build
-# Set _OPENACC=true to enable Openacc, otherwise set as false
-make _OPENACC=true  
+make 

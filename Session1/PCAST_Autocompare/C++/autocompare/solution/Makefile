@@ -7,11 +7,7 @@ CFLAGS= -g -O3 -std=c++11 -Wall
 # Linking Flags
 LDFLAGS=
 
-ifeq ($(OPENACC),true)
-ACCFLAGS= -acc -ta=tesla:autocompare,cc70 -Minfo=all -I${NVHPC_ROOT_PATH}/include
-else 
-ACCFLAGS= 
-endif
+ACCFLAGS= -acc -ta=tesla:autocompare,cc70 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)

@@ -2,13 +2,9 @@
 CC=nvc++
 
 # Compilation flags
-CFLAGS= -g -O3 -std=c++11 -Wall
+CFLAGS= -O3 -std=c++11 -Wall
 
-ifeq ($(_OPENACC),true)
-ACCFLAGS= -acc -gpu=cc60,cc70,managed -Minfo=all -I${NVHPC_ROOT_PATH}/include
-else 
-ACCFLAGS=
-endif
+ACCFLAGS= -acc -gpu=cc60,cc70 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
