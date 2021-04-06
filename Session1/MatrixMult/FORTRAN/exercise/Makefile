@@ -4,7 +4,7 @@ F90=nvfortran
 # Compilation flags
 FFLAGS= -O3 -Wall -Mfree
 
-ACCFLAGS= -acc -gpu=cc60,cc70 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
+ACCFLAGS= -acc -gpu=cc60,cc70,cuda11.1 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)

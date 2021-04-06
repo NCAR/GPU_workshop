@@ -4,7 +4,7 @@ CC=nvc++
 # Compilation flags
 CFLAGS= -O3 -std=c++11 -Wall
 
-ACCFLAGS= -acc -gpu=cc60,cc70 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
+ACCFLAGS= -acc -gpu=cc60,cc70,cuda11.1 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
 
 # Description of necessary files and binaries
 # List of object files separated by spaces (e.g. main.o device.o)
