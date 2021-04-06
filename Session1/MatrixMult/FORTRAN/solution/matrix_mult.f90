@@ -94,7 +94,7 @@ program matrix_mult
       do j=1,colsB
          do i=1,rowsA
             tmp = 0.0
-!$acc loop vector reduction(+:tmp)
+!$acc loop reduction(+:tmp)
             do k=1,rowsB
                 tmp = tmp + a(i,k) * b(k,j)
             enddo
