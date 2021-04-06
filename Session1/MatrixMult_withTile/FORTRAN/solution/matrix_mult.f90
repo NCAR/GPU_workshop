@@ -90,7 +90,7 @@ program matrix_mult
       call system_clock(t1)
 
 !$acc data copyin(a,b) copyout(c_gpu)
-!$acc parallel loop tile(64,8) reduction(+:tmp)
+!$acc parallel loop tile(32,32) reduction(+:tmp)
       do j=1,colsB
          do i=1,rowsA
             tmp = 0.0
