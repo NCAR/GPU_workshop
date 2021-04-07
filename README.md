@@ -10,7 +10,7 @@ Created in Q1 of 2021 using NVIDIA High Performance Computing Software Developme
 * Krishna Chemudupati - Student Assistant II CISL & University of Colorado Boulder
 * Briley James - Student Assisstant III CISL & University of Wyoming
 * Oreoluwa Babatunde - Student Assistant II & University of Wyoming
-* Supreeth Suresh - Software Engineer II CISL
+* Supreeth Suresh - ssuresh@ucar.edu - Software Engineer II CISL
 * Cena Miller - Software Engineer II CISL
 
 
