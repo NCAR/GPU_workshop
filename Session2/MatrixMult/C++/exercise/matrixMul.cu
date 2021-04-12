@@ -1,6 +1,6 @@
 #include "pch.h"
 
-__global__ void mmul( float *a, float *b, float *c, int m, int n, int q)
+__global__ void mmul( float *A, float *B, float *C, int m, int p, int q)
 {
    //Calculate the row and column values based on the block Id, block dimensions and the thread Id.
  
@@ -10,7 +10,7 @@ __global__ void mmul( float *a, float *b, float *c, int m, int n, int q)
 
 
 
-__host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const int n, const int p, const int q, const int block_size)
+__host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const int p, const int q)
 {
   //declare variables to be used by GPU (device) for matrix multiplication
   float *d_A, *d_B, *d_C;
@@ -39,10 +39,9 @@ __host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const i
   printf("\tGrid size  : {%d, %d, %d} blocks.\n",grid.x, grid.y, grid.z);
   printf("\tBlock size : {%d, %d, %d} threads.\n",block.x, block.y, block.z);
 
-
   //Launch matrix multiplication kernel (the global function)
 
- // block CPU until GPU returns data using cudaDeviceSynchronize 
+  // block CPU until GPU returns data using cudaDeviceSynchronize 
 
   // Transfer results from device to host 
 

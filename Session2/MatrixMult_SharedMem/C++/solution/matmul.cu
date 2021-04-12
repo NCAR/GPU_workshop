@@ -2,14 +2,14 @@
 #include <cuda.h>
 #include "pch.h"
 
-__global__ void SharedMatmul(const float *a, const float *b, float *c, const int m, const int p, const int q) {
+__global__ void SharedMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q) {
   // Compute each thread's global row and column index
   int row = blockIdx.y * blockDim.y + threadIdx.y;
   int col = blockIdx.x * blockDim.x + threadIdx.x;
 
   // Statically allocate a tile of shared memory. Tile size should equal block size.
-  __shared__ float s_a[SHMEM_SIZE];
-  __shared__ float s_b[SHMEM_SIZE];
+  __shared__ float s_A[SHMEM_SIZE];
+  __shared__ float s_B[SHMEM_SIZE];
 
   // Declare a temporary variable to accumulate calculated elements
   // for the C matrix
@@ -21,10 +21,10 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
     int shared_index = threadIdx.y * blockDim.x + threadIdx.x;
     
     // For matrix A, keep the row invariant and iterate through columns.
-    s_a[shared_index] = a[row * p + i + threadIdx.x];
+    s_A[shared_index] = A[row * p + i + threadIdx.x];
     
     // For matrix B, keep the column invariant and iterate through rows.
-    s_b[shared_index] = b[i * q + threadIdx.y * q + col];
+    s_B[shared_index] = B[i * q + threadIdx.y * q + col];
 
     // Wait for tiles to be loaded in before doing computation.
     __syncthreads();
@@ -32,7 +32,7 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
     // Do matrix multiplication on the small matrix within the current tile.
     for (int j = 0; j < blockDim.x; j++) {
       sum +=
-          s_a[threadIdx.y * blockDim.x + j] * s_b[j * blockDim.x + threadIdx.x];
+          s_A[threadIdx.y * blockDim.x + j] * s_B[j * blockDim.x + threadIdx.x];
     }
 
     // Wait for all threads to finish using current tiles before loading in new ones.
@@ -40,7 +40,7 @@ __global__ void SharedMatmul(const float *a, const float *b, float *c, const int
   }
 
   // Write resulting calculations as elements of the C matrix.
-  c[row * q + col] = sum;
+  C[row * q + col] = sum;
 }
 
 __host__ void gpuMatmul(const float *h_A, const float *h_B, float *gpu_C, const int m, const int p, const int q)
@@ -61,7 +61,7 @@ __host__ void gpuMatmul(const float *h_A, const float *h_B, float *gpu_C, const 
 
   //calculate grid and block dimensions
   // Remember: the maximum number of total threads is 1024.
-  int block_size = BLOCK_SIZE;
+  unsigned int block_size = BLOCK_SIZE;
   // Set blocks per grid dimension
   int blocks_x = (q+block_size-1) / block_size;
   int blocks_y = (m+block_size-1) / block_size;

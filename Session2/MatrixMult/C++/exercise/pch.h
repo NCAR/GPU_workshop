@@ -29,7 +29,7 @@
 void cpuMatmul(const float *A, const float *B, float *C, const int m, const int p, const int q);
 
 // Device routine
-extern void gpuMult(float *h_A, float *h_B, float *h_check, const int m, const int n, const int p, const int q, const int block_size);
+extern void gpuMult(float *h_A, float *h_B, float *h_check, const int m, const int p, const int q);
 
 // Functions in common.cpp 
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val, const char *name);

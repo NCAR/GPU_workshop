@@ -1,6 +1,6 @@
 #include "pch.h"
 
-__global__ void mmul( float *a, float *b, float *c, int m, int n, int q)
+__global__ void mmul( float *A, float *B, float *C, int m, int p, int q)
 {
   // Compute each thread's global row and column index
   int row = blockIdx.y * blockDim.y + threadIdx.y;
@@ -8,29 +8,29 @@ __global__ void mmul( float *a, float *b, float *c, int m, int n, int q)
   float sum = 0.0;
   if( col < q && row < m)
   {
-      for(int i = 0; i < n; i++)
+      for(int i = 0; i < p; i++)
       {
-          sum += a[row*n+i] * b[i*q+col];
+          sum += A[row*p+i] * B[i*q+col];
       }
-      c[row*q+col] = sum;
+      C[row*q+col] = sum;
     }
 }
 
 
 
-__host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const int n, const int p, const int q)
+__host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const int p, const int q)
 {
   //declare variables to be used by GPU (device) for matrix multiplication
   float *d_A, *d_B, *d_C;
 
   // Allocate device matrices on GPU using cudaMalloc
-  cudaMalloc(&d_A, m*n*sizeof(float));
+  cudaMalloc(&d_A, m*p*sizeof(float));
   cudaMalloc(&d_B, p*q*sizeof(float));
   cudaMalloc(&d_C, m*q*sizeof(float));
   cudaCheckErrors("cudaMalloc failure");
 
   // Copy host matrices A and B to the device using cudaMemcpy
-  cudaMemcpy(d_A, h_A, m*n*sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(d_A, h_A, m*p*sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(d_B, h_B, p*q*sizeof(float), cudaMemcpyHostToDevice);
   cudaCheckErrors("cudaMemcpy H2D failture");
 
@@ -47,9 +47,8 @@ __host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const i
   printf("\tGrid size  : {%d, %d, %d} blocks.\n",grid.x, grid.y, grid.z);
   printf("\tBlock size : {%d, %d, %d} threads.\n",block.x, block.y, block.z);
 
-
   //carry out matrix multiplication on the GPUs
-  mmul<<<grid,block>>>(d_A,d_B,d_C,m,n,q);
+  mmul<<<grid,block>>>(d_A,d_B,d_C,m,p,q);
 
   // Synchronize the device
   cudaDeviceSynchronize();
