@@ -36,11 +36,12 @@ __host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const i
 
   //calculate grid and block dimensions
   // Remember: the maximum number of total threads is 1024.
-  unsigned int block_size = BLOCK_SIZE;
+  unsigned int block_size = BLOCK_SIZE; // from pch.h is 32
+  dim3 block(block_size, block_size);
+  //calculate grid dimensions here
   unsigned int grid_rows = (m + block_size - 1) / block_size;
   unsigned int grid_cols = (q + block_size - 1) / block_size;
   dim3 grid(grid_cols, grid_rows);
-  dim3 block(block_size, block_size);
  
   printf("Kernel launch dimensions: \n");
   printf("\tGrid size  : {%d, %d, %d} blocks.\n",grid.x, grid.y, grid.z);

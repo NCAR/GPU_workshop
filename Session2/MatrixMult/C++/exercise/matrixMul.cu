@@ -16,33 +16,41 @@ __host__ void gpuMult(float *h_A, float *h_B, float *gpu_C, const int m, const i
   float *d_A, *d_B, *d_C;
 
   //Allocate device memory
-  cudaMalloc(&d_A, m*n*sizeof(float));
-  cudaMalloc(&d_B, p*q*sizeof(float));
-  cudaMalloc(&d_C, m*q*sizeof(float));
+  //cudaMalloc(&d_A, ???*???*sizeof(???));
+  //cudaMalloc(&d_B, ???*???*sizeof(???));
+  //cudaMalloc(&d_C, ???*???*sizeof(???));
   cudaCheckErrors("cudaMalloc failure");
-  cudaMemcpy(d_A, h_A, m*n*sizeof(float), cudaMemcpyHostToDevice);
-  cudaMemcpy(d_B, h_B, p*q*sizeof(float), cudaMemcpyHostToDevice);
+
+  // Copy host matrices A and B to the device using cudaMemcpy
+  //cudaMemcpy(dest, src, ???*???*sizeof(???), cudaMemcpyHostToDevice);
+  //cudaMemcpy(dest, src, ???*???*sizeof(???), cudaMemcpyHostToDevice);
   cudaCheckErrors("cudaMemcpy H2D failture");
   
-  //calculate grid and block dimensions here
-   
-
+  // Set block dimensions here
+  // Remember: the maximum number of total threads is 1024.
+  unsigned int block_size = BLOCK_SIZE; // from pch.h is 32
+  dim3 block(block_size, block_size);
+  //calculate grid dimensions here
+  //unsigned int grid_rows = ???; 
+  //unsigned int grid_cols = ???; 
+  dim3 grid(grid_cols, grid_rows);
  
   printf("Kernel launch dimensions: \n");
   printf("\tGrid size  : {%d, %d, %d} blocks.\n",grid.x, grid.y, grid.z);
   printf("\tBlock size : {%d, %d, %d} threads.\n",block.x, block.y, block.z);
 
 
-  //Launch matrix multiplication kernel, and block CPU until GPU returns data
+  //Launch matrix multiplication kernel (the global function)
 
-
-
-  cudaCheckErrors("Kernel execution failure or cudaMemcpy H2D failure");
-  
+ // block CPU until GPU returns data using cudaDeviceSynchronize 
 
   // Transfer results from device to host 
 
-  // Cleanup - free memory on GPU
+  cudaCheckErrors("Kernel execution failure or cudaMemcpy H2D failure");
+
+  // Cleanup - free memory on GPU using cudaFree
+
+
 
   cudaCheckErrors("cudaFree failure");
 }
