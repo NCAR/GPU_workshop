@@ -13,7 +13,7 @@
 #include <chrono>
 #include <ratio>
 
-#define DEFAULT_DIM 1024;
+#define DEFAULT_DIM 2048;
 #define BLOCK_SIZE 32 // The CUDA max is 1024 threads per block
 #define SHMEM_SIZE BLOCK_SIZE * BLOCK_SIZE
 #define MATMUL_A_VAL 3.0F

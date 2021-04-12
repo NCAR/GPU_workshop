@@ -10,7 +10,7 @@
 #define VERIF_TOL 1.0E-6F
 #define MAT_A_VAL 3.0F
 #define MAT_B_VAL 2.0F
-#define DEFAULT_DIM 1024;
+#define DEFAULT_DIM 2048;
 #define BLOCK_SIZE 32 // The CUDA max is 1024 threads per block
 
 #define cudaCheckErrors(msg) \
