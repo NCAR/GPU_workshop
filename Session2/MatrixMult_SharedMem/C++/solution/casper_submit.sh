@@ -1,14 +1,13 @@
 #!/bin/bash -l
 # Batch directives
-#SBATCH --gres=gpu:v100:1
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --account NTDD0002
-#SBATCH --partition=dav
-#SBATCH --reservation=casper_8xV100
-#SBATCH --time=00:15:00
-#SBATCH --output=log.matmul_%j.out
-#SBATCH --job-name=GPU_matmul
+#PBS -N sm_matmul
+#PBS -A NTDD0002
+#PBS -q casper
+#PBS -l select=1:ncpus=1:mem=50GB:ngpus=1
+#PBS -l gpu_type=v100
+#PBS -l walltime=00:05:00
+#PBS -e sm_matmul.err
+#PBS -o sm_matmul.log
 
 # Load the necessary modules (software)
 module purge
@@ -24,4 +23,4 @@ nvidia-smi
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun ./matmul.exe 
+./matmul.exe 

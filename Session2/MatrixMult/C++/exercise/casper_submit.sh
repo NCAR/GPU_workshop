@@ -1,17 +1,14 @@
 #!/bin/bash -l
 # Batch directives
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --account NTDD0002
-#SBATCH --partition=dav
-## This reservation is only active around the time we have
-##  a tutorial session
-#SBATCH --reservation=CSG_GPU_workshop1
-#SBATCH --gres=gpu:v100:1
-#SBATCH --time=00:15:00
-#SBATCH --output=log.matrix_mult.out
-#SBATCH --job-name=MatMult
-#SBATCH --mem=50G
+#PBS -N matmul
+#PBS -A NTDD0002
+#PBS -q casper
+#PBS -l select=1:ncpus=1:mem=50GB:ngpus=1
+#PBS -l gpu_type=v100
+#PBS -l walltime=00:05:00
+##PBS --reservation=TDD_4xV100 
+#PBS -e matmul.err
+#PBS -o matmul.log
 
 # Load the necessary modules (software)
 module purge
@@ -27,4 +24,4 @@ nvidia-smi
 
 # Move to the correct directory and run the executable
 echo -e "\nBeginning code output:\n-------------\n"
-srun nvprof ./matMult.exe 
+./matMult.exe 
