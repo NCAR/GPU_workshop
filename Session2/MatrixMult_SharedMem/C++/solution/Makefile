@@ -3,8 +3,8 @@ CC=pgc++
 CUDACC=nvcc
 
 # Compilation flags
-CFLAGS= -g -O3 -std=c++11 -Wall
-CUDACFLAGS= -g -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
+CFLAGS= -O3 -std=c++11 -Wall
+CUDACFLAGS=  -std=c++11 -O3 -I${CUDA_ROOT_PATH}/include
 
 # Linking Flags
 LDFLAGS=
