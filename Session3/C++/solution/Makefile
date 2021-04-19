@@ -1,0 +1,30 @@
+# Compilers and linkers
+CC=nvc++
+MPICC=mpic++
+
+# Compilation flags
+CFLAGS= -g -O3 -std=c++11 -Wall
+
+#ACCFLAGS= -acc=gpu -gpu=cuda11.1,cc70 -Minfo=accel -I${NVHPC_ROOT_PATH}/include
+ACCFLAGS= -acc=gpu -gpu=cuda11.1,cc70,managed -Minfo=accel -I${NVHPC_ROOT_PATH}/include
+
+# Description of necessary files and binaries
+# List of object files separated by spaces (e.g. main.o device.o)
+OBJECTS= main.o common.o stencil.o 
+# The binary to be built by this Makefile
+BINARY= mpi_acc_stencil.exe
+
+
+all: $(BINARY) 
+
+$(BINARY): $(OBJECTS)
+	$(MPICC) -o $(BINARY) $(OBJECTS) $(ACCFLAGS) 
+
+%.o: %.cpp Makefile
+	$(MPICC) -c $(CFLAGS) $<
+
+%.o: %.cc Makefile
+	$(MPICC) -c $(CFLAGS) $(ACCFLAGS) $<
+
+clean:
+	rm *.o $(BINARY)
