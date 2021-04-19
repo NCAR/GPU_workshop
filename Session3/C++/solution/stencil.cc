@@ -120,15 +120,15 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         if(HasNeighbor(neighbors, DIR_TOP)){ // Fill the values in the top row
             MPI_Waitall(2, requestT, status);
 #pragma acc parallel loop present(recv_top[0:buffsz_x], M_new[0:matsz])  
-            for(int j=1; j<nx-1; j++){
-                M_new[j] = recv_top[j-1];
+            for(int j=0; j<nx; j++){
+                M_new[j] = recv_top[j];
             }
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             MPI_Waitall(2, requestB, status);
 #pragma acc parallel loop present(recv_bot[0:buffsz_x], M_new[0:matsz]) 
-            for(int j=1; j<nx-1; j++){ // Fill the values in the bottom row
-                M_new[(ny-1)*nx+j] = recv_bot[j-1]; 
+            for(int j=0; j<nx; j++){ // Fill the values in the bottom row
+                M_new[(ny-1)*nx+j] = recv_bot[j]; 
             }
         }
         // End the halo exchange section
