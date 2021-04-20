@@ -2,15 +2,14 @@
  * by: G. Dylan Dickerson (gdicker@ucar.edu)
  */
 
-#include <openacc.h>
 #include <float.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 #include <algorithm>
 #include <mpi.h>
-#include <openacc.h>
 #include "pch.h"
+#include <openacc.h>
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 

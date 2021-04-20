@@ -92,7 +92,7 @@ int main(int argc, char** argv){
 
     // Have rank 0 print out some general info about this setup
     if(rank == 0){
-        printf("Global matrix with %d by %d interior points is being divided across %d processes\n", rows-2, cols, nprocs);
+        printf("Global matrix with %d by %d interior points is being divided across %d processes\n", rows, cols, nprocs);
         printf("Processes are laid out in 1D stripes\n");
         printf("Each thread is working on sub-matrices with %d by %d interior points\n", perProcessDim, l_cols);
         printf("------------------------------------------------------------------------------\n\n");

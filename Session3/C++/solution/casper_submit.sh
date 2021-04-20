@@ -1,12 +1,12 @@
 #!/bin/bash -l
 # Batch directives
 #PBS -N stncl_c
-#PBS -A NTDD0002
 #PBS -l select=1:ncpus=4:mpiprocs=4:ngpus=4
 #PBS -l gpu_type=v100
 #PBS -l walltime=00:10:00
-#PBS -q casper
 #PBS -j oe
+#PBS -A NTDD0002
+#PBS -q casper
 
 # Load the necessary modules (software)
 module purge
@@ -23,7 +23,6 @@ export LD_LIBRARY_PATH=${NCAR_ROOT_CUDA}/lib64:${LD_LIBRARY_PATH}
 echo -e "LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
 
 #export NV_ACC_TIME=1
-export PGI_COMPARE=summary,compare,abs=6
 
 export UCX_TLS=rc,sm,cuda_copy,cuda_ipc
 export OMPI_MCA_pml=ucx

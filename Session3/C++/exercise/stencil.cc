@@ -2,7 +2,6 @@
  * by: G. Dylan Dickerson (gdicker@ucar.edu)
  */
 
-#include <openacc.h>
 #include <float.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +10,7 @@
 #include <mpi.h>
 #include "pch.h"
 
-/// Include openacc.h for the acc_* functions
+// TODO: Include openacc.h for the acc_* functions
 
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
@@ -73,6 +72,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
 // TODO: Parallelize this copy loop
     // Make M_new a copy of M, this helps for the last loop inside the do-while
+    for(int i=0; i<ny; i++){
         for(int j=0; j<nx; j++){
             M_new[i*nx+j] = M[i*nx+j];
         }
@@ -101,7 +101,6 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 // TODO: Add host_data construct
             MPI_Irecv(recv_top, buffsz_x, MPI_FLOAT, neighbors[DIR_TOP], tag_b, MPI_COMM_WORLD, requestT);
             MPI_Isend(send_top, buffsz_x, MPI_FLOAT, neighbors[DIR_TOP], tag_t, MPI_COMM_WORLD, requestT+1);
-}
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             // Copy the values from the bottom row of the interior
