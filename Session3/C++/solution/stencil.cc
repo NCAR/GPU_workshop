@@ -143,7 +143,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         }
         // Find the global max difference. Have each process exit when the global error is low enough
         MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
-    } while(g_maxdiff > JACOBI_TOLERANCE);
+    } while(g_maxdiff > JACOBI_TOLERANCE && itr < JACOBI_MAX_ITR);
 
 #pragma acc exit data copyout(M[0:matsz]) delete(M_new[0:matsz])
 #pragma acc exit data delete(send_top[0:buffsz_x], send_bot[0:buffsz_x])
