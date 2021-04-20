@@ -20,7 +20,6 @@
 
 // Convergence tolerance
 #define JACOBI_TOLERANCE 1.0E-6F
-#define JACOBI_MAX_ITR   10000
 // Verification tolerance
 #define VERIFY_TOL   1.0E-6F
 
