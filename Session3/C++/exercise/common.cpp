@@ -125,30 +125,28 @@ void InitializeLJMatrix_MPI(float *M, const int ny, const int nx, const int rank
     }
 }
 
-void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank){
-    // Pointers for rows in each matrix
-    float *p = hostC;
-    float *q = gpuC;
-    bool PassFlag = 1;
-
-    for (int i = 0; i < ny; i++)
-    {
-        for (int j = 0; j < nx; j++)
-        {
-            if (fabs(p[j] - q[j]) > fTolerance)
-            {
-                printf("Rank:%d error: %f > %f", rank, fabs(p[j]-q[j]),fTolerance);
-                printf("\tRank:%d host_M[%d][%d]= %f", rank, i,j, p[j]);
-                printf("\tRank:%d GPU_M[%d][%d]= %f", rank, i,j, q[j]);
-                PassFlag=0;
-                return;
-            }
+void InitializeLJMatrixRandBorder_MPI(float *M, const int ny, const int nx, const int rank, const int nranks){
+/*
+ * Set the outside border to random values and the interiors to 0.0
+ */
+    int startRow = 0, lastRow = ny;
+    if(rank == 0){ // if in the first row
+        for(int j=0; j<nx; j++){
+            M[j] = ((float)rand() / (RAND_MAX)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN);
         }
-        p += nx;
-        q += nx;
+        startRow++;
     }
-    if(PassFlag)
-    {
-        printf("Rank:%d Verification passed\n", rank);
+    else if(rank == nranks -1){
+        for(int j=0; j<nx; j++){
+            M[j] = ((float)rand() / (RAND_MAX)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN);
+        }
+        lastRow--;
+    }
+    for(int i=startRow; i<lastRow; i++){
+        M[i*nx] = ((float)rand() / (RAND_MAX)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN);
+        for(int j=1; j<nx-1; j++){
+            M[i*nx+j] = 0.0f;
+        }
+        M[i*nx+nx-1] = ((float)rand() / (RAND_MAX)*(RANGE_MAX - RANGE_MIN) + RANGE_MIN); 
     }
 }

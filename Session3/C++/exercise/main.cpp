@@ -114,12 +114,12 @@ int main(int argc, char** argv){
 
     // Fill the M matrices so that the j=0 row is 300 while the other
     // three sides of the matrix are set to 0
-    InitializeLJMatrix_MPI(gpu_M, l_rows, l_cols, rank, coords);
+    InitializeLJMatrixRandBorder_MPI(gpu_M, l_rows, l_cols, rank, nprocs);
     t1 = MPI_Wtime();
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0){
-        printf("Max init time was %f seconds. Begin compute\n", maxT);
+        printf("Max random border init time was %f seconds. Begin compute\n", maxT);
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 
@@ -130,7 +130,7 @@ int main(int argc, char** argv){
     elapsedT = t1 - t0;
     MPI_Reduce(&elapsedT, &maxT, 1, MPI_DOUBLE, MPI_MAX, 0, MPI_COMM_WORLD);
     if (rank == 0){
-        printf("Max MPI ACC compute time was %f seconds for %d iterations to reach %f error.\n", maxT, gpu_ret.itr, gpu_ret.error);
+        printf("Max MPI ACC compute time was %f seconds for %d iterations to reach %f max difference between iterations.\n", maxT, gpu_ret.itr, gpu_ret.error);
         fflush(stdout);
     } MPI_Barrier(MPI_COMM_WORLD);
 

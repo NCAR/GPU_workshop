@@ -6,7 +6,7 @@
 #PBS -l walltime=00:10:00
 #PBS -j oe
 #PBS -A NTDD0002
-#PBS -q R123790
+#PBS -q casper 
 
 # Load the necessary modules (software)
 module purge

@@ -65,8 +65,8 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
 
 
-// TODO: Create an unstructured data region copyin M and M_new
-// as well as create the send_* and recv_* variables
+// TODO: Create a structured data region copy M and M_new
+// as well as create the send_*, recv_*, and maxdiff variables
 
 
 
@@ -79,8 +79,9 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     }
 
     do {
-        maxdiff = 0.0f;
         itr++;
+        maxdiff = 0.0f;
+// TODO: Update the device maxdiff after setting it to 0
 
         // Update M_new with M
 // TODO: Parallelize the update loop
@@ -142,7 +143,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
     } while(g_maxdiff > JACOBI_TOLERANCE && itr < JACOBI_MAX_ITR);
 
-// TODO: Add pragmas to copyout data and delete other arrays for unstructured data region
+// TODO: Close the data region 
 
     // Free malloc'ed memory
     free(M_new);

@@ -63,10 +63,11 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_top = (float*)malloc(buffsz_x*sizeof(float));
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
 
-
-#pragma acc enter data copyin(M[0:matsz], M_new[0:matsz])
-#pragma acc enter data create(send_top[0:buffsz_x], recv_top[0:buffsz_x])
-#pragma acc enter data create(send_bot[0:buffsz_x], recv_bot[0:buffsz_x])
+#pragma acc data copy(M[0:matsz]) copyin(M_new[0:matsz]) \
+ create(send_top[0:buffsz_x], recv_top[0:buffsz_x]) \
+ create(send_bot[0:buffsz_x], recv_bot[0:buffsz_x]) \
+ create(maxdiff)
+{
 
     // Make M_new a copy of M, this helps for the last loop inside the do-while
 #pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
@@ -77,8 +78,10 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     }
 
     do {
-        maxdiff = 0.0f;
         itr++;
+        maxdiff = 0.0f;
+// Update the device maxdiff after setting it to 0
+#pragma acc update device(maxdiff)
 
         // Update M_new with M
 #pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
@@ -134,7 +137,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
         // Check for convergence while copying values into M
 #pragma acc parallel loop collapse(2) reduction(max:maxdiff) \
- present(M[0:matsz],M_new[0:matsz]) copy(maxdiff)
+ present(M[0:matsz],M_new[0:matsz], maxdiff)
         for(int i=0; i<ny; i++){
             for(int j=0; j<nx; j++){
                 maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
@@ -142,12 +145,11 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
             }
         }
         // Find the global max difference. Have each process exit when the global error is low enough
+#pragma acc host_data use_device(maxdiff)
         MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
     } while(g_maxdiff > JACOBI_TOLERANCE && itr < JACOBI_MAX_ITR);
 
-#pragma acc exit data copyout(M[0:matsz]) delete(M_new[0:matsz])
-#pragma acc exit data delete(send_top[0:buffsz_x], send_bot[0:buffsz_x])
-#pragma acc exit data delete(recv_top[0:buffsz_x], recv_bot[0:buffsz_x])
+} // acc end data
 
     // Free malloc'ed memory
     free(M_new);

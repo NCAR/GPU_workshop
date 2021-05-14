@@ -40,7 +40,7 @@ void MatrixVerification(float *hostC, float *gpuC, const int ny, const int nx, c
 void PrintMatrix(float *matrix, int ny, int nx);
 // MPI functions
 void InitializeLJMatrix_MPI(float *M, const int ny, const int nx, const int rank, const int *coords);
-void MatrixVerification_MPI(float *hostC, float *gpuC, const int ny, const int nx, const float fTolerance, int rank);
+void InitializeLJMatrixRandBorder_MPI(float *M, const int ny, const int nx, const int rank, const int nranks);
 
 // =============
 // Host routines
