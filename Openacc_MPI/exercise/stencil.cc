@@ -12,6 +12,7 @@
 
 // TODO: Include openacc.h for the acc_* functions
 
+
 #define MAX(X,Y) (((X) > (Y)) ? (X) : (Y))
 
 void mapGPUToMPIRanks(int rank){
@@ -64,14 +65,17 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_top = (float*)malloc(buffsz_x*sizeof(float));
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
 
-
-// TODO: Create a structured data region copy M and M_new
+// TODO: Create a structured data region copy M, copyin M_new,
 // as well as create the send_*, recv_*, and maxdiff variables
+//#pragma acc data copy(M[0:matsz]) copyin(M_new[0:matsz]) \
+// create(send_top[0:buffsz_x], recv_top[0:buffsz_x]) \
+// create(send_bot[0:buffsz_x], recv_bot[0:buffsz_x]) \
+// create(maxdiff)
+//{
 
-
-
-// TODO: Parallelize this copy loop
     // Make M_new a copy of M, this helps for the last loop inside the do-while
+// TODO: Parallelize this copy loop
+
     for(int i=0; i<ny; i++){
         for(int j=0; j<nx; j++){
             M_new[i*nx+j] = M[i*nx+j];
@@ -83,8 +87,10 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         maxdiff = 0.0f;
 // TODO: Update the device maxdiff after setting it to 0
 
+
         // Update M_new with M
 // TODO: Parallelize the update loop
+//#pragma acc parallel loop collapse(2) default(present) 
         for(int i=1; i<ny-1; i++){
             for(int j=1; j<nx-1; j++){
                 M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
@@ -96,43 +102,55 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         if(HasNeighbor(neighbors, DIR_TOP)){
             // Copy the values from the top row of the interior
 // TODO: Parallelize this loop copying into the send buffer
+
             for(int j=0; j<nx; j++){
                 send_top[j] = M_new[1*nx+j];
             }
 // TODO: Add host_data construct
+
+
             MPI_Irecv(recv_top, buffsz_x, MPI_FLOAT, neighbors[DIR_TOP], tag_b, MPI_COMM_WORLD, requestT);
             MPI_Isend(send_top, buffsz_x, MPI_FLOAT, neighbors[DIR_TOP], tag_t, MPI_COMM_WORLD, requestT+1);
+
         }
+
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             // Copy the values from the bottom row of the interior
 // TODO: Parallelize this loop copying into the send buffer
+#pragma acc parallel loop default(present) 
             for(int j=0; j<nx; j++){
                 send_bot[j] = M_new[(ny-2)*nx+j];
             }
 // TODO: Add host_data construct
+//#pragma acc host_data use_device(recv_bot, send_bot)
+//{
             MPI_Irecv(recv_bot, buffsz_x, MPI_FLOAT, neighbors[DIR_BOTTOM], tag_t, MPI_COMM_WORLD, requestB);
             MPI_Isend(send_bot, buffsz_x, MPI_FLOAT, neighbors[DIR_BOTTOM], tag_b, MPI_COMM_WORLD, requestB+1);
+//}
         }
 
         // Wait to receive the values and fill in the correct areas of M_new
         if(HasNeighbor(neighbors, DIR_TOP)){ // Fill the values in the top row
             MPI_Waitall(2, requestT, status);
 // TODO: Parallelize this loop copying into the border area
-            for(int j=1; j<nx-1; j++){
-                M_new[j] = recv_top[j-1];
+
+            for(int j=0; j<nx; j++){
+                M_new[j] = recv_top[j];
             }
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             MPI_Waitall(2, requestB, status);
 // TODO: Parallelize this loop copying into the border area
-            for(int j=1; j<nx-1; j++){ // Fill the values in the bottom row
-                M_new[(ny-1)*nx+j] = recv_bot[j-1]; 
+//#pragma acc parallel loop default(present)
+            for(int j=0; j<nx; j++){ // Fill the values in the bottom row
+                M_new[(ny-1)*nx+j] = recv_bot[j]; 
             }
         }
         // End the halo exchange section
 
         // Check for convergence while copying values into M
 // TODO: Parallelize the convergence loop, apply a max reduction
+
         for(int i=0; i<ny; i++){
             for(int j=0; j<nx; j++){
                 maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
@@ -140,11 +158,13 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
             }
         }
         // Find the global max difference. Have each process exit when the global error is low enough
+// TODO: Use the device pointer of maxdiff to avoid another copy
+
         MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
     } while(g_maxdiff > JACOBI_TOLERANCE && itr < JACOBI_MAX_ITR);
 
 // TODO: Close the data region 
-
+//} // acc end data
     // Free malloc'ed memory
     free(M_new);
     free(send_top);

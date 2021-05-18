@@ -63,6 +63,8 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
     recv_top = (float*)malloc(buffsz_x*sizeof(float));
     recv_bot = (float*)malloc(buffsz_x*sizeof(float));
 
+// Create a structured data region copy M, copyin M_new,
+// as well as create the send_*, recv_*, and maxdiff variables
 #pragma acc data copy(M[0:matsz]) copyin(M_new[0:matsz]) \
  create(send_top[0:buffsz_x], recv_top[0:buffsz_x]) \
  create(send_bot[0:buffsz_x], recv_bot[0:buffsz_x]) \
@@ -70,7 +72,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 {
 
     // Make M_new a copy of M, this helps for the last loop inside the do-while
-#pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
+#pragma acc parallel loop collapse(2) default(present) 
     for(int i=0; i<ny; i++){
         for(int j=0; j<nx; j++){
             M_new[i*nx+j] = M[i*nx+j];
@@ -84,7 +86,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 #pragma acc update device(maxdiff)
 
         // Update M_new with M
-#pragma acc parallel loop collapse(2) present(M[0:matsz], M_new[0:matsz])
+#pragma acc parallel loop collapse(2) default(present) 
         for(int i=1; i<ny-1; i++){
             for(int j=1; j<nx-1; j++){
                 M_new[i*nx+j] = 0.25f *(M[(i-1)*nx+j]+M[i*nx+j+1]+ \
@@ -95,7 +97,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         // Perform halo exchange
         if(HasNeighbor(neighbors, DIR_TOP)){
             // Copy the values from the top row of the interior
-#pragma acc parallel loop present(send_top[0:buffsz_x], M_new[0:matsz])
+#pragma acc parallel loop default(present) 
             for(int j=0; j<nx; j++){
                 send_top[j] = M_new[1*nx+j];
             }
@@ -107,7 +109,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             // Copy the values from the bottom row of the interior
-#pragma acc parallel loop  present(send_bot[0:buffsz_x], M_new[0:matsz])
+#pragma acc parallel loop default(present) 
             for(int j=0; j<nx; j++){
                 send_bot[j] = M_new[(ny-2)*nx+j];
             }
@@ -121,14 +123,14 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         // Wait to receive the values and fill in the correct areas of M_new
         if(HasNeighbor(neighbors, DIR_TOP)){ // Fill the values in the top row
             MPI_Waitall(2, requestT, status);
-#pragma acc parallel loop present(recv_top[0:buffsz_x], M_new[0:matsz])  
+#pragma acc parallel loop default(present)
             for(int j=0; j<nx; j++){
                 M_new[j] = recv_top[j];
             }
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             MPI_Waitall(2, requestB, status);
-#pragma acc parallel loop present(recv_bot[0:buffsz_x], M_new[0:matsz]) 
+#pragma acc parallel loop default(present) 
             for(int j=0; j<nx; j++){ // Fill the values in the bottom row
                 M_new[(ny-1)*nx+j] = recv_bot[j]; 
             }
@@ -136,8 +138,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         // End the halo exchange section
 
         // Check for convergence while copying values into M
-#pragma acc parallel loop collapse(2) reduction(max:maxdiff) \
- present(M[0:matsz],M_new[0:matsz], maxdiff)
+#pragma acc parallel loop collapse(2) reduction(max:maxdiff) default(present) 
         for(int i=0; i<ny; i++){
             for(int j=0; j<nx; j++){
                 maxdiff = MAX(fabs(M_new[i*nx+j] - M[i*nx+j]), maxdiff);
