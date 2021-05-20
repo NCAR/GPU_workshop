@@ -3,6 +3,7 @@
  * Contains the constants, headers, and function prototypes used in other files
  */
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h> 
 
 #ifndef PCH_H_MATRIX_ADD
@@ -18,6 +19,9 @@
 void cpu_matrix_mult(const float *A, const float *B, float *C, const int rowsA, const int colsB,\
   const int rowsB);
 
+void cpu_matrix_mult_trans(const float *A, const float *B, float *C, const int rowsA, const int colsB,\
+  const int rowsB);
+
 // Functions in common.cpp 
 void InitializeMatrixSame(float *array, const int ny, const int nx, const float val,const char *name);
 void InitializeMatrixRand(float *array, const int ny, const int nx, const char *name);
@@ -26,6 +30,9 @@ void PrintMatrix(float *matrix, int ny, int nx);
 
 // OpenACC routine
 void openacc_matrix_mult(const float *A, const float *B, float *C, const int rowsA, const int colsB,\
+  const int rowsB);
+
+void openacc_matrix_mult_trans(const float *A, const float *B, float *C, const int rowsA, const int colsB,\
   const int rowsB);
 
 #endif // PCH_H_MATRIX_ADD
