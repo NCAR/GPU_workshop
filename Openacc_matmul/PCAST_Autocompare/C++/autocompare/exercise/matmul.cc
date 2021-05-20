@@ -8,7 +8,7 @@ void gpuMatmul(const float *restrict A, const float *restrict B, float *restrict
     #pragma acc parallel loop gang collapse(2)
     for (int i = 0; i < m; i++) {
       for (int j = 0; j < q; j++) {
-        temp = 0.0;
+        //temp = 0.0;
         #pragma acc loop vector reduction(+:temp)
         for (int k = 0; k < p; k++) {
           temp += A[i*p+k] * B[k*q+j];
