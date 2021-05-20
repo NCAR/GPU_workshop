@@ -13,7 +13,7 @@ ACCFLAGS= -acc -ta=tesla:autocompare,cc70,cuda11.1 -Minfo=accel -I${NVHPC_ROOT_P
 # List of object files separated by spaces (e.g. main.o device.o)
 OBJECTS= main.o functions.o common.o matmul.o
 # The binary to be built by this Makefile
-BINARY= matmul.exe
+BINARY= matrix_mult.exe
 
 
 all: $(BINARY) 

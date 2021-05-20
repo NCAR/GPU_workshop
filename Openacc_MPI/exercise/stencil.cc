@@ -89,7 +89,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
 
         // Update M_new with M
-// TODO: Parallelize the update loop
+// TODO: Uncomment to parallelize the update loop
 //#pragma acc parallel loop collapse(2) default(present) 
         for(int i=1; i<ny-1; i++){
             for(int j=1; j<nx-1; j++){
@@ -116,12 +116,12 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
 
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             // Copy the values from the bottom row of the interior
-// TODO: Parallelize this loop copying into the send buffer
-#pragma acc parallel loop default(present) 
+// TODO: Uncomment to parallelize this loop copying into the send buffer
+//#pragma acc parallel loop default(present) 
             for(int j=0; j<nx; j++){
                 send_bot[j] = M_new[(ny-2)*nx+j];
             }
-// TODO: Add host_data construct
+// TODO: Uncomment add host_data construct
 //#pragma acc host_data use_device(recv_bot, send_bot)
 //{
             MPI_Irecv(recv_bot, buffsz_x, MPI_FLOAT, neighbors[DIR_BOTTOM], tag_t, MPI_COMM_WORLD, requestB);
@@ -140,7 +140,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         }
         if(HasNeighbor(neighbors, DIR_BOTTOM)){
             MPI_Waitall(2, requestB, status);
-// TODO: Parallelize this loop copying into the border area
+// TODO: Uncomment to parallelize this loop copying into the border area
 //#pragma acc parallel loop default(present)
             for(int j=0; j<nx; j++){ // Fill the values in the bottom row
                 M_new[(ny-1)*nx+j] = recv_bot[j]; 
@@ -163,7 +163,7 @@ LJ_return LaplaceJacobi_MPIACC(float *M, const int ny, const int nx,
         MPI_Allreduce(&maxdiff, &g_maxdiff, 1, MPI_FLOAT, MPI_MAX, MPI_COMM_WORLD);
     } while(g_maxdiff > JACOBI_TOLERANCE && itr < JACOBI_MAX_ITR);
 
-// TODO: Close the data region 
+// TODO: Uncomment to close the data region 
 //} // acc end data
     // Free malloc'ed memory
     free(M_new);
