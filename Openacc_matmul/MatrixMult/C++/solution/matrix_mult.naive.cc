@@ -11,12 +11,8 @@ float temp = 0.0;
 
  t_B = (float*)malloc(rowsB*colsB*sizeof(float));
 
-#pragma acc data copyout(C[0:rowsA*colsB]) \
-     copyin(A[0:rowsA*rowsB],B[0:rowsB*colsB]) \
-     create(t_B[0:rowsB*colsB])
-  {
 
-#pragma acc parallel loop collapse(2) default(present)
+#pragma acc parallel loop collapse(2) copyin(B[0:rowsB*colsB]) copyout(t_B[0:rowsB*colsB])
  for (int i = 0; i < rowsB; i++)
       for (int j = 0; j < colsB; j++)
       {
@@ -25,7 +21,7 @@ float temp = 0.0;
       }
 
  #pragma acc parallel loop collapse(2) \
-     reduction(+:temp) default(present)
+     reduction(+:temp) copyin(A[0:rowsA*rowsB],t_B[0:rowsB*colsB]) copyout(C[0:rowsA*colsB])
   for (int i = 0; i < rowsA; i++)
       for (int j = 0; j < colsB; j++)
       {
@@ -37,7 +33,6 @@ float temp = 0.0;
            }
            C[i*colsB+j] = temp;
       }
-  }
    free(t_B);
 }
 

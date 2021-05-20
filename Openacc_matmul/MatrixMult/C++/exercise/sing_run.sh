@@ -1,6 +1,9 @@
 #!/bin/bash
 
+# With arguments rowsA colsA rowsB colsB
 ./matrix_mult.exe
 
-# With arguments rowsA colsA rowsB colsB
-#./matrix_mult.exe 2048 2048 2048 2048
+
+# nvprof profiling
+
+#nvprof --unified-memory-profiling off --print-gpu-summary ./matrix_mult.exe

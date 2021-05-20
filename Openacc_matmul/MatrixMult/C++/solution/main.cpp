@@ -46,20 +46,23 @@ int main(int argc, char* argv[]) {
   InitializeMatrixSame(h_A, rowsA, colsA, MAT_A_VAL,"h_A");
   InitializeMatrixSame(h_B, rowsB, colsB, MAT_B_VAL,"h_B");
 
+  //InitializeMatrixRand(h_A, rowsA, colsA, "h_A");
+  //InitializeMatrixRand(h_B, rowsB, colsB, "h_B");
+
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("Init took %f seconds. Begin CPU compute.\n", t1sum.count());
 
   // Calculate A*B=C on the host
   t0 = high_resolution_clock::now();
-  cpu_matrix_mult_trans(h_A, h_B, cpu_C, rowsA, colsB, rowsB);
+  cpu_matrix_mult(h_A, h_B, cpu_C, rowsA, colsB, rowsB);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("CPU Matrix Multiplication took %f seconds. \n", t1sum.count());
 
   // Calculate A*B=C on the device using OpenACC
   t0 = high_resolution_clock::now();
-  openacc_matrix_mult_trans(h_A, h_B, gpu_C, rowsA, colsB, rowsB);
+  openacc_matrix_mult(h_A, h_B, gpu_C, rowsA, colsB, rowsB);
   t1 = high_resolution_clock::now();
   t1sum = duration_cast<duration<double>>(t1-t0);
   printf("GPU Matrix Multiplication took %f seconds. \n", t1sum.count());
