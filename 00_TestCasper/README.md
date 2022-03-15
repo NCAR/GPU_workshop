@@ -7,7 +7,7 @@ To initialize and run this notebook on Casper:
 3. **Navigate to the folder** you'd prefer to save the GPU workshop github repo (Default is your `$HOME` folder)
 4. Select the **git icon** (diamond square below Dask icon) on the side panel at the left side of the browser window
 5. Select "**Clone a Repository**" 
-6. Enter this git repository address **`https://github.com/dphow/GPU_workshop.git`**
+6. Enter this git repository address **`https://github.com/NCAR/GPU_workshop.git`**
 7. Navigate into the newly cloned `GPU_workshop` directory and select the file **`TestCasper.ipynb`** in the folder `00_TestCasper`
 
 Once you have this notebook displayed and running under the Bash kernel (check active kernel in top right of window), then run each code cell below in order by selecting the cell and pressing CTRL+ENTER.
