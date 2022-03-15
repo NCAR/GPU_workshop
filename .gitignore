@@ -42,3 +42,6 @@
 
 # For the Nvidia Visual Profiler results
 *.nvvp
+
+# For Jupyter Notebook checkpoints
+*.ipynb_checkpoints
