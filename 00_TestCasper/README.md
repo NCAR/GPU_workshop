@@ -1,0 +1,6 @@
+# Testing the Compute Environment on Casper and Other Systems
+Please use the notebook [TestCasper.ipynb](TestCasper.ipynb) to make sure you're able to access NCAR's compute clusters and your user account has the correct access permissions to run relevant workshop compute jobs under the course's project ID **UCIS0004**. Registered workshop participants should have received details about their NCAR CIT account if a new user and established users should have had the prior project ID added to their account and now listed at [sam.ucar.edu](https://sam.ucar.edu).
+
+To immediately start an interactive compute session with this notebook using your NCAR CIT account, please use this [nbgitpuller link](https://jupyterhub.hpc.ucar.edu/stable/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FNCAR%2FGPU_workshop&urlpath=lab%2Ftree%2FGPU_workshop%2F00_TestCasper%2FTestCasper.ipynb&branch=CSG_tutorial) to open up an interactive JupyterHub session with this notebook in your browser. After logging with your credentials and DUO or 2-Factor Authentication device, choose "Casper login node" under the "Cluster Selection" pulldown.
+
+If you have any questions, problems running this notebook, or issues accessing the compute cluster, please reach out to workshop organizers over email or the [NCAR GPU Users Slack](https://ncargpuusers.slack.com).

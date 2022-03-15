@@ -1,0 +1,37 @@
+
+Currently Loaded Modules:
+  1) ncarenv/1.2   2) nvhpc/20.11   3) cuda/11.0.3
+
+ 
+
+==39863== NVPROF is profiling process 39863, command: ./matrix_add.exe 8192 4096
+Failing in Thread:1
+call to cuStreamSynchronize returned error 700: Illegal address during kernel execution
+
+==39863== Profiling application: ./matrix_add.exe 8192 4096
+==39863== Warning: 1 records have invalid timestamps due to insufficient device buffer space. You can configure the buffer space using the option --device-buffer-size.
+==39863== Profiling result:
+No kernels were profiled.
+            Type  Time(%)      Time     Calls       Avg       Min       Max  Name
+      API calls:   77.33%  200.72ms         1  200.72ms  200.72ms  200.72ms  cuDevicePrimaryCtxRetain
+                   12.67%  32.875ms         1  32.875ms  32.875ms  32.875ms  cuStreamSynchronize
+                    7.90%  20.494ms         2  10.247ms  32.589us  20.461ms  cuMemAllocManaged
+                    1.60%  4.1478ms         4  1.0369ms  1.0204ms  1.0601ms  cuDeviceTotalMem
+                    0.36%  921.97us         1  921.97us  921.97us  921.97us  cuMemAllocHost
+                    0.07%  188.05us         1  188.05us  188.05us  188.05us  cuMemAlloc
+                    0.04%  105.84us         1  105.84us  105.84us  105.84us  cuModuleLoadDataEx
+                    0.02%  48.480us         1  48.480us  48.480us  48.480us  cuLaunchKernel
+                    0.01%  18.308us         5  3.6610us     188ns  16.773us  cuDeviceGetAttribute
+                    0.01%  13.693us         1  13.693us  13.693us  13.693us  cuStreamCreate
+                    0.01%  13.676us         3  4.5580us     555ns  12.375us  cuPointerGetAttributes
+                    0.00%  5.9910us         1  5.9910us  5.9910us  5.9910us  cuModuleGetFunction
+                    0.00%  5.6010us         1  5.6010us  5.6010us  5.6010us  cuDeviceGetPCIBusId
+                    0.00%  1.7400us         3     580ns     205ns     907ns  cuCtxSetCurrent
+                    0.00%  1.0570us         3     352ns     170ns     650ns  cuDeviceGetCount
+                    0.00%     641ns         2     320ns     190ns     451ns  cuDeviceGet
+                    0.00%     581ns         1     581ns     581ns     581ns  cuCtxSynchronize
+                    0.00%     279ns         1     279ns     279ns     279ns  cuCtxGetCurrent
+                    0.00%     210ns         1     210ns     210ns     210ns  cuDeviceComputeCapability
+                    0.00%     204ns         1     204ns     204ns     204ns  cuDriverGetVersion
+nvprof: /dvs/p4/build/sw/rel/gpgpu/toolkit/r11.0/nvprof/src/openacc/nvprof_openacc.c:386: push_activity_stack: Assertion `start <= end' failed.
+srun: error: casper36: task 0: Aborted (core dumped)
