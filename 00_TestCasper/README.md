@@ -10,6 +10,6 @@ To initialize and run this notebook on Casper:
 6. Enter this git repository address **`https://github.com/NCAR/GPU_workshop.git`**
 7. Navigate into the newly cloned `GPU_workshop` directory and select the file **`TestCasper.ipynb`** in the folder `00_TestCasper`
 
-Once you have this notebook displayed and running under the Bash kernel (check active kernel in top right of window), then run each code cell below in order by selecting the cell and pressing CTRL+ENTER.
+Once you have this notebook displayed and running under the Bash kernel (check active kernel in top right of window), then run each code cell below in order by selecting the cell and pressing SHIFT+ENTER.
 
 If you have any questions, problems running this notebook, or issues accessing the compute cluster, please reach out to workshop organizers over email or the [NCAR GPU Users Slack](https://ncargpuusers.slack.com).
