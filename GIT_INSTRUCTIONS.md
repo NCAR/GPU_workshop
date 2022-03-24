@@ -1,15 +1,15 @@
-If you working on your own machine or are having issues syncing the workshop git repository, please consult these suggested directions. First, clone this git repository if it doesn't exist
+If you are working on your own machine or are having issues syncing the workshop git repository, please consult these suggested directions. First, clone this git repository if it doesn't exist
 
         git clone git@github.com:NCAR/GPU_workshop.git
 
-Prior to each session, we recommend that you update to the latest version of the teaching material repository by running the below commands. This will modify your working directoy files to match those listed on Github. If you have editted files which you don't care about, 
+Prior to each session, we recommend that you update to the latest version of the teaching material repository by running the below commands from the top workshop directory. This will modify your working directoy files to match those listed on Github.
 
-        # If you have editted files you don't want to save, first reset your repo (will permanently overwrite files to match Github commit)
+        # If you have editted files you are comfortable being reverted, first reset your repo (will permanently overwrite files to match original Github commit)
         git reset --hard
         
-        # Otherwise, checkout workshop branch and update it to latest version
+        # To get the latest course content, checkout workshop branch and update it to latest version
         git checkout workshop
-        git pull git@github.com:NCAR/GPU_workshop.git
+        git pull
 
 When working on course material individually, we recommend you create your own local branch for that session so that your personal edits won't be deleted as course contents may update throughout the workshop series. After checking out and updating the workshop branch, run the below to create and switch to your own branch. If desired, you should then save and commit any changes you make to your own branch before returning to the workshop branch and pulling recent changes with the prior commands.
 
