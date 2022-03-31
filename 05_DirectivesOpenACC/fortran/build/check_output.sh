@@ -56,8 +56,8 @@ if (( `awk "BEGIN {val=$dte; abs=val>0?val:-val; ret=abs<$3?0:-1; print ret}"` )
   printf "Total energy tolerance: $3"
   exit -1
 fi
-printf "Test executable produced correct results within error bounds.\n"
 
 cat ${1}.output
+printf "Test executable produced correct results within error bounds.\n"
 rm -f ${1}.output
 
