@@ -30,7 +30,7 @@ The full course description detailing learning objectives and material to be cov
 2. [Why Use GPU Accelerators](02_WhyGPUs)
 3. [Introduction to GPU and Accelerator Architectures](03_IntroGPUArch)
 4. [Software Infrastructure and Make Systems](04_SoftInfrastrucure)
-5. Directive Based Programming with OpenACC (two sessions)
+5. [Directive Based Programming with OpenACC](05_DirectivesOpenACC) (two sessions)
 7. Hands-On Session Using OpenACC in MPAS-A
 8. Multi-GPU Programming (two sessions)
 10. IDEs, Debugging, and Optimization Tools for GPU Computing
