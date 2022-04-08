@@ -58,6 +58,6 @@ if (( `awk "BEGIN {val=$dte; abs=val>0?val:-val; ret=abs<$3?0:-1; print ret}"` )
 fi
 
 cat ${1}.output
-printf "Test executable produced correct results within error bounds.\n"
+printf "Test executable produced correct results within error bounds of expected mass change and total energy change.\n"
 rm -f ${1}.output
 
