@@ -151,6 +151,22 @@ if (${DO_OPENACC})
   target_link_libraries(openacc_test_ex "${_LIBS}")
 
   add_test(NAME OPENACC_TEST_EX COMMAND ./check_output.sh ./openacc_test_ex 1e-13 4.5e-5 ) 
+  
+## Setup Exercise version 2 of build
+
+  add_executable(openacc_ex2 miniWeather_mpi_exercise2.F90)
+  target_include_directories(openacc_ex2 PUBLIC ${PNETCDF_PATH}/include)
+  set_target_properties(openacc_ex2 PROPERTIES COMPILE_FLAGS "${EXE_DEFS} ${OPENACC_FLAGS}")
+  set(_LIBS "-L${PNETCDF_PATH}/lib -lpnetcdf ${OPENACC_LINK_FLAGS} ${LDFLAGS}")
+  string(STRIP "${_LIBS}" _LIBS)
+  target_link_libraries(openacc_ex2 "${_LIBS}")
+
+  add_executable(openacc_test_ex2 miniWeather_mpi_exercise2.F90)
+  target_include_directories(openacc_test_ex2 PUBLIC ${PNETCDF_PATH}/include)
+  set_target_properties(openacc_test_ex2 PROPERTIES COMPILE_FLAGS "${TEST_DEFS} ${OPENACC_FLAGS}  -Minfo=accel -Minstrument")
+  target_link_libraries(openacc_test_ex2 "${_LIBS}")
+
+  add_test(NAME OPENACC_TEST_EX2 COMMAND ./check_output.sh ./openacc_test_ex2 1e-13 4.5e-5 ) 
 endif()
 
 

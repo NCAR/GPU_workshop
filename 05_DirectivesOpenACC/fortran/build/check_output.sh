@@ -28,6 +28,7 @@ if [[ ! -f $1 ]]; then
   exit -1
 fi
 ${TEST_MPI_COMMAND} $1 > ${1}.output || exit -1
+cat ${1}.output
 
 dmass=`grep d_mass ${1}.output | awk '{print $2}'`
 if [[ "$dmass" == "NaN" ]]; then
@@ -57,7 +58,5 @@ if (( `awk "BEGIN {val=$dte; abs=val>0?val:-val; ret=abs<$3?0:-1; print ret}"` )
   exit -1
 fi
 
-cat ${1}.output
 printf "Test executable produced correct results within error bounds of expected mass change and total energy change.\n"
 rm -f ${1}.output
-
