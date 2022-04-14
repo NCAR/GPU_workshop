@@ -462,7 +462,7 @@ contains
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     
     !Unpack the receive buffers
-    !$acc parallel loop collapse(3) async
+    !$acc parallel loop collapse(3)
     do ll = 1 , NUM_VARS
       do k = 1 , nz
         do s = 1 , hs
@@ -480,7 +480,7 @@ contains
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !! TODO: ASYNC ME (OR TRY OTHER OPTIMIZATIONS)
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        !$acc parallel loop async
+        !$acc parallel loop
         do k = 1 , nz
           z = (k_beg-1 + k-0.5_rp)*dz
           if (abs(z-3*zlen/4) <= zlen/16) then
