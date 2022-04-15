@@ -14635,15 +14635,25 @@ div.jp-OutputPrompt {
 
 <div class="reveal">
 <div class="slides"><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><img src="img/NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
 <h1 id="Directive-Based-Programming-with-OpenACC,-Part-2">Directive Based Programming with OpenACC, Part 2<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC,-Part-2">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
 <p>Date: April 14th 2022</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>In this notebook we present techniques and code examples using Matt Norman's MiniWeather for using OpenACC to develop for GPUs. Extending from <a href="05_openACC_miniWeather_Tutorial.ipynb">Part 1</a>, we will cover:</p>
 <ol>
@@ -14659,15 +14669,20 @@ div.jp-OutputPrompt {
 </ol>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<div class="highlight"><pre><span></span><span class="c1"># Be sure to clone (if needed) and update/pull the NCAR GPU_workshop directory</span>
-<span class="c1"># Use the JupyterHub GitHub GUI on the left panel or the below shell commands</span>
+<p>Head to the <a href="https://jupyterhub.hpc.ucar.edu/stable">NCAR JupyterHub portal</a> and <strong>start a JupyterHub session on Casper login</strong> (or batch nodes using 1 CPU, no GPUs) and open the notebook in <code>05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.ipynb</code>. Be sure to clone (if needed) and update/pull the NCAR GPU_workshop directory.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Use the JupyterHub GitHub GUI on the left panel or the below shell commands</span>
 git clone git@github.com:NCAR/GPU_workshop.git
 git pull
 </pre></div>
-<p><strong>Start a JupyterHub session on Casper login</strong> (or batch nodes using 1 CPU, no GPUs) and open the notebook in <code>05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.ipynb</code> by heading to the <a href="https://jupyterhub.hpc.ucar.edu/stable">NCAR JupyterHub portal</a>.</p>
 <h1 id="Workshop-Etiquette">Workshop Etiquette<a class="anchor-link" href="#Workshop-Etiquette">&#182;</a></h1><ul>
 <li>Please mute yourself and turn off video during the session.</li>
 <li>Questions may be submitted in the chat and will be answered when appropriate. You may also raise your hand, unmute, and ask questions during Q&amp;A at the end of the presentation.</li>
@@ -14680,14 +14695,24 @@ git pull
 </ul>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Notebook-Setup">Notebook Setup<a class="anchor-link" href="#Notebook-Setup">&#182;</a></h2><p>Set the <code>PROJECT</code> code to a currently active project, ie <code>UCIS0004</code> for the GPU workshop, and <code>QUEUE</code> to the appropriate routing queue depending on if during a live workshop session (<code>gpuworkshop</code>), during weekday 8am to 5:30pm MT (<code>gpudev</code>), or all other times (<code>casper</code>). Due to limited shared GPU resources, please use <code>GPU_TYPE=gp100</code> during the workshop. Otherwise, set <code>GPU_TYPE=v100</code> (required for <code>gpudev</code>) for independent work. See <a href="https://arc.ucar.edu/knowledge_base/72581396#StartingCasperjobswithPBS-Concurrentresourcelimits">Casper queue documentation</a> for more info.</p>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -14703,13 +14728,21 @@ git pull
 </div>
 
 </div></div><div class="fragment">
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Test that MiniWeather builds correctly below. This build uses the already refactored and complete <a href="fortran/miniWeather_mpi_openacc.F90">miniWeather_mpi_openacc.F90</a> source file as well as the CPU only <a href="fortran/miniWeather_mpi.F90">miniWeather_mpi.F90</a> source file which serves as a basis for later exercises.</p>
 
 </div>
+</div>
+</div>
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -14726,18 +14759,26 @@ git pull
 </div>
 
 </div></div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Lastly, <code>make</code> and run the new <a href="fortran/miniWeather_mpi_exercise2.F90">miniWeather_mpi_exercise2.F90</a> program to establish a performance baseline.</p>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span>make -C fortran/build openacc_test
+<div class=" highlight hl-bash"><pre><span></span>make -C fortran/build openacc_test_ex2
 </pre></div>
 
      </div>
@@ -14747,13 +14788,15 @@ git pull
 
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">cd</span> fortran/build
 qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span><span class="nv">$GPU_TYPE</span> -l <span class="nv">walltime</span><span class="o">=</span><span class="m">60</span> -v <span class="nv">NVCOMPILER_ACC_TIME</span><span class="o">=</span><span class="m">1</span> -- <span class="se">\</span>
-<span class="nv">$PWD</span>/check_output.sh <span class="nv">$PWD</span>/openacc_test 1e-13 <span class="m">4</span>.5e-5
+<span class="nv">$PWD</span>/check_output.sh <span class="nv">$PWD</span>/openacc_test_ex2 1e-13 <span class="m">4</span>.5e-5
 <span class="nb">cd</span> ../..
 </pre></div>
 
@@ -14763,14 +14806,24 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Data-Locaility-and-Data-Movement-Bandwidth">Data Locaility and Data Movement Bandwidth<a class="anchor-link" href="#Data-Locaility-and-Data-Movement-Bandwidth">&#182;</a></h2><p>Previously, our work with MiniWeather utilized the <code>-gpu=managed</code> flag which setup a unified memory environment allowing us to not have to worry about data movement. However, unless the code has been designed to keep data resident on the GPU, <strong>managed memory typically will not allow for optimal performance</strong>.</p>
 <p>Recalling the design of heterogeneous GPU accelerated systems, the following diagram shows limits of data movement by the size of the arrows between each memory space.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><img src="img/GPUmemoryMove.png" alt="GPU Memory Movement"></p>
 <ul>
@@ -14781,8 +14834,14 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="CPU-to-GPU-Data-Movement-is-Costly!">CPU to GPU Data Movement is Costly!<a class="anchor-link" href="#CPU-to-GPU-Data-Movement-is-Costly!">&#182;</a></h2><ul>
 <li>The bandwidth transfer rate for CPU to GPU data movement is the slowest in present day heterogeneous systems</li>
@@ -14791,10 +14850,16 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <p>Using OpenACC's directives <code>!$acc data</code>, <code>!$acc enter/exit data</code>, and <code>!$acc update ...</code> allow you to manage directly residency of data across the distinct CPU and GPU memory spaces.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Data-Directives">Data Directives<a class="anchor-link" href="#Data-Directives">&#182;</a></h2><p>Reviewing <code>-Minfo=accel</code> output from last session and despite using <code>-gpu=managed</code>, many data clauses were implicitly specified by the compiler. These clauses are reviewed below:</p>
+<h2 id="Data-Directives">Data Directives<a class="anchor-link" href="#Data-Directives">&#182;</a></h2><p>Reviewing <code>-Minfo=accel</code> output from last session, many data clauses were implicitly specified by the compiler despite using <code>-gpu=managed</code>. Data clauses are below:</p>
 <table>
 <thead><tr>
 <th>OpenACC</th>
@@ -14831,7 +14896,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <tr>
 <td><code>present(vars)</code></td>
 <td><code>assert(omp_target_is_present(vars))</code></td>
-<td>Asserts that a data object is already present on GPU. Previous clauses include an implicit <code>present()</code> such that if true, that clause's action will not be performed</td>
+<td>Indicates that a data object is already present on GPU. Previous clauses include an implicit <code>present()</code> such that if true, that clause's action will not be performed</td>
 </tr>
 <tr>
 <td><code>delete(vars)</code></td>
@@ -14862,14 +14927,26 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </table>
 
 </div>
+</div>
+</div>
 </div><div class="fragment">
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Each clause can reference a list of variables, ie <code>vars</code>=<code>var1,var2,...</code> and if desired, a subset of a variable array. For example, <code>copy(a,b(10:20))</code> copies from CPU to GPU at region entry and from GPU to CPU at region exit both the variable <code>a</code> (full array by default) and only the slice of <code>b</code> indexed from 10 through 20.</p>
+<p>Each clause can reference a list of variables, ie <code>vars</code>=<code>var1,var2,...</code> or subsets of variable arrays. For example, <code>copy(a,b(10:20))</code> copies from CPU to GPU at region entry and from GPU to CPU at region exit both the variable <code>a</code> (full array by default) and only the slice of <code>b</code> indexed from 10 through 20.</p>
 
 </div>
+</div>
+</div>
 </div></div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Scope-of-Data-Directives-and-Data-Regions">Scope of Data Directives and Data Regions<a class="anchor-link" href="#Scope-of-Data-Directives-and-Data-Regions">&#182;</a></h2><p>All data clauses can only be used in the scope of a ...</p>
 <ul>
@@ -14888,8 +14965,14 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><strong>Unstructured Data Regions</strong> are preferred particularly when dealing with object oriented codes where the programmer may need to manage data locality across multiple modules, subroutines/functions, and source files.</p>
 <p><strong>Specific clauses can only be used in certain contexts</strong>. For example:</p>
@@ -14901,69 +14984,105 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <p>Note: We will not cover <code>deviceptr()</code>, <code>attach()</code>, and <code>dettach()</code> in this notebook. These clauses are typically useful for CUDA libraries interoperaility and CUDA aware MPI with OpenACC.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Visualizing-Data-Directives-with-Data-and-Compute-Regions">Visualizing Data Directives with Data and Compute Regions<a class="anchor-link" href="#Visualizing-Data-Directives-with-Data-and-Compute-Regions">&#182;</a></h2><p>This code and following visualizations highlight the data locality of variables across <strong>CPU memory space, the black line,</strong> and the <strong>GPU memory space, the green line</strong>. To note, there is <strong>always an implied data region with any compute construct</strong>.</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc parallel </span>
 <span class="err">{</span><span class="c">!!! data region !!!</span>
-    <span class="err">{</span><span class="c">!** parallel region **!</span>
-    <span class="c">!$acc loop</span>
-    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span><span class="mi">1000</span>
-        <span class="n">flux</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">=</span> <span class="p">...</span>
-    <span class="k">end do</span>
-    <span class="err">}</span><span class="c">!** end parallel region **!</span>
+<span class="w">    </span><span class="err">{</span><span class="c">!** parallel region **!</span>
+<span class="w">    </span><span class="c">!$acc loop</span>
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">1000</span><span class="w"></span>
+<span class="w">        </span><span class="n">flux</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="k">end do</span><span class="w"></span>
+<span class="w">    </span><span class="err">}</span><span class="c">!** end parallel region **!</span>
 <span class="err">}</span><span class="c">!!! end data region !!!</span>
 <span class="c">!$acc end parallel</span>
 </pre></div>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Implicit-Data-Region-with-a-Parallel-Region">Implicit Data Region with a Parallel Region<a class="anchor-link" href="#Implicit-Data-Region-with-a-Parallel-Region">&#182;</a></h2><p><img src="img/DataParLegend.png" alt="Data Management Legend" style="width:300px;"/></p>
 <p>Thanks go to Pierre-François Lavallée and Thibaut Véry from IDRIS, France for this and following images inspiraton. See their PRACE course <a href="http://www.idris.fr/media/formations/openacc/gpu_directives.pdf">Introduction to OpenACC and OpenMP GPU</a> presented July 2019.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-Program-without-Data-Managment">OpenACC Program without Data Managment<a class="anchor-link" href="#OpenACC-Program-without-Data-Managment">&#182;</a></h2><p><img src="img/NoDataConstructs_repeats.png" alt="Naive Data Movement" style="width:600px;"/></p>
 <p>Without specifiying data movement, data transfers/allocations are performed by default at each compute region as determined by provided clauses or compiler (see <code>-Minfo=accel</code> output). For a program with many time steps, this could be 1,000s of unecessary transfers!</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-Program-with-Structured-Data-Region">OpenACC Program with Structured Data Region<a class="anchor-link" href="#OpenACC-Program-with-Structured-Data-Region">&#182;</a></h2><p><img src="img/OptimizedDataConstructs.png" alt="Optimized Data Management" style="width:600px;"/></p>
 <p>By specifying data movement over an encapsulating data region, data actions are done only at region entry and/or exit.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE:-Specify-Variables-in-Data-Regions-around-Time-Step-Loop">EXERCISE: Specify Variables in Data Regions around Time Step Loop<a class="anchor-link" href="#EXERCISE:-Specify-Variables-in-Data-Regions-around-Time-Step-Loop">&#182;</a></h2><p>Let's return to MiniWeather. We will now be using a new exercise source file <a href="fortran/miniWeather_mpi_exercise2.F90#L128">miniWeather_mpi_exercise2.F90</a>. This file has the <code>!$acc parallel ...</code> directives completed from the previous session. Now, we want to add a data region around the main time step loop section of the code near <strong>Line 128</strong> (see <code>TODO: MANAGE GPU DATA</code>). This will look like:</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc data ... ! Structured data region</span>
-    <span class="c">!$acc kernels</span>
-        <span class="p">...</span>
-    <span class="c">!$acc end kernels</span>
-    <span class="k">call </span><span class="n">f_has_kernels</span><span class="p">()</span>
+<span class="w">    </span><span class="c">!$acc kernels</span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="c">!$acc end kernels</span>
+<span class="w">    </span><span class="k">call </span><span class="n">f_has_kernels</span><span class="p">()</span><span class="w"></span>
 <span class="c">!$acc end data</span>
 
 <span class="c">!!!!! OR !!!!!</span>
 
 <span class="c">!$acc enter data ... ! Unstructured data directive</span>
-    <span class="c">!$acc kernels</span>
-        <span class="p">...</span>
-    <span class="c">!$acc end kernels</span>
-    <span class="k">call </span><span class="n">f_has_kernels</span><span class="p">()</span>
+<span class="w">    </span><span class="c">!$acc kernels</span>
+<span class="w">        </span><span class="p">...</span><span class="w"></span>
+<span class="w">    </span><span class="c">!$acc end kernels</span>
+<span class="w">    </span><span class="k">call </span><span class="n">f_has_kernels</span><span class="p">()</span><span class="w"></span>
 <span class="c">!$acc exit data ... ! Unstructured data directive</span>
 </pre></div>
 <p>Only consider usage of <code>copy()</code>, <code>copyin()</code>, <code>copyout()</code>, and <code>create()</code>. Hints are provided (<code>CTRL</code>/<code>CMD</code> + <code>F</code> <code>GPU_data</code>) to help define which clauses to use and variables you need to consider. Note: Variables listed in <code>GPU_data</code> sections are used across the <code>reductions()</code>, <code>output()</code>, and <code>perform_timestep()</code> subroutines called within the main time step loop.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <ol>
 <li><strong>Which clause do you use to ensure that data is availabile on the GPU and updates the same data on CPU after GPU work is done?</strong></li>
@@ -14973,8 +15092,12 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <p>Once you are satisfied with your changes, <code>make</code> and run the new executable and see how that has impacted performance.</p>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -14989,6 +15112,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15005,7 +15130,11 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Data-Directives---!$acc-update-...-and-the-present()-Clause">Data Directives - <code>!$acc update ...</code> and the <code>present()</code> Clause<a class="anchor-link" href="#Data-Directives---!$acc-update-...-and-the-present()-Clause">&#182;</a></h2><p>Unfortunately, the previous exercise introduced incorrect results. In some cases, you need to guarantee the movement of data between the host and device in order to ensure correct data is being processed. This uses the <code>!$acc update ...</code> directive:</p>
 <ul>
@@ -15016,62 +15145,108 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <p>The <code>present()</code> clause will prevent an implicit data directive from being used on a parallel region. It makes clear to the compiler the availability of data on the device and only checks that data is present on the device. It also can make the code more readable to the programmer. Whether or not the <code>present()</code> data is in sync with the data on the CPU depends on recent computations or usage of <code>!$acc update ...</code>.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Example-Diagram-for-Data-Movement-Clauses">Example Diagram for Data Movement Clauses<a class="anchor-link" href="#Example-Diagram-for-Data-Movement-Clauses">&#182;</a></h2><p><img src="img/OpenACC_DataExample.png" alt="Example Data Movement"></p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Reference-Counters-and-Attachment-Counters">Reference Counters and Attachment Counters<a class="anchor-link" href="#Reference-Counters-and-Attachment-Counters">&#182;</a></h2><p>All data clauses also utilize a <strong>reference counter</strong> for device variables or <strong>attachment counter</strong> for device pointers. There are separate counters for <strong>structured</strong> and <strong>unstructured</strong> data regions. Only when a variable's counter increments from 0 or is reduced to 0 does a data action get performed. Example:</p>
 <ol>
-<li>Enter first data region with <code>copy(a,b)</code> clause. <code>a</code> &amp; <code>,b</code> copied from CPU to GPU, <strong>reference counters</strong> increments 0 -&gt; 1</li>
-<li>Kernel inside data region with <code>copy(a,b)</code> clause. No copy action but <strong>reference counters</strong> increments 1 -&gt; 2</li>
-<li>Kernel exits and no copy is performed. <strong>Reference counters</strong> decrements from 2-&gt;1</li>
-<li>First data region exits, <code>a</code> &amp; <code>b</code> copied out and deallocated on GPU, <strong>reference counters</strong> decrements 1 -&gt; 0.</li>
+<li>Enter first data region with <code>copy(a,b)</code> clause. <code>a</code> &amp; <code>b</code> copied from CPU to GPU, <strong>reference counters</strong> increment 0 -&gt; 1</li>
+<li>Kernel inside data region with <code>copy(a,b)</code> clause. No copy action but <strong>reference counters</strong> increment 1 -&gt; 2</li>
+<li>Kernel exits and no copy is performed. <strong>Reference counters</strong> decrement from 2-&gt;1</li>
+<li>First data region exits, <code>a</code> &amp; <code>b</code> copied out and deallocated on GPU, <strong>reference counters</strong> decrement 1 -&gt; 0.</li>
 </ol>
 <p>Essentially, counters track whether data is already <em>present</em> or <em>not present</em> on the GPU, ie <em>present</em> = <em>true</em> if <em>counter</em> &gt; 0 and informs data movement actions. This can avoid unnecessarily moving data at each kernel. To ensure a data action is performed, the use of <code>!$acc update ...</code> is recommended.</p>
 <p>Another option is adding <code>finalize</code> for unstructured data regions only, ie <code>!$acc exit data ...</code> with <code>delete()</code>, <code>detach()</code>, or <code>copyout()</code>. This forces the <strong>reference counter</strong> to 0.</p>
 
 </div>
-</div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="OpenACC-and-Reference-Counters">OpenACC and Reference Counters<a class="anchor-link" href="#OpenACC-and-Reference-Counters">&#182;</a></h2><p><img src="img/OptimizedDataConstructs_references.png" alt="Optimized Data Management with References" style="width:600px;"/></p>
-<p>Even when compute regions specify data movement clauses,  data actions only happen when the counter increments from 0 -&gt; 1 or decrements 1 -&gt; 0. In this example, the variable <code>a</code> only has a data action performed on it at at data region exit and exit.</p>
-
+</div>
 </div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="OpenACC-and-Reference-Counters">OpenACC and Reference Counters<a class="anchor-link" href="#OpenACC-and-Reference-Counters">&#182;</a></h2><p><img src="img/OptimizedDataConstructs_references.png" alt="Optimized Data Management with References" style="width:600px;"/></p>
+<p>Even when compute regions specify data movement clauses,  data actions only happen when the counter increments from 0 -&gt; 1 or decrements 1 -&gt; 0. In this example, the variable <code>a</code> only has a data action performed on it at at data region entry and exit.</p>
+
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-and-Update-Directives">OpenACC and Update Directives<a class="anchor-link" href="#OpenACC-and-Update-Directives">&#182;</a></h2><p><img src="img/OptimizedDataConstructs_update.png" alt="Optimized Data Management with Updates" style="width:600px;"/></p>
 <p>To ensure a data operation takes place, use <code>!$acc update host()</code> or <code>!$acc update device()</code> outside a parallel compute region. Another option: add <code>finalize</code> to clauses <code>copyout()</code>, <code>delete()</code>, or <code>detach()</code> in any structured or unstructured data region. <code>finalize</code> will set the reference counter to 0.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE:-Specify-Update-Directives-for-MPI-Processes">EXERCISE: Specify Update Directives for MPI Processes<a class="anchor-link" href="#EXERCISE:-Specify-Update-Directives-for-MPI-Processes">&#182;</a></h2><p>Again using the exercise source file <a href="fortran/miniWeather_mpi_exercise2.F90#L440">miniWeather_mpi_exercise2.F90</a>, we want to add a update directives at the following locations to manage the send and receive buffers as well as manage I/O output appropriately. Search for <code>TODO: UPDATE DATA</code> or go to:</p>
 <ul>
+<li>MPI Buffers<ul>
 <li>[] Line 448</li>
 <li>[] Line 460</li>
+</ul>
+</li>
+<li>Output I/O<ul>
 <li>[] Line 828 - hints provided</li>
+</ul>
+</li>
 </ul>
 <ol>
 <li>Look at the buffer variables that need to be passed between MPI tasks. <strong>When do the data objects need to be updated on the host and device when doing an MPI send and MPI receive?</strong></li>
 </ol>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Once you are satisfied with your changes, <code>make</code> and run the new executable and review how that has impacted performance.</p>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15086,6 +15261,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15102,7 +15279,11 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Asynchronous-Execution-with-async()-and-wait()-Clauses">Asynchronous Execution with <code>async()</code> and <code>wait()</code> Clauses<a class="anchor-link" href="#Asynchronous-Execution-with-async()-and-wait()-Clauses">&#182;</a></h2><p>One of the more important advanced OpenACC features is <strong>asynchronous execution</strong>. This allows you to interface with <strong>CUDA Streams</strong> and manage directly the scheduling queues the GPU uses to run kernels on the device in a defined sequence.</p>
 <ul>
@@ -15120,28 +15301,46 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>So far, the CPU and GPU have performed <strong>synchronous execution</strong>. The CPU must wait to synchronize with the completion of compute or data movement work on the GPU. This often creates time gaps between compute kernels on the GPU (say during data movement or kernel initialization) where the hardware is not being utilized.</p>
 <p><img src="img/async_Pipelining.png" alt="Asynchronous Pipelining" style="width:600px;"/></p>
 <p>If multiple asynchronous queues are used and there are available compute resources, it's also possible to overlap compute kernels with each other in addition to data movement kernels. <strong>Serialized execution of parallel kernels is not required.</strong></p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Usage-of-async()-and-wait()-Clauses">Usage of <code>async()</code> and <code>wait()</code> Clauses<a class="anchor-link" href="#Usage-of-async()-and-wait()-Clauses">&#182;</a></h2><p>The async clause may appear on a <code>parallel</code>, <code>serial</code>, <code>kernels</code>, or <code>data</code> construct, or an <code>enter data</code>, <code>exit data</code>, <code>update</code>, or <code>wait</code> directive. The <code>wait</code> clause can appear on the same (except itself).</p>
+<h2 id="Usage-of-async()-and-wait()-Clauses">Usage of <code>async()</code> and <code>wait()</code> Clauses<a class="anchor-link" href="#Usage-of-async()-and-wait()-Clauses">&#182;</a></h2><p>The <code>async</code> clause may appear on a <code>parallel</code>, <code>serial</code>, <code>kernels</code>, or <code>data</code> construct, or an <code>enter data</code>, <code>exit data</code>, <code>update</code>, or <code>wait</code> directive. The <code>wait</code> clause can appear on the same (except itself).</p>
 <ul>
 <li><code>async(n)</code> - Launches work asynchronously in queue <code>n</code>. If <code>n</code> is omitted, the default queue is selected.</li>
-<li><code>wait(n,m,...)</code> - Blocks host (or blocks queue m if paired with <code>async(m)</code>) until all prior operations in queues <code>n,m,...</code> have completed. If an argument is omitted, all queues must complete.</li>
+<li><code>wait(n,m,...)</code> - Blocks host (or blocks queue <code>m</code> if paired with <code>async(m)</code>) until all prior operations in queues <code>n,m,...</code> have completed. If an argument is omitted, all queues must complete.</li>
 </ul>
 <p>The optional argument <code>n</code> must be an integer value. An essentially limitless number of queues/streams are able to be created. However, only 48 CUDA stream contexts (16 pre-Volta) will be allowed to run concurrently.</p>
 <p>Complex compute kernel task dependencies can be designed using clever queue scheduling to fully saturate the GPU. However, limited time does not permit us to review this here. Instead, please refer to section 7.1 of the <a href="../reference/OpenACC-Best-Practices-Programming-Guide_May2021.pdf">OpenACC Best Practices Programming Guide, May 2021</a> or more briefly in Steve Abbott's <a href="http://icl.cs.utk.edu/classes/cosc462/2017/pdf/OpenACC_3.pdf">Advanced OpenACC Lecture Slides</a> given at University of Tennessee's Innovation Computing Laboratory.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE:-Specify-async-Compute-Kernels-and-Place-wait-Barriers-in-MiniWeather">EXERCISE: Specify <code>async</code> Compute Kernels and Place <code>wait</code> Barriers in MiniWeather<a class="anchor-link" href="#EXERCISE:-Specify-async-Compute-Kernels-and-Place-wait-Barriers-in-MiniWeather">&#182;</a></h2><p>Again using the exercise source file <a href="fortran/miniWeather_mpi_exercise2.F90#L440">miniWeather_mpi_exercise2.F90</a>, we want to add <code>async</code> and <code>wait</code> at appropriate places in the code. Search for <code>TODO: ASYNC ME</code> or go to:</p>
 <ul>
@@ -15158,8 +15357,14 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <ol>
 <li><strong>Is it possible to set any of MiniWeather's compute kernels in thier own queues or do dependencies between kernels prevent this?</strong></li>
@@ -15193,8 +15398,12 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </table>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15209,6 +15418,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15225,14 +15436,24 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h4 id="Remaining-Concepts-Will-Be-Discussed-with-Time-Remaining-or-Provided-for-Independent-Review"><strong>Remaining Concepts Will Be Discussed with Time Remaining or Provided for Independent Review</strong><a class="anchor-link" href="#Remaining-Concepts-Will-Be-Discussed-with-Time-Remaining-or-Provided-for-Independent-Review">&#182;</a></h4><p>Some great discussions on these advanced concepts are covered in John Urbanic's June 2021 GPU Programming Lectures <a href="https://www.psc.edu/wp-content/uploads/2021/06/Advanced_OpenACC.pdf">Advanced OpenACC</a> and <a href="https://www.psc.edu/wp-content/uploads/2021/06/OpenACC_Using_OpenACC_with_CUDA-Libraries.pdf">Using OpenACC With CUDA Libraries</a>. Nonetheless, most optimations using OpenACC at this level should include profiling as part of any <strong>development cycle</strong>. We will cover usage of the Nsight Systems and Nsight Compute profilers at later sessions.</p>
 <p><img src="img/development-cycle.png" alt="OpenACC Development Cycle" style="width:500px;"/></p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Routines-and-Functions-Called-from-a-GPU-Kernel---!$acc-routine-...-Directive">Routines and Functions Called from a GPU Kernel - <code>!$acc routine ...</code> Directive<a class="anchor-link" href="#Routines-and-Functions-Called-from-a-GPU-Kernel---!$acc-routine-...-Directive">&#182;</a></h2><p>Compute regions are able to call external functions from within the kernel. However, the external function needs to be declared to the compiler that it is a GPU kernel.</p>
 <p>This is done using the <code>!$acc routine ...</code> directive. This directive should be placed in the specification part of the routine it should apply to or you may place it in the calling routine's/module's specification section as <code>!$acc routine(name)</code> where <code>name</code> is the routine which it applies. Required with any <code>!$acc routine ...</code> directive is one of four clauses:</p>
@@ -15244,14 +15465,26 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE:-Convert-Inlined-sample_ellipse_cosine()-to-Function-Call">EXERCISE: Convert Inlined <code>sample_ellipse_cosine()</code> to Function Call<a class="anchor-link" href="#EXERCISE:-Convert-Inlined-sample_ellipse_cosine()-to-Function-Call">&#182;</a></h2><p>In <a href="fortran/miniWeather_mpi_exercise2.F90#L266">miniWeather_mpi_exercise2.F90</a>, you can try specifying a GPU routine by searching for <code>TODO: TRY GPU ROUTINE OPTION</code> or going to <strong>Lines 264 and 769</strong>. As a comment, compilers often have non-optimal and sometimes even broken support for <code>!$acc routine ...</code>. Thus, perhaps consider instead inlining required routines into each relevant parallel region.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><code>make</code> and run the new executable and evaluate if this changed performance in any way.</p>
 <ol>
@@ -15260,8 +15493,12 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ol>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15276,6 +15513,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15292,7 +15531,11 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-API-Routines">OpenACC API Routines<a class="anchor-link" href="#OpenACC-API-Routines">&#182;</a></h2><p>OpenACC provides access to runtime library routines via <code>use openacc</code> module in FORTRAN (or <code>#include &lt;openacc.h&gt;</code> header in C/C++). This allows executing many features of OpenACC without directives, as well as a few important features not available through directives. Two important routines are below. These are most relevant for <strong>Multi-GPU Programming</strong> using <strong>CUDA aware MPI</strong> and will be discussed in future sessions.</p>
 <ol>
@@ -15305,8 +15548,14 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <p>See page 15 of the <a href="../reference/OpenACC-API-Guide_v2.7.pdf">OpenACC API Guide, v2.7</a> or page 89 of <a href="../reference/OpenACC-Full-Specification_v3.2.pdf">OpenACC Full Specification, v3.2</a> for a complete description of all possible API routines.</p>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-with-CUDA-and-GPU-Accelerated-Libraries">OpenACC with CUDA and GPU Accelerated Libraries<a class="anchor-link" href="#OpenACC-with-CUDA-and-GPU-Accelerated-Libraries">&#182;</a></h2><p>There is functionality to use manually developed CUDA kernels or CUDA libraries alongside OpenACC. This is particularly useful if you have decided to develop optimal CUDA code for a particularly expensive kernel or need to interface with a highly performant CUDA Accelerated Library such as cuBLAS or cuFFT. Note however this will likely impact the portability of your code with non-NVIDIA devices.</p>
 <p>This use case is effectively explained in John Urbanic's <a href="https://www.psc.edu/wp-content/uploads/2021/06/OpenACC_Using_OpenACC_with_CUDA-Libraries.pdf">Using OpenACC With CUDA Libraries</a> presentation. Nonetheless, below are the most important concepts to remember:</p>
@@ -15322,34 +15571,46 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="OpenACC-cuTENSOR-Example">OpenACC cuTENSOR Example<a class="anchor-link" href="#OpenACC-cuTENSOR-Example">&#182;</a></h2><p>Here is an example use case for the cuTENSOR library using OpenACC. The complete FORTRAN can be found in NVIDIA's HPC SDK Documentation <a href="https://docs.nvidia.com/hpc-sdk/compilers/fortran-cuda-interfaces/#cflib-tensor-oacc-host">Using cuBLAS from OpenACC Host Code</a>. Notably, this code is portable with and without OpenACC using <code>!@acc</code>.</p>
+<h2 id="OpenACC-cuTENSOR-Example">OpenACC cuTENSOR Example<a class="anchor-link" href="#OpenACC-cuTENSOR-Example">&#182;</a></h2><p>Here is an example use case for the cuTENSOR library using OpenACC. The complete FORTRAN can be found in NVIDIA's HPC SDK Documentation <a href="https://docs.nvidia.com/hpc-sdk/compilers/fortran-cuda-interfaces/#cflib-tensor-oacc-host">Using cuTENSOR from OpenACC Host Code</a>. Notably, this code is portable with and without OpenACC using <code>!@acc</code>.</p>
 <div class="highlight"><pre><span></span><span class="c">!@acc use openacc</span>
 <span class="c">!@acc use cutensorex</span>
-<span class="kt">integer</span><span class="p">,</span> <span class="k">parameter</span> <span class="kd">::</span> <span class="n">ni</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span> <span class="n">nj</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">nk</span><span class="o">=</span><span class="mi">960</span><span class="p">,</span> <span class="n">ntimes</span><span class="o">=</span><span class="mi">1</span>
-<span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="kd">::</span> <span class="n">a</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nk</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">nk</span><span class="p">,</span><span class="n">nj</span><span class="p">),</span> <span class="n">c</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nj</span><span class="p">),</span> <span class="n">d</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nj</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ni</span><span class="o">=</span><span class="mi">1280</span><span class="p">,</span><span class="w"> </span><span class="n">nj</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="n">nk</span><span class="o">=</span><span class="mi">960</span><span class="p">,</span><span class="w"> </span><span class="n">ntimes</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
+<span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nk</span><span class="p">),</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="n">nk</span><span class="p">,</span><span class="n">nj</span><span class="p">),</span><span class="w"> </span><span class="n">c</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nj</span><span class="p">),</span><span class="w"> </span><span class="n">d</span><span class="p">(</span><span class="n">ni</span><span class="p">,</span><span class="n">nj</span><span class="p">)</span><span class="w"></span>
 
-<span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-<span class="n">a</span> <span class="o">=</span> <span class="nb">dble</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">4.0d0</span><span class="o">*</span><span class="n">a</span> <span class="o">-</span> <span class="mf">2.0d0</span><span class="p">))</span>
-<span class="n">b</span> <span class="o">=</span> <span class="nb">dble</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">8.0d0</span><span class="o">*</span><span class="n">b</span> <span class="o">-</span> <span class="mf">4.0d0</span><span class="p">))</span>
-<span class="n">c</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">;</span> <span class="n">d</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"></span>
+<span class="k">call </span><span class="nb">random_number</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dble</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">4.0d0</span><span class="o">*</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">2.0d0</span><span class="p">))</span><span class="w"></span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">dble</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="mf">8.0d0</span><span class="o">*</span><span class="n">b</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mf">4.0d0</span><span class="p">))</span><span class="w"></span>
+<span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="w"></span>
 
 <span class="c">!$acc enter data copyin(a,b,c) create(d)</span>
 <span class="c">!@acc istat = cutensorExSetStream(acc_get_cuda_stream(acc_async_sync))</span>
 <span class="c">!$acc host_data use_device(a,b,c,d)</span>
-<span class="k">do </span><span class="n">nt</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ntimes</span>
-  <span class="n">d</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="nb">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span>
-<span class="k">end do</span>
+<span class="k">do </span><span class="n">nt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ntimes</span><span class="w"></span>
+<span class="w">  </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<span class="k">end do</span><span class="w"></span>
 <span class="c">!$acc end host_data</span>
 <span class="c">!$acc update host(d)</span>
 </pre></div>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Advanced-Optimizations-with-cache,-tile,-and-gang/worker/vector-Clauses">Advanced Optimizations with <code>cache</code>, <code>tile</code>, and <code>gang/worker/vector</code> Clauses<a class="anchor-link" href="#Advanced-Optimizations-with-cache,-tile,-and-gang/worker/vector-Clauses">&#182;</a></h2><p>The compiler typically does a good job choosing close to optimal arrangements of <code>gang</code>, <code>worker</code>, and <code>vector</code> parallel execution. You can review compiler choices in <code>-Minfo=accel</code> output, basic profiling via <code>NVCOMPILER_ACC_TIME=1</code>, or NSight Systems/Compute profiling. However, further optimization can be explored by manualy specifying optimization parameters. <strong>This process requires significant experimentation with some intuition</strong>. Clauses not previously discussed are detailed below:</p>
 <ul>
@@ -15363,56 +15624,86 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3 id="Usage-of-cache()">Usage of <code>cache()</code><a class="anchor-link" href="#Usage-of-cache()">&#182;</a></h3><p>If you have a an array or subarray of data to be accessed frequently within a compute kernel, the <code>cache()</code> directive can direct the compiler to keep that portion of memory nearby in a fast L1 shared memory cache for each gang. The size of this cache is limited and dependent on the hardware (V100 - 96kB, A100 - 160kB) but can increase performance if configured correctly. Example below:</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc parallel loop gang vector</span>
-<span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
-  <span class="c">!$acc cache(a(i−1:i+1))</span>
-  <span class="n">lower</span> <span class="o">=</span> <span class="n">i</span><span class="err">−</span><span class="mi">1</span>
-  <span class="n">upper</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
-  <span class="nb">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-  <span class="c">!$acc loop seq</span>
-  <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="n">lower</span><span class="p">,</span> <span class="n">upper</span>
-    <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span>
-  <span class="k">end do</span>
-<span class="k">end do</span>
+<span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="c">!$acc cache(a(i−1:i+1))</span>
+<span class="w">  </span><span class="n">lower</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="err">−</span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="n">upper</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="nb">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"></span>
+<span class="w">  </span><span class="c">!$acc loop seq</span>
+<span class="w">  </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lower</span><span class="p">,</span><span class="w"> </span><span class="n">upper</span><span class="w"></span>
+<span class="w">    </span><span class="nb">sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">sum</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<span class="w">  </span><span class="k">end do</span>
+<span class="k">end do</span><span class="w"></span>
 <span class="c">!$acc end parallel</span>
 </pre></div>
 <p>Feel free to review Lashgar's and Baniasadi's <a href="http://www.ahmado.com/profile/lashgar/files/17ijhpcn.pdf">Efficient Implementation of OpenACC cache Directive on NVIDIA GPUs</a> in 2017 IJHPCN for a more in depth discussion from a compiler perspective.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Target-Specific-Devices-when-Specifying-Parallelism">Target Specific Devices when Specifying Parallelism<a class="anchor-link" href="#Target-Specific-Devices-when-Specifying-Parallelism">&#182;</a></h3><p>Any specific tuning using the following clauses should target specific hardware or hardware types. To promote portability, consider pairing these clauses with <code>device_type(d_type)</code> where <code>d_type</code>=<code>acc_device_nvidia</code>,<code>acc_device_radeon</code>,<code>acc_device_host</code>, etc depending on what OpenACC specification is implemented and what the compiler recognizes.</p>
+<h3 id="Target-Specific-Devices-when-Specifying-Parallelism">Target Specific Devices when Specifying Parallelism<a class="anchor-link" href="#Target-Specific-Devices-when-Specifying-Parallelism">&#182;</a></h3><p>When tuning performance using the following clauses, OpenACC should target specific hardware or hardware types. To promote portability, consider pairing these clauses with <code>device_type(d_type)</code> where <code>d_type</code>=<code>acc_device_nvidia</code>,<code>acc_device_radeon</code>,<code>acc_device_host</code>, etc depending on what OpenACC specification is implemented and what the compiler recognizes.</p>
 <p>For example, <code>!$acc loop device_type(acc_device_nvidia) vector_length(1024) device_type(acc_device_radeon) vector_length(128)</code> will apply distinct clauses for NVIDIA and AMD devices respectively.</p>
 <p>If neither device type is attached, then the compiler chooses its own arrangement of levels of parallelism.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Usage-of-tile()">Usage of <code>tile()</code><a class="anchor-link" href="#Usage-of-tile()">&#182;</a></h3><p>For multidimensional loops, <code>tile()</code> splits up this loops into blocks to distribute work across a device. This is essentially opposite to <code>collapse()</code> which exposes parallelism and unrolls loops into the largest possible units.</p>
+<h3 id="Usage-of-tile()">Usage of <code>tile()</code><a class="anchor-link" href="#Usage-of-tile()">&#182;</a></h3><p>For multidimensional loops, <code>tile()</code> splits loops into blocks to distribute work across a device. This is essentially opposite to <code>collapse()</code> which exposes parallelism and unrolls loops into the largest possible units.</p>
 <p>Where <code>collapse()</code> can often negatively impact data locality, <code>tile()</code> should be used to increase data locality or encourage <strong>memory coalescing</strong>, improving performance in some cases. Lastly, tiles can be executed simultaneously across distinct gangs.</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><img src="img/tile.png" alt="OpenACC Tile" style="width:400px;"/></p>
 <div class="highlight"><pre><span></span><span class="c">!$acc kernels loop tile(2,2)</span>
-<span class="k">do </span><span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span>
-  <span class="k">do </span><span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span>
-    <span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">=</span> <span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-  <span class="k">end do</span>
-<span class="k">end do</span>
+<span class="k">do </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="w">  </span><span class="k">do </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="w"></span>
+<span class="w">    </span><span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+<span class="w">  </span><span class="k">end do</span>
+<span class="k">end do</span><span class="w"></span>
 </pre></div>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3 id="Usage-of-gang/worker/vector">Usage of <code>gang/worker/vector</code><a class="anchor-link" href="#Usage-of-gang/worker/vector">&#182;</a></h3><p>Modifying levels of parallelism is more an art than a science, requiring intuition and experimentation to find the optimal arrangement for a given kernel, which also depends on kernel problem size. Sometimes, refactoring the kernel algorithm is recommended instead. Here are some main points:</p>
 <ul>
@@ -15423,51 +15714,69 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <li>More often than not, it is best to let the compiler decide the number of gangs.</li>
 <li>Effective tuning can often be done by only adjusting the <code>vector_length</code>.</li>
 <li>Usage of a <code>worker</code> loop is very rare and often reserved for when <code>vector_length</code> is small, ie less than 128.</li>
-<li><strong>Coallescing memory access</strong> in <code>vector</code> loops is likely most important consideration, ie threads access contiguous memory elements in| matrix collumns in FORTRAN (rows in C/C++).</li>
+<li><strong>Coallescing memory access</strong> in <code>vector</code> loops is likely most important consideration, ie threads access contiguous memory elements in matrix collumns in FORTRAN (rows in C/C++).</li>
 </ul>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3 id="Coallesced-Memory-Example-in-FORTRAN">Coallesced Memory Example in FORTRAN<a class="anchor-link" href="#Coallesced-Memory-Example-in-FORTRAN">&#182;</a></h3><div class="highlight"><pre><span></span><span class="c">!$acc parallel</span>
 <span class="c">!$acc loop gang</span>
-<span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span>
-    <span class="c">!$acc loop vector</span>
-    <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span>
-        <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
-    <span class="k">end do</span>
-<span class="k">end do</span>
+<span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="w"></span>
+<span class="w">    </span><span class="c">!$acc loop vector</span>
+<span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="w"></span>
+<span class="w">        </span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end do</span>
+<span class="k">end do</span><span class="w"></span>
 <span class="c">!$acc end parallel</span>
 </pre></div>
 <p>The below example is uncoalesced after switching the <code>i/j</code> in the loops (this is opposite in C/C++):</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc parallel</span>
 <span class="c">!$acc loop gang</span>
-<span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span>
-    <span class="c">!$acc loop vector</span>
-    <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span>
-        <span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">=</span> <span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="o">+</span> <span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span>
-    <span class="k">end do</span>
-<span class="k">end do</span>
+<span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="w"></span>
+<span class="w">    </span><span class="c">!$acc loop vector</span>
+<span class="w">    </span><span class="k">do </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">ny</span><span class="w"></span>
+<span class="w">        </span><span class="n">A</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">B</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">C</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="k">end do</span>
+<span class="k">end do</span><span class="w"></span>
 <span class="c">!$acc end parallel</span>
 </pre></div>
 
 </div>
+</div>
+</div>
 </div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE---Manually-Tune-Performance-of-Select-MiniWeather-Kernels">EXERCISE - Manually Tune Performance of Select MiniWeather Kernels<a class="anchor-link" href="#EXERCISE---Manually-Tune-Performance-of-Select-MiniWeather-Kernels">&#182;</a></h2><p>Try out some of the previous performance tuning directives in <a href="fortran/miniWeather_mpi_exercise2.F90">miniWeather_mpi_exercise2.F90</a>.</p>
 <p>It is recommended to modify user parameters at <strong>Line 57</strong> such that <code>_NX=1024</code>, <code>_NZ=512</code>, and <code>_SIM_TIME=10</code>.</p>
 <p>This sets up a sufficiently large problem to fill GPU SMs. Short simulation time promotes rapid profile driven development. You might also try even larger domain sizes but runtime will increase. Focus on just one kernel at a time (choose a random kernel or select the most costly kernel. See from timing output via <code>NVCOMPILER_ACC_TIME=1</code> in last few exercises).</p>
 
 </div>
+</div>
+</div>
 </div></section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><code>make</code> and run the new executable and record how performance changes with each modification.</p>
 <ol>
-<li><strong>Can you beat the performance of the collapse() clause and the automatic choices made by the compiler?</strong></li>
-<li><strong>Share you results in Slack (specify kernel you chose) and see what others were able to achieve.</strong></li>
+<li><strong>Can you beat the performance of the <code>collapse()</code> clause and the automatic choices made by the compiler?</strong></li>
+<li><strong>Share your results in Slack (specify kernel you chose) and see what others were able to achieve.</strong></li>
 </ol>
 <table>
 <thead><tr>
@@ -15504,8 +15813,12 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </table>
 
 </div>
+</div>
+</div>
 </div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15520,6 +15833,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 
 </div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
 <div class="jp-InputArea jp-Cell-inputArea">
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
@@ -15536,7 +15851,11 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
-<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Suggested-Resources">Suggested Resources<a class="anchor-link" href="#Suggested-Resources">&#182;</a></h2><ul>
 <li>Matt Norman's <a href="https://github.com/mrnorman/miniWeather/wiki/A-Practical-Introduction-to-GPU-Refactoring-in-Fortran-with-Directives-for-Climate">A Practical Introduction to GPU Refactoring in FORTRAN with Directives for Climate</a></li>
@@ -15546,6 +15865,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <li>If you want to dive deep into lower level control and optimization of GPU performance, check out Oak Ridge National Lab's <a href="https://olcf.ornl.gov/cuda-training-series/https://olcf.ornl.gov/cuda-training-series/">CUDA Training Series</a>.</li>
 </ul>
 
+</div>
+</div>
 </div>
 </div></section></section>
 </div>

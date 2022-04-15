@@ -14641,7 +14641,9 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Directive-Based-Programming-with-OpenACC">Directive Based Programming with OpenACC<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC">&#182;</a></h1><p>By: Daniel Howard, Consulting Services Group, CISL &amp; NCAR, March 31st 2022</p>
+<p><img src="img/NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
+<h1 id="Directive-Based-Programming-with-OpenACC">Directive Based Programming with OpenACC<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
+<p>Date: March 31st 2022</p>
 
 </div>
 </div>
@@ -14932,7 +14934,7 @@ From "<a href="https://www.psc.edu/wp-content/uploads/2021/06/OpenMP-and-GPUs.pd
 </tr>
 <tr>
 <td><code>!$acc loop ...</code></td>
-<td><code>!omp ...</code></td>
+<td><code>!$omp ...</code></td>
 <td>Defines a parallel loop within a compute kernel</td>
 </tr>
 <tr>
@@ -15215,8 +15217,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="OpenACC-Directives---kernels-and-parallel-with-Unified-Managed-Memory">OpenACC Directives - <code>kernels</code> and <code>parallel</code> with Unified Managed Memory<a class="anchor-link" href="#OpenACC-Directives---kernels-and-parallel-with-Unified-Managed-Memory">&#182;</a></h2><p>For reference, here is the <a href="https://www.openacc.org/sites/default/files/inline-files/API%20Guide%202.7.pdf">OpenACC 2.7 Quick Reference Guide</a>. You can also read through the official <a href="https://www.openacc.org/sites/default/files/inline-images/Specification/OpenACC-3.1-final.pdf">OpenACC 3.1 Full Standard Specification</a> or <a href="https://www.openacc.org/sites/default/files/inline-files/OpenACC_Programming_Guide_0_0.pdf">OpenACC Programming and Best Practices Guide</a> when your time allows.</p>
-<p>We first introduce the <code>kernels</code> and <code>parallel</code> directives in OpenACC. For an in depth comparison, read the blog post <a href="https://www.pgroup.com/blogs/posts/kernels-vs-parallel.htm">OpenACC Kernels and Parallel Constructs</a> by Michael Wolfe. In order to simplify initial work, we will use <strong>managed memory</strong>.
-<img src="img/UnifiedMemory.png" alt="Unified Memory, NVIDIA"></p>
+<p>We first introduce the <code>kernels</code> and <code>parallel</code> directives in OpenACC. For an in depth comparison, read the blog post <a href="https://www.pgroup.com/blogs/posts/kernels-vs-parallel.htm">OpenACC Kernels and Parallel Constructs</a> by Michael Wolfe. In order to simplify initial work, we will use <strong>managed memory</strong>.</p>
+<p><img src="img/UnifiedMemory.png" alt="Unified Memory, NVIDIA"></p>
 
 </div>
 </div>
