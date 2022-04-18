@@ -27,20 +27,15 @@ We actively encourage that all participants join the [NCAR GPU Users Slack](ncar
 The full course description detailing learning objectives and material to be covered can be found [here](https://docs.google.com/document/d/1Tovha_SA0-4QPdOkc1Z89KQgVNAUsTDLNa_PqeCAvhU/edit#heading=h.90nvn0bxldkr). The condensed schedule for topics to cover is listed below.
 
 1. [Introduction to Parallel Programming](01_IntroParallel)
-    * [Slides](01_IntroParallel/Introduction%20to%20Parallel%20Programming%20-%20Shiquan%20Su,%20GPU%20Training%2020220203.pdf)
-    * [Recording](https://youtu.be/UjK0O412A60)
+    * [Slides](01_IntroParallel/Introduction%20to%20Parallel%20Programming%20-%20Shiquan%20Su,%20GPU%20Training%2020220203.pdf) - [Recording](https://youtu.be/UjK0O412A60)
 2. [Why Use GPU Accelerators](02_WhyGPUs)
-    * [Slides](02_WhyGPUs/Why%20Use%20GPU%20Accelerators%20-%20Daniel%20Howard,%20GPU%20Training%2020220217.pdf)
-    * [Recording](https://youtu.be/zKb2ISrVEcU)
+    * [Slides](02_WhyGPUs/Why%20Use%20GPU%20Accelerators%20-%20Daniel%20Howard,%20GPU%20Training%2020220217.pdf) - [Recording](https://youtu.be/zKb2ISrVEcU)
 3. [Introduction to GPU and Accelerator Architectures](03_IntroGPUArch)
-    * [Slides](03_IntroGPUArch/Introduction%20to%20GPU%20and%20Accelerator%20Architectures%20-%20Brent%20Leback,%20GPU%20Training%2020220303.pdf)
-    * [Recording](https://youtu.be/82GiossgAIQ)
+    * [Slides](03_IntroGPUArch/Introduction%20to%20GPU%20and%20Accelerator%20Architectures%20-%20Brent%20Leback,%20GPU%20Training%2020220303.pdf) - [Recording](https://youtu.be/82GiossgAIQ)
 4. [Software Infrastructure and Make Systems](04_SoftInfrastrucure)
-    * [Slides](04_SoftInfrastrucure/Software%20Infrastructure%20and%20Make%20Systems%20-%20Vanderwende%2020220317.pdf)
-    * [Recording](https://youtu.be/vzOAZpg2w8s)
+    * [Slides](04_SoftInfrastrucure/Software%20Infrastructure%20and%20Make%20Systems%20-%20Vanderwende%2020220317.pdf) - [Recording](https://youtu.be/vzOAZpg2w8s)
 5. [Directive Based Programming with OpenACC](05_DirectivesOpenACC) (two sessions)
-    * Slides [Part 1](05_DirectivesOpenACC/05_openACC_miniWeather_Tutorial.slides.pdf) and [Part 2](05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.slides.pdf)
-    * Recordings [Part 1](https://youtu.be/NYEas1HVS00) and [Part 2](https://youtu.be/nAyqaYeshXM)
+    * Slides [Part 1](05_DirectivesOpenACC/05_openACC_miniWeather_Tutorial.slides.pdf) and [Part 2](05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.slides.pdf) - Recordings [Part 1](https://youtu.be/NYEas1HVS00) and [Part 2](https://youtu.be/nAyqaYeshXM)
 7. Hands-On Session Using OpenACC in MPAS-A
 8. Multi-GPU Programming (two sessions)
 10. IDEs, Debugging, and Optimization Tools for GPU Computing
