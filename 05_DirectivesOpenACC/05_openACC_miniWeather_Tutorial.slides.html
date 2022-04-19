@@ -14642,7 +14642,7 @@ div.jp-OutputPrompt {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p><img src="img/NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
-<h1 id="Directive-Based-Programming-with-OpenACC">Directive Based Programming with OpenACC<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
+<h1 id="Directive-Based-Programming-with-OpenACC-and-MiniWeather,-Part-1">Directive Based Programming with OpenACC and MiniWeather, Part 1<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC-and-MiniWeather,-Part-1">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
 <p>Date: March 31st 2022</p>
 
 </div>
@@ -14655,7 +14655,7 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>In this notebook we present techniques and code examples for using OpenACC to develop for GPUs. We will cover:</p>
+<p>In this notebook we explore the mini-app <a href="https://github.com/mrnorman/miniWeather">MiniWeather</a> to present techniques and code examples for using OpenACC to develop for GPUs. We will cover:</p>
 <ol>
 <li>Comparison of descriptive &amp; perscriptive programming and their portability<ul>
 <li>OpenACC</li>
@@ -14896,7 +14896,7 @@ From "<a href="https://www.psc.edu/wp-content/uploads/2021/06/OpenMP-and-GPUs.pd
 </ul>
 </li>
 <li><strong>OpenACC</strong> - Began 2010<ul>
-<li>Latest 3.1 standard Nov 2020, GPU-only community adoption, NVIDIA strongly influences development</li>
+<li>Latest 3.2 standard Nov 2021, GPU-only community adoption, NVIDIA strongly influences development</li>
 </ul>
 </li>
 <li>Compiler support for GPU target variable across vendors</li>
@@ -15427,7 +15427,7 @@ mpiexec -n <span class="m">1</span> <span class="nv">$PWD</span>/openacc_ex
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="GPU-Execution-Task-Granularity">GPU Execution Task Granularity<a class="anchor-link" href="#GPU-Execution-Task-Granularity">&#182;</a></h2><p><img src="img/Map-of-Gang-Worker-Vector.png" alt="Gang Worker Vector hierarchy" style="width:600px;"/></p>
-<p>From <a href="http://dx.doi.org/10.1109/ACCESS.2019.2932443">"Porting LASG/ IAP Climate System Ocean Model to GPUs Using OpenACC"</a> Jiang, et al 2019</p>
+<p>From <a href="../reference/OpenACC-Best-Practices-Programming-Guide_May2021.pdf">OpenACC Programming and Best Practices Guide</a> &amp; <a href="http://dx.doi.org/10.1109/ACCESS.2019.2932443">"Porting LASG/ IAP Climate System Ocean Model to GPUs Using OpenACC"</a> Jiang, et al 2019</p>
 
 </div>
 </div>
@@ -15711,9 +15711,9 @@ mpiexec -n <span class="m">1</span> <span class="nv">$PWD</span>/openacc_ex
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Suggested-Resources">Suggested Resources<a class="anchor-link" href="#Suggested-Resources">&#182;</a></h2><ul>
 <li>Matt Norman's <a href="https://github.com/mrnorman/miniWeather/wiki/A-Practical-Introduction-to-GPU-Refactoring-in-Fortran-with-Directives-for-Climate">A Practical Introduction to GPU Refactoring in FORTRAN with Directives for Climate</a></li>
-<li>May 2021, <a href="https://www.openacc.org/sites/default/files/inline-files/OpenACC_Programming_Guide_0_0.pdf">OpenACC Programming and Best Practices Guide</a> and <a href="https://github.com/OpenACC/openacc-best-practices-guide">Github</a></li>
-<li><a href="https://www.openacc.org/sites/default/files/inline-files/API%20Guide%202.7.pdf">OpenACC 2.7 Quick Reference Guide</a></li>
-<li>Official <a href="https://www.openacc.org/sites/default/files/inline-images/Specification/OpenACC-3.1-final.pdf">OpenACC 3.1 Full Standard Specification</a> - Not all updated features are implemented yet by compatible compilers</li>
+<li>May 2021, <a href="../reference/OpenACC-Best-Practices-Programming-Guide_May2021.pdf">OpenACC Programming and Best Practices Guide</a> and <a href="https://github.com/OpenACC/openacc-best-practices-guide">Github</a></li>
+<li><a href="../reference/OpenACC-API-Guide_v2.7.pdf">OpenACC 2.7 Quick Reference Guide</a></li>
+<li>Official <a href="../reference/OpenACC-Full-Specification_v3.2.pdf">OpenACC 3.2 Full Standard Specification</a> - Not all updated features are implemented yet by compatible compilers</li>
 <li>If you want to dive deep into lower level control and optimization of GPU performance, check out Oak Ridge National Lab's <a href="https://olcf.ornl.gov/cuda-training-series/https://olcf.ornl.gov/cuda-training-series/">CUDA Training Series</a>.</li>
 </ul>
 
