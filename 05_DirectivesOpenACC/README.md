@@ -13,7 +13,7 @@ __Part 1__ - [Jupyter Notebook](05_openACC_miniWeather_Tutorial.ipynb)
     * Serial constructs
     * Loop constructs
 
-__[Part 2]__ - [Jupyter Notebook](05p2_openACC_miniWeather_Tutorial.ipynb)
+__Part 2__ - [Jupyter Notebook](05p2_openACC_miniWeather_Tutorial.ipynb)
 * Detailing of OpenACC API Directives
     * Data Constructs
     * Routine Directives and Other Clauses
