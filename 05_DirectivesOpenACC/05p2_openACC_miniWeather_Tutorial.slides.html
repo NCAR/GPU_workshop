@@ -14707,10 +14707,10 @@ git pull
 <p>Test that MiniWeather builds correctly below. This build uses the already refactored and complete <a href="fortran/miniWeather_mpi_openacc.F90">miniWeather_mpi_openacc.F90</a> source file as well as the CPU only <a href="fortran/miniWeather_mpi.F90">miniWeather_mpi.F90</a> source file which serves as a basis for later exercises.</p>
 
 </div>
-</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[98]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">cd</span> fortran/build
@@ -14722,54 +14722,6 @@ git pull
      </div>
 </div>
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>-- The Fortran compiler identification is PGI 22.2.0
--- Detecting Fortran compiler ABI info
--- Detecting Fortran compiler ABI info - done
--- Check for working Fortran compiler: /glade/u/apps/dav/opt/ncarcompilers/0.5.0/nvhpc/22.2/mpi/mpif90 - skipped
--- Checking whether /glade/u/apps/dav/opt/ncarcompilers/0.5.0/nvhpc/22.2/mpi/mpif90 supports Fortran 90
--- Checking whether /glade/u/apps/dav/opt/ncarcompilers/0.5.0/nvhpc/22.2/mpi/mpif90 supports Fortran 90 - yes
--- *** Compiling OpenACC code with PGI 22.2.0 using the flags: -acc -gpu=cc60,cc70
--- *** OpenMP4.5 code will not be compiled.
--- *** Compiling do concurrent code with PGI 22.2.0 using the flags: -stdpar=gpu -Minfo=stdpar -gpu=cc60,cc70
--- Configuring done
--- Generating done
--- Build files have been written to: /glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build
-Scanning dependencies of target mpi
-[ 50%] Building Fortran object CMakeFiles/mpi.dir/miniWeather_mpi.F90.o
-[100%] Linking Fortran executable mpi
-[100%] Built target mpi
-Scanning dependencies of target mpi_test
-[ 50%] Building Fortran object CMakeFiles/mpi_test.dir/miniWeather_mpi.F90.o
-[100%] Linking Fortran executable mpi_test
-[100%] Built target mpi_test
-Scanning dependencies of target openacc
-[ 50%] Building Fortran object CMakeFiles/openacc.dir/miniWeather_mpi_openacc.F90.o
-[100%] Linking Fortran executable openacc
-[100%] Built target openacc
-Scanning dependencies of target openacc_test
-[ 50%] Building Fortran object CMakeFiles/openacc_test.dir/miniWeather_mpi_openacc.F90.o
-[100%] Linking Fortran executable openacc_test
-[100%] Built target openacc_test
-</pre>
-</div>
-</div>
-
-</div>
-
 </div>
 
 </div></div></section><section>
@@ -15561,10 +15513,10 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </table>
 
 </div>
-</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[107]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-bash"><pre><span></span>make -C fortran/build openacc_ex2
@@ -15575,132 +15527,10 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 </div>
 
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>make: Entering directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make[1]: Entering directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make[2]: Entering directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make[3]: Entering directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-Scanning dependencies of target openacc_ex2
-make[3]: Leaving directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make[3]: Entering directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-[ 50%] Building Fortran object CMakeFiles/openacc_ex2.dir/miniWeather_mpi_exercise2.F90.o
-miniweather:
-    130, Generating copy(state(:,:,:)) [if not already present]
-         Generating create(flux(:,:,:)) [if not already present]
-         Generating copyin(hy_dens_int(:),hy_dens_cell(:),hy_dens_theta_cell(:),hy_dens_theta_int(:)) [if not already present]
-         Generating create(tend(:,:,:)) [if not already present]
-         Generating copyin(state_tmp(:,:,:)) [if not already present]
-         Generating create(recvbuf_r(:,:,:),sendbuf_l(:,:,:)) [if not already present]
-         Generating copyin(hy_pressure_int(:)) [if not already present]
-         Generating create(recvbuf_l(:,:,:),sendbuf_r(:,:,:)) [if not already present]
-semi_discrete_step:
-    257, Generating NVIDIA GPU code
-        258, !$acc loop gang, vector tile(32,4,4) ! blockidx%x threadidx%x
-        259,   ! blockidx%x threadidx%x tiled
-        260,   ! blockidx%x threadidx%x tiled
-    257, Generating implicit copyin(state_init(1:nx,1:nz,:),tend(:nx,:nz,:)) [if not already present]
-         Generating implicit copyout(state_out(1:nx,1:nz,:)) [if not already present]
-compute_tendencies_x:
-    310, Generating NVIDIA GPU code
-        311, !$acc loop gang, vector(128) collapse(2) ! blockidx%x threadidx%x
-        312,   ! blockidx%x threadidx%x collapsed
-        314, !$acc loop seq
-        315, !$acc loop seq
-    310, Local memory used for d3_vals,stencil,vals
-         Generating implicit copyin(hy_dens_cell(1:nz)) [if not already present]
-         Generating implicit copyout(flux(:nx+1,:nz,:)) [if not already present]
-         Generating implicit copyin(hy_dens_theta_cell(1:nz),state(:nx+2,1:nz,:)) [if not already present]
-    314, Loop carried reuse of stencil prevents parallelization
-    315, Loop is parallelizable
-    343, Generating NVIDIA GPU code
-        344, !$acc loop gang, vector(128) collapse(3) ! blockidx%x threadidx%x
-        345,   ! blockidx%x threadidx%x collapsed
-        346,   ! blockidx%x threadidx%x collapsed
-    343, Generating implicit copyout(tend(:nx,:nz,:)) [if not already present]
-         Generating implicit copyin(flux(:nx+1,:nz,:)) [if not already present]
-compute_tendencies_z:
-    372, Generating NVIDIA GPU code
-        373, !$acc loop gang, vector(128) collapse(2) ! blockidx%x threadidx%x
-        374,   ! blockidx%x threadidx%x collapsed
-        376, !$acc loop seq
-        377, !$acc loop seq
-    372, Local memory used for d3_vals,stencil,vals
-         Generating implicit copyin(hy_dens_theta_int(1:nz+1),hy_dens_int(1:nz+1)) [if not already present]
-         Generating implicit copyout(flux(:nx,:nz+1,:)) [if not already present]
-         Generating implicit copyin(state(1:nx,:nz+2,:),hy_pressure_int(1:nz+1)) [if not already present]
-    376, Loop carried reuse of stencil prevents parallelization
-    377, Loop is parallelizable
-    410, Generating NVIDIA GPU code
-        411, !$acc loop gang, vector(128) collapse(3) ! blockidx%x threadidx%x
-        412,   ! blockidx%x threadidx%x collapsed
-        413,   ! blockidx%x threadidx%x collapsed
-    410, Generating implicit copyout(tend(:nx,:nz,:)) [if not already present]
-         Generating implicit copyin(state(1:nx,1:nz,:1),flux(:nx,:nz+1,:)) [if not already present]
-         Generating implicit copyin(tend(:nx,:nz,3)) [if not already present]
-set_halo_values_x:
-    440, Generating NVIDIA GPU code
-        441, !$acc loop gang, vector(128) collapse(3) ! blockidx%x threadidx%x
-        442,   ! blockidx%x threadidx%x collapsed
-        443,   ! blockidx%x threadidx%x collapsed
-    440, Generating implicit copyout(sendbuf_l(1:2,1:nz,1:4),sendbuf_r(1:2,1:nz,1:4)) [if not already present]
-         Generating implicit copyin(state(:,1:nz,:)) [if not already present]
-    454, Generating update self(sendbuf_r(:,:,:),sendbuf_l(:,:,:))
-    468, Generating update device(recvbuf_r(:,:,:),recvbuf_l(:,:,:))
-    471, Generating NVIDIA GPU code
-        472, !$acc loop gang, vector(128) collapse(3) ! blockidx%x threadidx%x
-        473,   ! blockidx%x threadidx%x collapsed
-        474,   ! blockidx%x threadidx%x collapsed
-    471, Generating implicit copyin(recvbuf_r(1:2,1:nz,1:4),recvbuf_l(1:2,1:nz,1:4)) [if not already present]
-         Generating implicit allocate(state(:,1:nz,:)) [if not already present]
-         Generating implicit copyout(state(nx+1:nx+2,1:nz,:)) [if not already present]
-set_halo_values_z:
-    511, Generating NVIDIA GPU code
-        512, !$acc loop gang, vector(128) collapse(2) ! blockidx%x threadidx%x
-        513,   ! blockidx%x threadidx%x collapsed
-    511, Generating implicit copyin(state(:nx+2,:,:)) [if not already present]
-         Generating implicit copyin(hy_dens_cell(:)) [if not already present]
-         Generating implicit copyout(state(:nx+2,nz+1:nz+2,:)) [if not already present]
-output:
-    839, Generating update self(state(:,:,:))
-reductions:
-    940, Generating NVIDIA GPU code
-        941, !$acc loop gang, vector(128) collapse(2) ! blockidx%x threadidx%x
-             Generating reduction(+:te,mass)
-        942,   ! blockidx%x threadidx%x collapsed
-    940, Generating implicit copyin(hy_dens_cell(1:nz)) [if not already present]
-         Generating implicit copy(mass) [if not already present]
-         Generating implicit copyin(hy_dens_theta_cell(1:nz)) [if not already present]
-         Generating implicit copy(te) [if not already present]
-         Generating implicit copyin(state(1:nx,1:nz,1:4)) [if not already present]
-[100%] Linking Fortran executable openacc_ex2
-make[3]: Leaving directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-[100%] Built target openacc_ex2
-make[2]: Leaving directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make[1]: Leaving directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-make: Leaving directory `/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/build&#39;
-</pre>
-</div>
-</div>
-
-</div>
-
-</div>
-
-</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+</div></div><div class="fragment"><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[108]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">cd</span> fortran/build
@@ -15712,143 +15542,6 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
      </div>
 </div>
 </div>
-</div>
-
-<div class="jp-Cell-outputWrapper">
-
-
-<div class="jp-OutputArea jp-Cell-outputArea">
-
-<div class="jp-OutputArea-child">
-
-    
-    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
-
-
-<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
-<pre>Waiting on job launch; 2499140.casper-pbs with qsub arguments:
-    qsub  -l gpu_type=v100 -v NVCOMPILER_ACC_TIME=1 -q casper@casper-pbs -A SCSG0001 -l walltime=60 -l select=1:ncpus=1:ngpus=1
-
-
-
-Accelerator Kernel Timing data
-Timing may be affected by asynchronous behavior
-set PGI_ACC_SYNCHRONOUS to 1 to disable async() clauses
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-miniweather  NVIDIA  devicenum=0
-time(us): 4,201
-130: data region reached 2 times
-130: data copyin transfers: 22
-device time(us): total=2,899 max=1,388 min=4 avg=131
-170: data copyout transfers: 2
-device time(us): total=1,302 max=1,281 min=21 avg=651
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-semi_discrete_step  NVIDIA  devicenum=0
-time(us): 73,570
-257: compute region reached 924 times
-257: kernel launched 924 times
-grid: [4096]  block: [512]
-device time(us): total=73,570 max=87 min=71 avg=79
-elapsed time(us): total=87,935 max=120 min=86 avg=95
-257: data region reached 1848 times
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-compute_tendencies_x  NVIDIA  devicenum=0
-time(us): 46,411
-310: compute region reached 462 times
-310: kernel launched 462 times
-grid: [4100]  block: [128]
-device time(us): total=24,352 max=58 min=50 avg=52
-elapsed time(us): total=31,667 max=85 min=65 avg=68
-310: data region reached 924 times
-343: compute region reached 462 times
-343: kernel launched 462 times
-grid: [16384]  block: [128]
-device time(us): total=22,059 max=50 min=47 avg=47
-elapsed time(us): total=29,349 max=85 min=61 avg=63
-343: data region reached 924 times
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-compute_tendencies_z  NVIDIA  devicenum=0
-time(us): 50,778
-372: compute region reached 462 times
-372: kernel launched 462 times
-grid: [4104]  block: [128]
-device time(us): total=25,407 max=59 min=53 avg=54
-elapsed time(us): total=32,657 max=93 min=67 avg=70
-372: data region reached 924 times
-410: compute region reached 462 times
-410: kernel launched 462 times
-grid: [16384]  block: [128]
-device time(us): total=25,371 max=58 min=53 avg=54
-elapsed time(us): total=32,607 max=88 min=68 avg=70
-410: data region reached 924 times
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-set_halo_values_x  NVIDIA  devicenum=0
-time(us): 20,110
-440: compute region reached 462 times
-440: kernel launched 462 times
-grid: [32]  block: [128]
-device time(us): total=1,891 max=5 min=3 avg=4
-elapsed time(us): total=9,138 max=80 min=18 avg=19
-440: data region reached 924 times
-454: update directive reached 462 times
-454: data copyout transfers: 924
-device time(us): total=8,461 max=25 min=8 avg=9
-468: update directive reached 462 times
-468: data copyin transfers: 924
-device time(us): total=8,326 max=20 min=8 avg=9
-471: compute region reached 462 times
-471: kernel launched 462 times
-grid: [32]  block: [128]
-device time(us): total=1,432 max=15 min=3 avg=3
-elapsed time(us): total=10,011 max=32 min=19 avg=21
-471: data region reached 924 times
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-set_halo_values_z  NVIDIA  devicenum=0
-time(us): 2,092
-511: compute region reached 462 times
-511: kernel launched 462 times
-grid: [33]  block: [128]
-device time(us): total=2,092 max=16 min=4 avg=4
-elapsed time(us): total=9,313 max=32 min=18 avg=20
-511: data region reached 924 times
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-output  NVIDIA  devicenum=0
-time(us): 2,621
-839: update directive reached 2 times
-839: data copyout transfers: 4
-device time(us): total=2,621 max=1,285 min=22 avg=655
-/glade/u/home/dhoward/GPU_workshop/05_DirectivesOpenACC/fortran/miniWeather_mpi_exercise2.F90
-reductions  NVIDIA  devicenum=0
-time(us): 187
-940: compute region reached 2 times
-940: kernel launched 2 times
-grid: [4096]  block: [128]
-device time(us): total=98 max=56 min=42 avg=49
-elapsed time(us): total=578 max=499 min=79 avg=289
-940: reduction kernel launched 2 times
-grid: [2]  block: [256]
-device time(us): total=17 max=9 min=8 avg=8
-elapsed time(us): total=54 max=27 min=27 avg=27
-940: data region reached 4 times
-940: data copyin transfers: 4
-device time(us): total=29 max=11 min=3 avg=7
-955: data copyout transfers: 4
-device time(us): total=43 max=18 min=7 avg=10
-nx_glob, nz_glob:         1024          512
-dx,dz:     19.53125000000000         19.53125000000000
-dt:    6.5104166666666657E-002
-*** OUTPUT ***
-*** OUTPUT ***
-CPU Time:    0.3671109000000000
-d_mass:     0.000000000000000
-d_te:     -1.8715999421861912E-005
-Test executable produced correct results within error bounds of expected mass change and total energy change.
-</pre>
-</div>
-</div>
-
-</div>
-
 </div>
 
 </div></div></section></section><section><section>
