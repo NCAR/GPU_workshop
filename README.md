@@ -1,5 +1,6 @@
+![NCAR UCAR Logo](NCAR_CISL_NSF_banner.jpeg)
 # GPU Computing Workshop Series for the Earth Science Community
- With support from the National Center for Atmospheric Reserach (NCAR), the Consulting Services Group (CSG), and the Application Scalability and Performance Group (ASAP) team under the Computational and Information Systems Laboratory (CISL), we present this GPU training series for scientists, software engineers, and students, with emphasis on Earth science applications.
+With support from the National Center for Atmospheric Reserach (NCAR), the Consulting Services Group (CSG), and the Application Scalability and Performance Group (ASAP) team under the Computational and Information Systems Laboratory (CISL), we present this GPU training series for scientists, software engineers, and students, with emphasis on Earth science applications.
 
 The content of this course is coordinated with the series of [GPU Training sessions](https://www2.cisl.ucar.edu/what-we-do/training-library/gpu-computing-workshops) starting in Februrary 2022. The NVIDIA High Performance Computing Software Development Kit (NVHPC SDK) and CUDA Toolkit will be the primary software requirements for this training which will be already available on NCAR's HPC clusters as modules you may load. This software is free to download from NVIDIA by navigating to the [NVHPC SDK Current Release Downloads](https://developer.nvidia.com/nvidia-hpc-sdk-downloads 'NVHPC SDK') page and the [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads 'CUDA Toolkit') downloads page. Any provided code is written specifically to build and run on NCAR's Casper HPC system but may be adapted to other systems or personal machines. Material will be updated as appropriate for the future deployment of NCAR's Derecho cluster and as technology progresses.
 
@@ -7,10 +8,10 @@ We actively encourage that all participants join the [NCAR GPU Users Slack](ncar
 
 ## Course Content Contributors
 
-* Daniel Howard - Software Engineer I CISL/CSG
 * Brian Vanderwende - Software Engineer III CISL/CSG
-* Shiquan Su - Software Engineer III CISL/CSG
 * Cena Miller - Software Engineer II CISL/ASAP
+* Daniel Howard - Software Engineer I CISL/CSG
+* Shiquan Su - Software Engineer III CISL/CSG
 * Supreeth Suresh - Software Engineer II CISL/ASAP
 
 ## Coordinates

@@ -1,3 +1,4 @@
+![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Testing the Compute Environment on Casper and Other Systems
 Please follow the directions below and in the notebook [TestCasper.ipynb](TestCasper.ipynb) to run some basic GPU program tests and make sure you're able to access NCAR's compute clusters and your user account has the correct access permissions to run relevant workshop compute jobs under the course's project ID **UCIS0004**. Registered workshop participants should have received details about their NCAR CIT account if a new user and established users should have had the prior project ID added to their account and now listed at [sam.ucar.edu](https://sam.ucar.edu).
 

@@ -1,3 +1,4 @@
+![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Why Use GPU Accelerators?
 
 [“Why Use GPU Accelerators?"](Why%20Use%20GPU%20Accelerators%20-%20Daniel%20Howard,%20GPU%20Training%2020220217.pdf) is the second workshop in this series and was presented by Daniel Howard of CISL's Consulting Services Group on February 20th, 2022. The video recording for this session has been uploaded [here](https://youtu.be/zKb2ISrVEcU). Topics covered include:
