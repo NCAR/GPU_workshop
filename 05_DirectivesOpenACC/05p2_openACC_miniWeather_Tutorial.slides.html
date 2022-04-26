@@ -14637,7 +14637,7 @@ div.jp-OutputPrompt {
 <div class="slides"><section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="img/NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
+<p><img src="../NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
 <h1 id="Directive-Based-Programming-with-OpenACC-and-MiniWeather,-Part-2">Directive Based Programming with OpenACC and MiniWeather, Part 2<a class="anchor-link" href="#Directive-Based-Programming-with-OpenACC-and-MiniWeather,-Part-2">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
 <p>Date: April 14th 2022</p>
 
@@ -14716,7 +14716,7 @@ git pull
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">cd</span> fortran/build
 <span class="nb">source</span> cmake_casper_nvhpc.sh
 <span class="nb">cd</span> ../..
-<span class="c1"># After running this, there will be the executables `mpi` and `openacc` in &quot;fortran/build&quot;</span>
+<span class="c1"># After running this, there will be the executables `mpi`, `mpi_test`, `openacc` and `openacc_test` in &quot;fortran/build&quot;</span>
 </pre></div>
 
      </div>
@@ -15371,7 +15371,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div></section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Usage-of-cache()">Usage of <code>cache()</code><a class="anchor-link" href="#Usage-of-cache()">&#182;</a></h3><p>If you have a an array or subarray of data to be accessed frequently within a compute kernel, the <code>cache()</code> directive can direct the compiler to keep that portion of memory nearby in a fast L1 shared memory cache for each gang. The size of this cache is limited and dependent on the hardware (V100 - 96kB, A100 - 160kB) but can increase performance if configured correctly. Example below:</p>
+<h3 id="Usage-of-cache()">Usage of <code>cache()</code><a class="anchor-link" href="#Usage-of-cache()">&#182;</a></h3><p>If you have an array or subarray of data to be accessed frequently within a compute kernel, the <code>cache()</code> directive can direct the compiler to keep that portion of memory nearby in a fast L1 shared memory cache for each gang. The size of this cache is limited and dependent on the hardware (V100 - 96kB, A100 - 160kB) but can increase performance if configured correctly. Example below:</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc parallel loop gang vector</span>
 <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">n</span><span class="o">-</span><span class="mi">1</span>
   <span class="c">!$acc cache(a(i−1:i+1))</span>
@@ -15419,7 +15419,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div></section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Usage-of-gang/worker/vector">Usage of <code>gang/worker/vector</code><a class="anchor-link" href="#Usage-of-gang/worker/vector">&#182;</a></h3><p>Modifying levels of parallelism is more an art than a science, requiring intuition and experimentation to find the optimal arrangement for a given kernel, which also depends on kernel problem size. Sometimes, refactoring the kernel algorithm is recommended instead. Here are some main points:</p>
+<h3 id="Usage-of-gang/worker/vector">Usage of <code>gang/worker/vector</code><a class="anchor-link" href="#Usage-of-gang/worker/vector">&#182;</a></h3><p>Modifying levels of parallelism is more an art than a science, requiring intuition and experimentation to find the optimal arrangement for a given kernel, which also depends on kernel problem size. <strong>Sometimes, refactoring the kernel algorithm is recommended instead</strong>. Here are some main points:</p>
 <ul>
 <li><code>gang</code> parallism is often best for outer loops and <code>vector</code> for inner loops.</li>
 <li><code>vector</code> should be of lengths 32 or multiples of 32 (NVIDIA) since each SIMT warp is length 32.</li>
@@ -15435,7 +15435,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div></section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Coallesced-Memory-Example-in-FORTRAN">Coallesced Memory Example in FORTRAN<a class="anchor-link" href="#Coallesced-Memory-Example-in-FORTRAN">&#182;</a></h3><div class="highlight"><pre><span></span><span class="c">!$acc parallel</span>
+<h3 id="Coallesced-Memory-Example-in-FORTRAN">Coallesced Memory Example in FORTRAN<a class="anchor-link" href="#Coallesced-Memory-Example-in-FORTRAN">&#182;</a></h3><div class="highlight"><pre><span></span><span class="c">!$acc parallel         ! j-i ordering allows coallesced memory access in FORTRAN</span>
 <span class="c">!$acc loop gang</span>
 <span class="k">do </span><span class="n">j</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ny</span>
     <span class="c">!$acc loop vector</span>
@@ -15446,7 +15446,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <span class="c">!$acc end parallel</span>
 </pre></div>
 <p>The below example is uncoalesced after switching the <code>i/j</code> in the loops (this is opposite in C/C++):</p>
-<div class="highlight"><pre><span></span><span class="c">!$acc parallel</span>
+<div class="highlight"><pre><span></span><span class="c">!$acc parallel         ! i-j ordering DOES NOT allow coallesced memory access in FORTRAN</span>
 <span class="c">!$acc loop gang</span>
 <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nx</span>
     <span class="c">!$acc loop vector</span>
@@ -15462,14 +15462,18 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="EXERCISE---Manually-Tune-Performance-of-Select-MiniWeather-Kernels">EXERCISE - Manually Tune Performance of Select MiniWeather Kernels<a class="anchor-link" href="#EXERCISE---Manually-Tune-Performance-of-Select-MiniWeather-Kernels">&#182;</a></h2><p>Try out some of the previous performance tuning directives in <a href="fortran/miniWeather_mpi_exercise2.F90">miniWeather_mpi_exercise2.F90</a>.</p>
-<p>It is recommended to modify user parameters at <strong>Line 57</strong> such that <code>_NX=1024</code>, <code>_NZ=512</code>, and <code>_SIM_TIME=10</code>.</p>
-<p>This sets up a sufficiently large problem to fill GPU SMs. Short simulation time promotes rapid profile driven development. You might also try even larger domain sizes but runtime will increase. Focus on just one kernel at a time (choose a random kernel or select the most costly kernel. See from timing output via <code>NVCOMPILER_ACC_TIME=1</code> in last few exercises).</p>
+<p>It is recommended to modify user parameters such that <code>_NX=1024</code>, <code>_NZ=512</code>, and <code>_SIM_TIME=10</code> either:</p>
+<ol>
+<li>Near the head of the <a href="fortran/CMakeLists.txt">CMakeLists.txt</a>. Compilations of test executables WILL NOT BE affected.</li>
+<li>At <strong><a href="fortran/miniWeather_mpi_exercise2.F90#L57">Line 57</a></strong> of the exercise 2 source file. Compilations of test executables WILL BE affected.</li>
+</ol>
+<p>This sets up a sufficiently large problem to fill GPU SMs and the short simulation time promotes rapid profile driven development. You might also try even larger domain sizes but runtime will increase.</p>
 
 </div>
 </div></section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><code>make</code> and run the new executable and record how performance changes with each modification.</p>
+<p><strong>Focus on just one kernel at a time</strong> (choose a random kernel or select the most costly kernel given timing output via <code>NVCOMPILER_ACC_TIME=1</code> in last few exercises) and <strong>note below the line number of the kernel</strong>. <code>make</code> and run the new executable and record how performance changes with each modification.</p>
 <ol>
 <li><strong>Can you beat the performance of the <code>collapse()</code> clause and the automatic choices made by the compiler?</strong></li>
 <li><strong>Share your results in Slack (specify kernel you chose) and see what others were able to achieve.</strong></li>
@@ -15482,7 +15486,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </thead>
 <tbody>
 <tr>
-<td>BaseLine (on V100)</td>
+<td>BaseLine (on V100) - collapse()</td>
 <td>XX</td>
 </tr>
 <tr>
@@ -15515,7 +15519,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span>make -C fortran/build openacc_test_ex2
+<div class=" highlight hl-bash"><pre><span></span>make -C fortran/build openacc_ex2
 </pre></div>
 
      </div>
@@ -15531,7 +15535,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">cd</span> fortran/build
 qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span><span class="nv">$GPU_TYPE</span> -l <span class="nv">walltime</span><span class="o">=</span><span class="m">60</span> -v <span class="nv">NVCOMPILER_ACC_TIME</span><span class="o">=</span><span class="m">1</span> -- <span class="se">\</span>
-<span class="nv">$PWD</span>/check_output.sh <span class="nv">$PWD</span>/openacc_test_ex2 1e-13 <span class="m">4</span>.5e-5
+<span class="nv">$PWD</span>/check_output.sh <span class="nv">$PWD</span>/openacc_ex2 1e-13 <span class="m">4</span>.5e-5
 <span class="nb">cd</span> ../..
 </pre></div>
 
@@ -15541,6 +15545,14 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 </div>
 
 </div></div></section></section><section><section>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h2 id="Verify-Correctness-and-Display-MiniWeather-Output">Verify Correctness and Display MiniWeather Output<a class="anchor-link" href="#Verify-Correctness-and-Display-MiniWeather-Output">&#182;</a></h2><p>Results of the program may be viewed by initiating a ssh X session with Casper on a terminal <code>ssh -Y [username]@casper.ucar.edu</code> then running <code>module load ncview</code> and <code>ncview output.nc</code> on the output file that should now be in your <code>$HOME</code> directory or the folder where you ran the MiniWeather executable from.</p>
+<p>Alternatively, use the Python script <a href="ncplot_MiniWeather.ipynb">ncplot_MiniWeather.ipynb</a> to display and save image/GIF results within JupyterHub.</p>
+<p>Visualiztion can be useful tool to verify correctness of recent changes to the code as well. However, if you want a quantitative method to verify correctness, we will discuss the use of <a href="https://developer.nvidia.com/blog/detecting-divergence-using-pcast-to-compare-gpu-to-cpu-results/">PCAST</a>, Parallel Compiler Assisted Software Testing, in a later session. This compares results between GPU and CPU versions of the code running simultaneously or against a "golden" baseline file.</p>
+
+</div>
+</div></section></section><section><section>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Suggested-Resources">Suggested Resources<a class="anchor-link" href="#Suggested-Resources">&#182;</a></h2><ul>
