@@ -187,8 +187,7 @@ do iter = 1, maxIter
       end do
 !$acc end kernels
 
-!$acc parallel num_workers(8) vector_length(32)
-!$acc loop gang worker
+!$acc kernels
       do iCell = cellSolveStart,cellSolveEnd
 !DIR$ IVDEP
          do k=2,nVertLevels
@@ -209,13 +208,12 @@ do iter = 1, maxIter
 ! May separate out due to vector dependence of gamma_tri(k-1,iCell)
 ! What does kernels do to this loop?
 !     do iCell = cellSolveStart,cellSolveEnd
-         !$acc loop seq
          do k=2,nVertLevels
             alpha_tri(k,iCell) = 1./(b_tri(k,iCell)-a_tri(k,iCell)*gamma_tri(k-1,iCell))
             gamma_tri(k,iCell) = c_tri(k,iCell)*alpha_tri(k,iCell)
          end do
       end do ! loop over cells
-!$acc end parallel
+!$acc end kernels
 
 !$acc end data
 
