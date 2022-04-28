@@ -14743,15 +14743,15 @@ elapsed time<span class="o">(</span>us<span class="o">)</span>: <span class="nv"
 <p><strong>Were you able to achieve any significant speed-up?</strong></p>
 <p>The next panels shows statistical results from some launch configuration experiments using parameters <code>_NX=1024</code>, <code>_NZ=512</code>, and <code>_SIM_TIME=10</code> and different clauses in place of <code>***</code> for the <code>semi_discrete_step</code> subroutine kernel. Note that <code>NUM_VARS=4</code>.</p>
 <div class="highlight"><pre><span></span><span class="c">!$acc parallel loop *** async</span>
-    <span class="k">do </span><span class="n">ll</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">,</span> <span class="n">NUM_VARS</span> 
-      <span class="c">!$acc loop ***</span>
-      <span class="k">do </span><span class="n">k</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">,</span> <span class="n">nz</span>
-        <span class="c">!$acc loop ***</span>
-        <span class="k">do </span><span class="n">i</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">,</span> <span class="n">nx</span>
-          <span class="n">state_out</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span> <span class="o">=</span> <span class="n">state_init</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">tend</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span>
-        <span class="k">enddo</span>
+<span class="w">    </span><span class="k">do </span><span class="n">ll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">NUM_VARS</span><span class="w"> </span>
+<span class="w">      </span><span class="c">!$acc loop ***</span>
+<span class="w">      </span><span class="k">do </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">nz</span><span class="w"></span>
+<span class="w">        </span><span class="c">!$acc loop ***</span>
+<span class="w">        </span><span class="k">do </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">nx</span><span class="w"></span>
+<span class="w">          </span><span class="n">state_out</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">state_init</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">dt</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">tend</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">,</span><span class="n">ll</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="k">enddo</span>
 <span class="k">      enddo</span>
-<span class="k">    enddo</span>
+<span class="k">    enddo</span><span class="w"></span>
 </pre></div>
 
 </div>
@@ -14979,10 +14979,10 @@ Schemes Using OpenACC</a></p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>Given ported kernels, MPAS-A was designed to create CPU and GPU data copies <a href="https://github.com/MPAS-Dev/MPAS-Model/blob/atmosphere/v6.x-openacc/src/core_atmosphere/physics/mpas_atmphys_vars.F">at initialization</a> via <code>!$acc declare create(...)</code> and copy data at <a href="https://github.com/MPAS-Dev/MPAS-Model/blob/atmosphere/v6.x-openacc/src/framework/mpas_pool_routines.F">unstructured data regions</a> via <code>!$acc enter data copyin(...)</code> prior to each kernel call. Then, each kernel would only require a <code>present(...)</code> clause using the prior variable lists. <strong>Reference counters</strong> would mitigate excessive copies.</p>
 <div class="highlight"><pre><span></span><span class="c">!!! From mpas_atmphys_vars.F module</span>
-<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">RKIND</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:,:),</span><span class="k">allocatable</span><span class="kd">::</span> <span class="p">&amp;</span>
+<span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">RKIND</span><span class="p">),</span><span class="k">dimension</span><span class="p">(:,:,:),</span><span class="k">allocatable</span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
 <span class="c">!... arrays related to u- and v-velocities interpolated to theta points:</span>
-    <span class="n">u_p</span><span class="p">,</span>              <span class="p">&amp;</span><span class="c">!u-velocity interpolated to theta points            [m/s]</span>
-    <span class="n">v_p</span>                <span class="c">!v-velocity interpolated to theta points            [m/s]</span>
+<span class="w">    </span><span class="n">u_p</span><span class="p">,</span><span class="w">              </span><span class="p">&amp;</span><span class="c">!u-velocity interpolated to theta points            [m/s]</span>
+<span class="w">    </span><span class="n">v_p</span><span class="w">                </span><span class="c">!v-velocity interpolated to theta points            [m/s]</span>
 <span class="c">!$acc declare create(u_p, v_p)</span>
 </pre></div>
 <p>Any lingering excessive data copies could be identified by profilers and fixed while other required copies for CPU algorithms &amp; I/O were managed by <code>!$acc update</code> directives.</p>
@@ -15026,7 +15026,7 @@ make
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span>qcmd -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span>v100 -v <span class="nv">NVCOMPILER_ACC_TIME</span><span class="o">=</span><span class="m">1</span> -- <span class="se">\</span>
+<div class=" highlight hl-bash"><pre><span></span>qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span><span class="nv">$GPU_TYPE</span> -l <span class="nv">walltime</span><span class="o">=</span><span class="m">20</span> -v <span class="nv">NVCOMPILER_ACC_TIME</span><span class="o">=</span><span class="m">1</span> -- <span class="se">\</span>
 <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/vert_implicit_coefs.exe
 </pre></div>
 
