@@ -37,7 +37,7 @@ The full course description detailing learning objectives and material to be cov
     * [Slides](04_SoftInfrastrucure/Software%20Infrastructure%20and%20Make%20Systems%20-%20Vanderwende%2020220317.pdf) - [Recording](https://youtu.be/vzOAZpg2w8s)
 5. [Directive Based Programming with OpenACC](05_DirectivesOpenACC) (two sessions)
     * Slides [Part 1](05_DirectivesOpenACC/05_openACC_miniWeather_Tutorial.slides.pdf) and [Part 2](05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.slides.pdf) - Recordings [Part 1](https://youtu.be/NYEas1HVS00) and [Part 2](https://youtu.be/nAyqaYeshXM)
-7. Hands-On Session Using OpenACC in MPAS-A
+7. [Hands-On Session Using OpenACC in MPAS-A](07_HandsOnMPASA)
 8. Multi-GPU Programming (two sessions)
 10. IDEs, Debugging, and Optimization Tools for GPU Computing
 11. Hands-On Session with Nsight Systems and Compute
