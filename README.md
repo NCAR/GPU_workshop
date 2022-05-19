@@ -16,7 +16,7 @@ We actively encourage that all participants join the [NCAR GPU Users Slack](ncar
 
 ## Coordinates
 
-* Dates: February through August 2022
+* Dates: February through September 2022
 * Format: 1 hour sessions roughly every 2 weeks
 * Communication: Emails to registrants and open discussion in [NCAR GPU Users Slack](ncargpuusers.slack.com).
 * Support and offce hours: Schedule time with workshop organizers in Slack or submit a ticket to [support.ucar.edu](https://support.ucar.edu).
@@ -38,13 +38,16 @@ The full course description detailing learning objectives and material to be cov
 5. [Directive Based Programming with OpenACC](05_DirectivesOpenACC) (two sessions)
     * Slides [Part 1](05_DirectivesOpenACC/05_openACC_miniWeather_Tutorial.slides.pdf) and [Part 2](05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.slides.pdf) - Recordings [Part 1](https://youtu.be/NYEas1HVS00) and [Part 2](https://youtu.be/nAyqaYeshXM)
 7. [Hands-On Session Using OpenACC in MPAS-A](07_HandsOnMPASA)
-8. Multi-GPU Programming (two sessions)
-10. IDEs, Debugging, and Optimization Tools for GPU Computing
-11. Hands-On Session with Nsight Systems and Compute
-12. Co-Design Process Training for Scientists and Project Leads
-13. CuPy and NumPy/SciPy via Legate/cuNumerics
-14. Numba with CUDA, CuPy, and Dask
-15. Optimizing AI/ML workflows in Python for GPUs
+    * [Slides](07_HandsOnMPASA/07_HandsOnMPASA.slides.pdf) - [Recording](https://youtu.be/AwaEHzUcPWs)
+8. Verifying Code Correctness with PCAST
+    * [Slides](08_PCAST/08_PCAST.slides.pdf) - [Recording](https://youtu.be/GBledvf6mDs)
+9. IDEs, Debugging, and Optimization Tools for GPU Computing
+10. Hands-On Session with Nsight Systems and Compute
+11. Multi-GPU Programming (two sessions)
+13. Co-Design Process Training for Scientists and Project Leads
+14. CuPy and NumPy/SciPy via Legate/cuNumerics
+15. Numba with CUDA, CuPy, and Dask
+16. Optimizing AI/ML workflows in Python for GPUs
 
 We have decided to focus primarily on descriptive and directive based programming plus usage of libraries/APIs in this GPU training program given the greater ease of deployment and cost savings in development time while still achieving significant performance. Nonetheless, many of the directive based and/or library implementations can work alongside CUDA kernels for when the greatest control of GPU hardware or performance optimizations are required. We recommend consulting this 9-part [CUDA Training Series](https://www.olcf.ornl.gov/cuda-training-series/ 'CUDA Training') offered by Oak Ridge national Laboratory or other resources for a more in depth training on CUDA code development.
 
