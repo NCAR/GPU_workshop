@@ -215,7 +215,6 @@ contains
     integer , intent(in   ) :: dir
     integer :: i,k,ll
     real(rp) :: x, z, wpert, dist, x0, z0, xrad, zrad, amp
-
     if     (dir == DIR_X) then
       !Set the halo values for this MPI task's fluid state in the x-direction
       call set_halo_values_x(state_forcing)
@@ -310,7 +309,7 @@ contains
     do ll = 1 , NUM_VARS
       do k = 1 , nz
         do i = 1 , nx
-          tend(i,k,ll) = -( flux(i+1,k,ll) - flux(i,k,ll) ) / dx
+          tend(i,k,ll) = ( flux(i+1,k,ll) - flux(i,k,ll) ) / dx
         enddo
       enddo
     enddo

@@ -14723,8 +14723,8 @@ git pull
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Complete-Mid-Workshop-Series-Survey">Complete Mid-Workshop Series Survey<a class="anchor-link" href="#Complete-Mid-Workshop-Series-Survey">&#182;</a></h2><p>In order to get feedback on and improve future GPU workshop series sessions, please complete the below survey. We will spend 3-5 minutes at the start of today's session to collect your feedback.</p>
-<p>Head to <a href="https://forms.gle/RRkfwnHnDsqqe1zE9">https://forms.gle/RRkfwnHnDsqqe1zE9</a> or scan the below QR code.
-<img src="img/Survey_QR.png" alt="GPU Workshop Mid-Series Survey QR Code"></p>
+<p>Head to <a href="https://forms.gle/RRkfwnHnDsqqe1zE9">https://forms.gle/RRkfwnHnDsqqe1zE9</a> or scan the below QR code.</p>
+<p><img src="img/Survey_QR.png" alt="GPU Workshop Mid-Series Survey QR Code" style="width:300px;"/></p>
 <p>If you've finished the survey, feel free to ask questions about any past material or other GPU topics during this time.</p>
 
 </div>
@@ -14750,8 +14750,8 @@ git pull
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT</span><span class="o">=</span>UCIS0004
-<span class="nb">export</span> <span class="nv">QUEUE</span><span class="o">=</span>casper
+<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT</span><span class="o">=</span>SCSG0001
+<span class="nb">export</span> <span class="nv">QUEUE</span><span class="o">=</span>gpudev
 <span class="nb">export</span> <span class="nv">GPU_TYPE</span><span class="o">=</span>v100
 
 module load nvhpc/22.2 <span class="p">&amp;</span>&gt; /dev/null
@@ -14920,7 +14920,7 @@ From Altuna Akalin, <a href="https://towardsdatascience.com/scientific-data-anal
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="PCAST:-Parallel-Compiler-Assisted-Software-Testing">PCAST: Parallel Compiler Assisted Software Testing<a class="anchor-link" href="#PCAST:-Parallel-Compiler-Assisted-Software-Testing">&#182;</a></h2><p>The PCAST tool serves as a <strong>convenient compiler aided framework</strong> for quickly building in some level of <strong>software testing</strong> into your development workflow, particularly to <strong>compare CPU data to GPU data</strong>.</p>
-<p>However, PCAST won't cover all the benefits of software validation or resolve all the challenges previously discussed.</p>
+<p>However, PCAST won't enable all the benefits of software validation or resolve all the challenges previously discussed.</p>
 
 </div>
 </div>
@@ -14932,10 +14932,10 @@ From Altuna Akalin, <a href="https://towardsdatascience.com/scientific-data-anal
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p>Primarily, PCAST allows for verifying that either</p>
+<p>Primarily, PCAST allows for you to check that...</p>
 <ol>
-<li>Output from previously run code is similar or equal to the output of modified code</li>
-<li>Calculations performed on the CPU is similar or equal to calulations performed on the GPU</li>
+<li>Output from previously run code is similar to or equal to the output of a minimally modified code</li>
+<li>Calculations performed on the CPU is similar to or equal to calulations performed on the GPU</li>
 </ol>
 
 </div>
@@ -14987,9 +14987,9 @@ From Altuna Akalin, <a href="https://towardsdatascience.com/scientific-data-anal
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Usage-of-PCAST---Golden-File">Usage of PCAST - Golden File<a class="anchor-link" href="#Usage-of-PCAST---Golden-File">&#182;</a></h2><p>In this first approach, PCAST can be run to compare successive program runs against a ground truth golden file. Essentially, CPU results will be compared to CPU results, with the assumption that the results in the golden file are correct.</p>
+<h2 id="Usage-of-PCAST---Golden-File">Usage of PCAST - Golden File<a class="anchor-link" href="#Usage-of-PCAST---Golden-File">&#182;</a></h2><p>In this first approach, PCAST can compare successive program runs against a ground truth golden file. Essentially, CPU results will be compared to CPU results, with the assumption that the results in the golden file are correct.</p>
 <p>NOTE: It's up to the programmer to determine if the results are in fact correct according to the model.</p>
-<p>With calls to <code>pcast_compare(...)</code> or <code>!$nvf compare(var-list)</code> directives, a data file named <code>pcast_compare.dat</code> by default will either be created if it does not exist or read to compare computed data with saved data from the data file. If using directives, they will only be enabled if the program is compiled with the <code>-Mpcast</code> flag.</p>
+<p>With calls to <code>pcast_compare(...)</code> or <code>!$nvf compare(var-list)</code> directives, a data file named <code>pcast_compare.dat</code> by default will either be created if it does not exist or read to compare computed data with saved data from the data file. If using directives, PCAST will only be enabled if the program is compiled with the <code>-Mpcast</code> flag.</p>
 <p>Notably, the directive is much more portable and significantly easier to use, ie <code>!$nvf compare(a(1:N))</code>, only requiring the input to be a <code>var-list</code> with an inferred full size of the array or specified sub-slices.</p>
 
 </div>
@@ -15028,7 +15028,7 @@ From Altuna Akalin, <a href="https://towardsdatascience.com/scientific-data-anal
 <ul>
 <li><code>datafile="name.dat"</code>: Change the name of the golden file</li>
 <li><code>create</code>: Explicitly force the creation of the golden file</li>
-<li><code>compare</code>: Explicitly force the comparison of the golden file</li>
+<li><code>compare</code>: Explicitly force the comparison to the golden file</li>
 <li><code>disable</code>: Disable any PCAST actions from taking place and force PCAST functions to immediately return with no effect. This does not disable <code>-gpu=redundant</code> execution if enabled for OpenACC codes</li>
 </ul>
 <p>All <code>PCAST_COMPARE</code> environmental variable options can be found in the <a href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-user-guide/index.html#pcast-env-vars">NVIDIA Documentation</a>.</p>
@@ -15080,7 +15080,7 @@ rm -f miniWeather_mpi_openacc_orig.F90.o
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span><span class="c1"># export PCAST_COMPARE=&quot;create&quot;</span>
+<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PCAST_COMPARE</span><span class="o">=</span><span class="s2">&quot;create&quot;</span>
 qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span><span class="nv">$GPU_TYPE</span> -l <span class="nv">walltime</span><span class="o">=</span><span class="m">60</span> -v PCAST_COMPARE -- <span class="se">\</span>
 <span class="nb">cd</span> <span class="nv">$PWD</span> <span class="o">&amp;&amp;</span> ./openacc_orig
 </pre></div>
@@ -15100,8 +15100,8 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <h2 id="EXERCISE:-Usage-of-PCAST---Test-against-a-Golden-File">EXERCISE: Usage of PCAST - Test against a Golden File<a class="anchor-link" href="#EXERCISE:-Usage-of-PCAST---Test-against-a-Golden-File">&#182;</a></h2><p>Add the same <code>pcast_comapre()</code> calls or directives to the non-original file <a href="miniWeather_mpi_openacc.F90">miniWeather_mpi_openacc.F90</a>. A bug has been introduced somewhere in the code.</p>
 <p>Make and run the non-original file and <strong>use the PCAST report to try to determine where the bug is</strong>.</p>
 <ol>
-<li><strong>Would testing additional variables across the MiniWeather code fascilitate this search better?</strong></li>
-<li><strong>What would be an easier way to find the source of the bug?</strong></li>
+<li><strong>Would testing additional variables via PCAST across the MiniWeather code fascilitate this search better?</strong></li>
+<li><strong>What would be an easier way to find the source of the bug?</strong> Hint: Use <code>diff</code> command.</li>
 <li><strong>How would you incorporate PCAST testing in a development workflow to minimize creation of bugs as changes are made to source files?</strong></li>
 </ol>
 
@@ -15156,9 +15156,10 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Usage-of-PCAST---OpenACC-and--gpu=redundant-/--gpu=autocompare">Usage of PCAST - OpenACC and <code>-gpu=redundant</code> / <code>-gpu=autocompare</code><a class="anchor-link" href="#Usage-of-PCAST---OpenACC-and--gpu=redundant-/--gpu=autocompare">&#182;</a></h2><p>In this second aproach, PCAST can be run to directly compare the calculations between the CPU and GPU.</p>
-<p>In <code>redundant</code> mode, CPU code is generated alongside GPU code and ran redundantly. Then, every time a <code>acc_compare</code> call or <code>!$acc compare()</code> directive is encountered, the compiler will verify the values between any specified variables.</p>
-<p>In <code>autocompare</code> mode, CPU code is again generated alongside GPU code and ran reduntantly. Then, every time data is moved between CPU and GPU, such as through an <code>!$acc update host()</code> directive or at the edges of data regions, the compiler will verify the values between the data that was to be moved.</p>
-<p><code>autocompare</code> is the easiest method to quickly test correctness between CPU and GPU code particularly when using OpenACC and automaticaly implies <code>redundant</code>. Since the source file stays the same, ie directive comments are ignored when generating CPU code, this can highlight if the OpenACC runtime is introducing any divergence in the GPU target code either due to inappropriate loop directives, ie missing <code>private()</code> or <code>reduction()</code>, or bad managagement of data movement.</p>
+<p>In <code>redundant</code> mode, CPU code is generated alongside GPU code and ran redundantly. Then, every time a <code>call acc_compare()</code> or <code>!$acc compare()</code> directive is encountered, the compiler will verify the values between any specified variables.</p>
+<p>In <code>autocompare</code> mode, CPU code is again generated alongside GPU code and ran reduntantly. Then, every time data is moved between CPU and GPU, such as via an <code>!$acc update host()</code> directive or at the edges of data regions, the compiler will verify the values between the data that was to be moved.</p>
+<p>For a comprehensive comparison of all GPU resident data, you can also use <code>call acc_compare_all()</code> or <code>!$acc compare all</code>.</p>
+<p><code>autocompare</code> is the easiest method to quickly test correctness between CPU and GPU code particularly when using OpenACC. The flag automaticaly implies <code>redundant</code>. Since the source file stays the same, ie directive comments are ignored when generating CPU code, this can highlight if the OpenACC runtime is introducing any divergence in the GPU target code either due to inappropriate loop directives, ie missing <code>private()</code> or <code>reduction()</code>, or bad managagement of data movement.</p>
 
 </div>
 </div>
@@ -15210,7 +15211,7 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">OPENACC_FLAGS</span><span class="o">=</span><span class="s2">&quot;-acc -gpu=autocompare,cc60,cc70&quot;</span>
 
 mpif90 -I<span class="si">${</span><span class="nv">PNETCDF_INC</span><span class="si">}</span> -Mextend -O0 -DNO_INFORM -c miniWeather_mpi_openacc.F90 -o miniWeather_mpi_openacc.F90.o <span class="se">\</span>
--D_NX<span class="o">=</span><span class="m">200</span> -D_NZ<span class="o">=</span><span class="m">100</span> -D_SIM_TIME<span class="o">=</span><span class="m">2</span>.01 -D_OUT_FREQ<span class="o">=</span><span class="m">1</span> -D_DATA_SPEC<span class="o">=</span>DATA_SPEC_THERMAL <span class="si">${</span><span class="nv">OPENACC_FLAGS</span><span class="si">}</span>
+-D_NX<span class="o">=</span><span class="m">1024</span> -D_NZ<span class="o">=</span><span class="m">512</span> -D_SIM_TIME<span class="o">=</span><span class="m">200</span>.01 -D_OUT_FREQ<span class="o">=</span><span class="m">20</span> -D_DATA_SPEC<span class="o">=</span>DATA_SPEC_THERMAL <span class="si">${</span><span class="nv">OPENACC_FLAGS</span><span class="si">}</span>
 
 mpif90 -Mextend -O3 -DNO_INFORM miniWeather_mpi_openacc.F90.o -o openacc -L<span class="si">${</span><span class="nv">PNETCDF_LIB</span><span class="si">}</span> -lpnetcdf <span class="si">${</span><span class="nv">OPENACC_FLAGS</span><span class="si">}</span>
 rm -f miniWeather_mpi_openacc.F90.o
@@ -15229,7 +15230,7 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PCAST_COMPARE</span><span class="o">=</span><span class="s2">&quot;summary,report=2&quot;</span>
+<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PCAST_COMPARE</span><span class="o">=</span><span class="s2">&quot;summary,report=2,stop&quot;</span>
 qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <span class="k">select</span><span class="o">=</span><span class="m">1</span>:ncpus<span class="o">=</span><span class="m">1</span>:ngpus<span class="o">=</span><span class="m">1</span> -l <span class="nv">gpu_type</span><span class="o">=</span><span class="nv">$GPU_TYPE</span> -l <span class="nv">walltime</span><span class="o">=</span><span class="m">60</span> -v PCAST_COMPARE -- <span class="se">\</span>
 <span class="nv">$PWD</span>/openacc
 </pre></div>
@@ -15269,27 +15270,15 @@ qcmd -A <span class="nv">$PROJECT</span> -q <span class="nv">$QUEUE</span> -l <s
 <h2 id="Suggested-Resources">Suggested Resources<a class="anchor-link" href="#Suggested-Resources">&#182;</a></h2><ul>
 <li><a href="https://docs.nvidia.com/hpc-sdk/compilers/hpc-compilers-user-guide/index.html#pcast">HPC Compiler's User Guide</a></li>
 <li><a href="https://developer.nvidia.com/blog/detecting-divergence-using-pcast-to-compare-gpu-to-cpu-results/">Detecting Divergence Using PCAST to Compare CPU to GPU Results</a></li>
+<li><a href="https://arxiv.org/abs/1906.09179">Challenges for Verifying and Validating Scientific Software in Computational Materials Science</a> - Vogel, et. al.</li>
+<li><a href="https://figshare.com/articles/presentation/Testing_of_HPC_Scientific_Software-_Part_1/6453017">Testing of HPC Scientific Software</a> - ISC 2018, Anshu Dubey</li>
+<li>BSSW's <a href="https://bssw.io/items?category=better-reliability">Better Reliability blog post category</a></li>
+<li>BSSW's <a href="https://bssw.io/blog_posts/software-verification">Software Verification blog post</a></li>
 </ul>
 
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-bash"><pre><span></span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div></section></section>
 </div>
 </div>
