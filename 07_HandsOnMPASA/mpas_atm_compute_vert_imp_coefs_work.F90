@@ -14,6 +14,7 @@ character(10) :: maxIterChar
 integer, parameter:: nVertLevels_default = 56
 integer, parameter:: nCells_default = 163842
 integer, parameter:: maxIter_default = 10
+
 real, parameter:: VERIF_TOL=1.0E-6
 real :: rgas, cp, gravity
 integer, nVertLevels
