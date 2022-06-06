@@ -42,6 +42,7 @@ The full course description detailing learning objectives and material to be cov
 8. Verifying Code Correctness with PCAST
     * [Slides](08_PCAST/08_PCAST.slides.pdf) - [Recording](https://youtu.be/GBledvf6mDs)
 9. IDEs, Debugging, and Optimization Tools for GPU Computing
+    * [Slides](09_DebugProfilerIDE/09_GPUDebug_Profile_IDE.slides.pdf) - [Recording](https://youtu.be/2DRj4WcwdGQ)
 10. Hands-On Session with Nsight Systems and Compute
 11. Multi-GPU Programming (two sessions)
 13. Co-Design Process Training for Scientists and Project Leads
@@ -49,7 +50,7 @@ The full course description detailing learning objectives and material to be cov
 15. Numba with CUDA, CuPy, and Dask
 16. Optimizing AI/ML workflows in Python for GPUs
 
-We have decided to focus primarily on descriptive and directive based programming plus usage of libraries/APIs in this GPU training program given the greater ease of deployment and cost savings in development time while still achieving significant performance. Nonetheless, many of the directive based and/or library implementations can work alongside CUDA kernels for when the greatest control of GPU hardware or performance optimizations are required. We recommend consulting this 9-part [CUDA Training Series](https://www.olcf.ornl.gov/cuda-training-series/ 'CUDA Training') offered by Oak Ridge national Laboratory or other resources for a more in depth training on CUDA code development.
+We have decided to focus primarily on descriptive and directive based programming plus usage of libraries/APIs in this GPU training program given the greater ease of deployment and cost savings in development time while still achieving significant performance. Nonetheless, many of the directive based and/or library implementations can work alongside CUDA kernels for when the greatest control of GPU hardware or performance optimizations are required. We recommend consulting this 9-part [CUDA Training Series](https://www.olcf.ornl.gov/cuda-training-series/ 'CUDA Training') offered by Oak Ridge National Laboratory or other resources for a more in depth training on CUDA code development.
 
 ## Course References, Resources, and Other Learning Materials
 

@@ -1,7 +1,7 @@
 ![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Hands-On Session Using OpenACC in MPAS-A
 
-["Hands-On Session Using OpenACC in MPAS-A"](07_HandsOnMPASA.ipynb) is the seventh workshop in this series and was presented by Daniel Howard of CISL's Consulting Services Group on April 28th. Topics covered include:
+["Hands-On Session Using OpenACC in MPAS-A"](07_HandsOnMPASA.ipynb) is the seventh workshop in this series and was presented by Daniel Howard of CISL's Consulting Services Group on April 28th. The video recording for this session has been uploaded [here](https://youtu.be/AwaEHzUcPWs). Topics covered include:
 
 * Review of exercises from prior OpenACC/MiniWeather sessions
 * MPAS-Atmosphere model overview
