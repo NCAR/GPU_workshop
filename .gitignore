@@ -45,3 +45,6 @@
 
 # For Jupyter Notebook checkpoints
 *.ipynb_checkpoints
+
+# For Eclipse PTP Sync
+.ptp-sync*
