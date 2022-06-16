@@ -5,7 +5,7 @@ This folder contains the materials for exploring the [Nsight Compute Profiler](1
 
 * Overview of Profiling and Performance Sampling Tools
     * Typical development workflows with profiling tools
-* NSight Systems for Overview Analysis of GPU Program Runtimes
-    * How to generate nsys reports and command line parameters
-    * Analysis of nsys reports and investigating the program timeline
-    * Generating NSight Compute profiling commands from nsys reports
+* NSight Compute for Individual GPU Kernel Performance Analysis
+    * How to generate ncu reports and command line parameters
+    * Overview of GPU kernel profiling data and source code timing heatmaps
+    * External resources for interpreting ncu reports data
