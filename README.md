@@ -8,6 +8,7 @@ We actively encourage that all participants join the [NCAR GPU Users Slack](ncar
 
 ## Course Content Contributors
 
+* Brett Neuman - Student Assistant, GPU Enthusiast CISL/CSG
 * Brian Vanderwende - Software Engineer III CISL/CSG
 * Cena Miller - Software Engineer II CISL/ASAP
 * Daniel Howard - Software Engineer I CISL/CSG
