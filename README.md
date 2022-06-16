@@ -20,7 +20,7 @@ We actively encourage that all participants join the [NCAR GPU Users Slack](ncar
 * Dates: February through September 2022
 * Format: 1 hour sessions roughly every 2 weeks
 * Communication: Emails to registrants and open discussion in [NCAR GPU Users Slack](ncargpuusers.slack.com).
-* Support and offce hours: Schedule time with workshop organizers in Slack or submit a ticket to [support.ucar.edu](https://support.ucar.edu).
+* Support and offce hours: Schedule time with workshop organizers in Slack or submit a ticket to [rchelp.ucar.edu](https://support.ucar.edu).
 * Register [here](https://docs.google.com/forms/d/e/1FAIpQLSe6g0jGCYthfB9wQe6pNDl7dLO1321EM2vDu7YUSoc0kjISCw/viewform) to receive a link for interactive Zoom sessions
 * Course Materials: In addition to code examples archived in this Github repository, slides and video recordings of sessions will be archived on each individual session's webpage accessed [here](https://www2.cisl.ucar.edu/what-we-do/training-library/gpu-computing-workshops).
 
