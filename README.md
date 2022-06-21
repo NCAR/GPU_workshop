@@ -45,12 +45,12 @@ The full course description detailing learning objectives and material to be cov
 9. [IDEs, Debugging, and Optimization Tools for GPU Computing](09_DebugProfilerIDE)
     * [Slides](09_DebugProfilerIDE/09_GPUDebug_Profile_IDE.slides.pdf) - [Recording](https://youtu.be/2DRj4WcwdGQ)
 10. [Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight)
-    * Slides, [nsys](10_HandsOnNsight/nsys/10_HandsOnNsight_nsys.pdf) [ncu](10_HandsOnNsight/ncu/10_HandsOnNsight_ncu.pdf)- [Recording]() - [Notebook](10_HandsOnNsight/10_HandsOnNsight.ipynb)
+    * Slides, [nsys](10_HandsOnNsight/nsys/10_HandsOnNsight_nsys.pdf) [ncu](10_HandsOnNsight/ncu/10_HandsOnNsight_ncu.pdf) - [Recording]() - [Notebook](10_HandsOnNsight/10_HandsOnNsight.ipynb)
 11. Multi-GPU Programming (two sessions)
-13. Co-Design Process Training for Scientists and Project Leads
-14. CuPy and NumPy/SciPy via Legate/cuNumerics
-15. Numba with CUDA, CuPy, and Dask
-16. Optimizing AI/ML workflows in Python for GPUs
+13. CuPy and NumPy/SciPy via Legate/cuNumerics
+14. Numba with CUDA, CuPy, and Dask
+15. Optimizing AI/ML workflows in Python for GPUs
+16. Co-Design Process Training for Scientists and Project Leads
 
 We have decided to focus primarily on descriptive and directive based programming plus usage of libraries/APIs in this GPU training program given the greater ease of deployment and cost savings in development time while still achieving significant performance. Nonetheless, many of the directive based and/or library implementations can work alongside CUDA kernels for when the greatest control of GPU hardware or performance optimizations are required. We recommend consulting this 9-part [CUDA Training Series](https://www.olcf.ornl.gov/cuda-training-series/ 'CUDA Training') offered by Oak Ridge National Laboratory or other resources for a more in depth training on CUDA code development.
 
