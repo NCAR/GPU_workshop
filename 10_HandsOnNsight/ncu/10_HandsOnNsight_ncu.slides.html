@@ -13208,8 +13208,8 @@ a.anchor-link {
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="../../NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
-<h1 id="Hands-On-Session-with-Nsight-Systems-and-Nsight-Compute">Hands-On Session with Nsight Systems and Nsight Compute<a class="anchor-link" href="#Hands-On-Session-with-Nsight-Systems-and-Nsight-Compute">&#182;</a></h1><p>By: Brett Neuman &amp; Daniel Howard, Consulting Services Group, CISL &amp; NCAR</p>
-<p><a href="mailto:bneuman@ucar.edu">bneuman@ucar.edu</a> &amp; <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a></p>
+<h1 id="Hands-On-Session-with-Nsight-Systems-and-Nsight-Compute">Hands-On Session with Nsight Systems and Nsight Compute<a class="anchor-link" href="#Hands-On-Session-with-Nsight-Systems-and-Nsight-Compute">&#182;</a></h1><p>By: Daniel Howard, Consulting Services Group, CISL &amp; NCAR</p>
+<p><a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a></p>
 <p>Date: June 16th, 2022</p>
 <p>In this notebook we explore profiling of the mini-app MiniWeather to present profiling techniques and code examples. We will cover:</p>
 <ul>
@@ -13265,7 +13265,7 @@ git pull
     <div class="input_area">
 <div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT</span><span class="o">=</span>UCIS0004
 <span class="nb">export</span> <span class="nv">QUEUE</span><span class="o">=</span>gpudev
-<span class="nb">export</span> <span class="nv">GPU_TYPE</span><span class="o">=</span>gp100
+<span class="nb">export</span> <span class="nv">GPU_TYPE</span><span class="o">=</span>v100
 
 module load nvhpc/22.5 openmpi <span class="p">&amp;</span>&gt; /dev/null
 <span class="nb">export</span> <span class="nv">PNETCDF_INC</span><span class="o">=</span>/glade/u/apps/dav/opt/pnetcdf/1.12.3/openmpi/4.1.4/nvhpc/22.5/include
@@ -13333,7 +13333,7 @@ module load nvhpc/22.5 openmpi <span class="p">&amp;</span>&gt; /dev/null
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Profiling-Workflow">Profiling Workflow<a class="anchor-link" href="#Profiling-Workflow">&#182;</a></h2><p><img src="img/Nsight-Workflow.png" alt="Nsight Workflow"></p>
+<h2 id="Profiling-Workflow">Profiling Workflow<a class="anchor-link" href="#Profiling-Workflow">&#182;</a></h2><p><img src="../nsys/img/Nsight-Diagram.png" alt="Nsight Workflow"></p>
 <p>When assessing performance of software, first profile the overall program with Nsight Systems. Then, expensive kernels can be identified and profiled using Nsight Compute.</p>
 <p>Iteratively analyze and modify code to optimize performance, up to the amount of effort is worthwhile.</p>
 
@@ -13448,7 +13448,7 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><code>SHIFT</code> +  <code>right click</code> <a href="MW_baseline.ncu-rep">MW_baseline.ncu-rep</a> in order to save the Nsight Compute report to your personal machine (or download the file from the left pane explorer). Use your local Nsight Compute client to open the file. Alternatively, after setting <code>module load nvhpc</code>, you can run <code>ncu-ui &lt;report-name&gt;</code> over a terminal X session or VNC/FastX session on Casper.</p>
+<p><code>SHIFT</code> +  <code>right click</code> <a href="MW_baseline.ncu-rep">MW_baseline.ncu-rep</a> in order to save the Nsight Compute report to your personal machine (or download the file from the left pane explorer). Install a free local <a href="https://developer.nvidia.com/nsight-compute">Nsight Compute client</a> to open the file. Alternatively, after setting <code>module load nvhpc</code>, you can run <code>ncu-ui &lt;report-name&gt;</code> over a terminal X session or VNC/FastX session on Casper.</p>
 
 </div>
 </div>
@@ -13476,7 +13476,8 @@ rm -f miniWeather_mpi_openacc.F90.o
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Nsight-Compute---Roofline-Analysis">Nsight Compute - Roofline Analysis<a class="anchor-link" href="#Nsight-Compute---Roofline-Analysis">&#182;</a></h2><p><img src="img/NCU_RooflineBounded.png" alt="Roofline Analysis"></p>
-<p>With at least <code>--set detailed</code>, a roofline plot is generated, used to determine if the kernel is <strong>compute bound</strong> or <strong>memory bound</strong>. Memory bound kernels can perhaps benefit by assigning more compute operations per thread if possible. Compute bound kernels will likely require further analysis for optimization, typically by checking for warp stalls or coallesced memory issues.</p>
+<p>With at least <code>--set detailed</code>, a roofline plot is generated, used to determine if the kernel is <strong>compute bound</strong> or <strong>memory bound</strong>. Measurements are plotted as points, where distance from the roofline indicates potential for improvement at a given kerne;'s <strong>arithmentic intensity</strong>, calculations per total size of data loads and stores.</p>
+<p>Memory bound kernels can perhaps benefit by assigning more compute operations per thread if possible. Compute bound kernels will likely require further analysis for optimization, typically by checking for warp stalls or coallesced memory issues.</p>
 
 </div>
 </div>
@@ -13531,7 +13532,6 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Experiment-with-a-Proposed-Optimization---Replace-Divide-with-Multiply">Experiment with a Proposed Optimization - Replace Divide with Multiply<a class="anchor-link" href="#Experiment-with-a-Proposed-Optimization---Replace-Divide-with-Multiply">&#182;</a></h2><p>Noting the <strong>hotspot at line 288</strong>, we can assess if there's a way to re-formulate this line to either reduce redundant operations or refactor the overall algorithm. The metrics provided may be able to provide a hint towards why this line is a bottleneck for MiniWeather.</p>
 <p>In this case, there are a significant number of warp stalls (see <a href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#statistical-sampler">here</a> for descriptions of types of warp stalls) as well as a much higher number of instructions executed compared to other lines in this kernel. Looking at this line, we see multiple divisions by 12 that could be simplified. Additionally, division is typically more expensive than multiplication within IEEE computational arithmetic.</p>
-<p>Thus, let's try changing this line to <code>vals(ll) = (-stencil(1) + 7*stencil(2) + 7*stencil(3) - stencil(4))*0.083333333333333333</code>. The report that analyses this change is <a href="MW_DivToMult.ncu-rep">MW_DivToMult.ncu-rep</a>.</p>
 
 </div>
 </div>
@@ -13539,11 +13539,19 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<p>Thus, let's try changing this line to <code>vals(ll) = (-stencil(1) + 7*stencil(2) + 7*stencil(3) - stencil(4))*0.083333333333333333</code>. The report that analyses this change is <a href="MW_DivToMult.ncu-rep">MW_DivToMult.ncu-rep</a>.</p>
+
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <p><img src="img/NCU_DivToMult.png" alt="Nsight Compute Source Division to Multiply"></p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></div></section></section><section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">

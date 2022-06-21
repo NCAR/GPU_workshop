@@ -40,11 +40,12 @@ The full course description detailing learning objectives and material to be cov
     * Slides [Part 1](05_DirectivesOpenACC/05_openACC_miniWeather_Tutorial.slides.pdf) and [Part 2](05_DirectivesOpenACC/05p2_openACC_miniWeather_Tutorial.slides.pdf) - Recordings [Part 1](https://youtu.be/NYEas1HVS00) and [Part 2](https://youtu.be/nAyqaYeshXM)
 7. [Hands-On Session Using OpenACC in MPAS-A](07_HandsOnMPASA)
     * [Slides](07_HandsOnMPASA/07_HandsOnMPASA.slides.pdf) - [Recording](https://youtu.be/AwaEHzUcPWs)
-8. Verifying Code Correctness with PCAST
+8. [Verifying Code Correctness with PCAST](08_PCAST)
     * [Slides](08_PCAST/08_PCAST.slides.pdf) - [Recording](https://youtu.be/GBledvf6mDs)
-9. IDEs, Debugging, and Optimization Tools for GPU Computing
+9. [IDEs, Debugging, and Optimization Tools for GPU Computing](09_DebugProfilerIDE)
     * [Slides](09_DebugProfilerIDE/09_GPUDebug_Profile_IDE.slides.pdf) - [Recording](https://youtu.be/2DRj4WcwdGQ)
-10. Hands-On Session with Nsight Systems and Compute
+10. [Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight)
+    * [Slides]() - [Recording]()
 11. Multi-GPU Programming (two sessions)
 13. Co-Design Process Training for Scientists and Project Leads
 14. CuPy and NumPy/SciPy via Legate/cuNumerics
