@@ -1,7 +1,7 @@
 ![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Multi-GPU Programming
 
-[Multi-GPU Programming](Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) is the eleventh and twelfth workshop in this series and was presented by Jiri Kraus (NVIDIA) and Daniel Howard (CISL's Consulting Services Group) on June 30th and July 14th. The video recordings for these session will be uploaded here: [Part 1]() and [Part 2](). Topics covered include:
+[Multi-GPU Programming](Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) is the eleventh and twelfth workshop in this series and was presented by Jiri Kraus (NVIDIA) and Daniel Howard (CISL's Consulting Services Group) on June 30th and July 14th. The video recordings for these session will be uploaded here: [Part 1](https://youtu.be/U7e7R-3pdpk) and [Part 2](). Topics covered include:
 
 __Part 1__ - [Presentation Slides](Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) by Jiri Kraus, NVIDIA
 * Hardware overview and data movement pathways across nodes and intranode
