@@ -45,7 +45,7 @@ The full course description detailing learning objectives and material to be cov
 9. [IDEs, Debugging, and Optimization Tools for GPU Computing](09_DebugProfilerIDE)
     * [Slides](09_DebugProfilerIDE/09_GPUDebug_Profile_IDE.slides.pdf) - [Recording](https://youtu.be/2DRj4WcwdGQ)
 10. [Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight)
-    * Slides, [nsys](10_HandsOnNsight/nsys/10_HandsOnNsight_nsys.pdf) [ncu](10_HandsOnNsight/ncu/10_HandsOnNsight_ncu.pdf) - [Recording]() - [Notebook](10_HandsOnNsight/10_HandsOnNsight.ipynb)
+    * Slides, [nsys](10_HandsOnNsight/nsys/10_HandsOnNsight_nsys.pdf) [ncu](10_HandsOnNsight/ncu/10_HandsOnNsight_ncu.pdf) - [Recording](https://youtu.be/3DAYN-onSzY) - [Notebook](10_HandsOnNsight/10_HandsOnNsight.ipynb)
 11. [Multi-GPU Programming](11_MultiGPU) (two sessions)
     * Slides, [Part 1](11_MultiGPU/Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) & [Part 2]() - Recordings, [Part 1](https://youtu.be/U7e7R-3pdpk) & [Part 2]() - Notebooks [Part 2]()
 13. CuPy and NumPy/SciPy via Legate/cuNumerics

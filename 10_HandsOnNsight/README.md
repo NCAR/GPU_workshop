@@ -1,7 +1,7 @@
 ![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Hands-On Session with Nsight Systems and Compute
 
-[Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight.ipynb) is the tenth workshop in this series and was presented by Brett Neuman and Daniel Howard of CISL's Consulting Services Group on June 16th. The video recording for this session will be uploaded [here](). Topics covered include:
+[Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight.ipynb) is the tenth workshop in this series and was presented by Brett Neuman and Daniel Howard of CISL's Consulting Services Group on June 16th. The video recording for this session will be uploaded [here](https://youtu.be/3DAYN-onSzY). Topics covered include:
 
 * Overview of Profiling and Performance Sampling Tools
     * Typical development workflows with profiling tools
