@@ -13255,8 +13255,8 @@ git pull
 <div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT</span><span class="o">=</span>SCSG0001
-<span class="nb">export</span> <span class="nv">QUEUE</span><span class="o">=</span>casper
+<div class=" highlight hl-bash"><pre><span></span><span class="nb">export</span> <span class="nv">PROJECT</span><span class="o">=</span>UCIS0004
+<span class="nb">export</span> <span class="nv">QUEUE</span><span class="o">=</span>gpudev
 <span class="nb">export</span> <span class="nv">GPU_TYPE</span><span class="o">=</span>v100
 
 module load cuda/11.6 nvhpc/22.5 openmpi/4.1.4 <span class="p">&amp;</span>&gt; /dev/null
@@ -13447,7 +13447,9 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Recall from the previous session how data must be copied from GPU memory to CPU memory to another node's CPU memory to that node's GPU memory.</p>
 <p><img src="img/MPI_MemoryMovement_NonAware.png" alt="MPI Memory Movement without CUDA Aware"></p>
-<p>Some of these memory movement steps can be eliminated with better programming choices.</p>
+<div class="highlight"><pre><span></span><span class="n">MPI_Send</span><span class="p">(</span><span class="n">s_buf_d</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_BYTE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="n">MPI_Recv</span><span class="p">(</span><span class="n">r_buf_d</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_BYTE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+</pre></div>
 
 </div>
 </div>
@@ -13460,7 +13462,7 @@ rm -f miniWeather_mpi_openacc.F90.o
 <span class="p">...</span><span class="w"></span>
 <span class="c">!$acc end host_data</span>
 </pre></div>
-<p>Essentialy, within any <code>host_data</code> on the CPU host, data objects in <code>use_device()</code> will no longer reference host/CPU memory but will instead point to device/GPU memory. This simple directive should tightly encapsulate any MPI calls, allowing a CUDA Aware MPI library to directly reference memory on the GPU instead of memory on the CPU. If interested, see more OpenACC interoperability features at <a href="https://github.com/OpenACC/openacc-interoperability-examples">this GitHub</a> by Jeff Larkin.</p>
+<p>Essentialy, within any <code>host_data</code> region in CPU code, data objects given in <code>use_device()</code> will instead point to device/GPU memory. This simple directive should tightly encapsulate any MPI calls, allowing a CUDA Aware MPI library to directly reference memory on the GPU instead of memory on the CPU. If interested, see more OpenACC interoperability features at <a href="https://github.com/OpenACC/openacc-interoperability-examples">this GitHub</a> by Jeff Larkin.</p>
 <p>For Casper, the default library <code>OpenMPI</code> enables CUDA aware features by default. However, different MPI libraries often require you to specify additional flags or environment variables to use CUDA aware features (slide 22 in <a href="Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf">Part 1</a>).</p>
 
 </div>
@@ -13471,6 +13473,11 @@ rm -f miniWeather_mpi_openacc.F90.o
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Once the MPI library directly references GPU device memory when setting up communication, messages communicated across a HPC cluster can more directly travel to their destinations, shortening the time spent in communication.</p>
 <p><img src="img/MPI_MemoryMovement_Aware.png" alt="MPI Memory Movement with CUDA Aware"></p>
+<div class="highlight"><pre><span></span><span class="c">!$acc host_data use_device(s_buf_d,r_buf_d)</span>
+<span class="n">MPI_Send</span><span class="p">(</span><span class="n">s_buf_d</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_BYTE</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="n">MPI_Recv</span><span class="p">(</span><span class="n">r_buf_d</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_BYTE</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
+<span class="c">!$acc end host_data</span>
+</pre></div>
 
 </div>
 </div>
