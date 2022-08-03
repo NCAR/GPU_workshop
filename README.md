@@ -47,9 +47,10 @@ The full course description detailing learning objectives and material to be cov
 10. [Hands-On Session with Nsight Systems and Compute](10_HandsOnNsight)
     * Slides, [nsys](10_HandsOnNsight/nsys/10_HandsOnNsight_nsys.pdf) [ncu](10_HandsOnNsight/ncu/10_HandsOnNsight_ncu.pdf) - [Recording](https://youtu.be/3DAYN-onSzY) - [Notebook](10_HandsOnNsight/10_HandsOnNsight.ipynb)
 11. [Multi-GPU Programming](11_MultiGPU) (two sessions)
-    * Slides, [Part 1](11_MultiGPU/Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) & [Part 2]() - Recordings, [Part 1](https://youtu.be/U7e7R-3pdpk) & [Part 2]() - Notebooks [Part 2]()
-13. CuPy and NumPy/SciPy via Legate/cuNumerics
-14. Numba with CUDA, CuPy, and Dask
+    * Slides, [Part 1](11_MultiGPU/Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) & [Part 2](11_MultiGPU_Part2.slides.pdf) - Recordings, [Part 1](https://youtu.be/U7e7R-3pdpk) & Part 2 - Notebook [Part 2](11_MultiGPU/11_MultiGPU_Part2.ipynb)
+13. GPU Python with CuPy and Legate
+    * [Slides](12_CuPyAndLegate/12_CuPyAndLegate.pdf) - Recording - [Notebook](12_CuPyAndLegate/12_CuPyAndLegate.ipynb)
+14. Multiple GPUs in Python with Dask
 15. Optimizing AI/ML workflows in Python for GPUs
 16. Co-Design Process Training for Scientists and Project Leads
 
