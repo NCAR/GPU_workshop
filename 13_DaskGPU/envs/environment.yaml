@@ -1,0 +1,14 @@
+name: pygpu-dask
+channels:
+  - rapidsai
+  - nvidia
+  - conda-forge
+dependencies:
+  - rapids=22.06
+  - python=3.9
+  - cudatoolkit=11.4
+  - dask-jobqueue
+  - jupyterlab
+  - pynvml
+  - cupy
+prefix: /glade/u/apps/opt/conda/envs/pygpu-dask
