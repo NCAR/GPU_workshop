@@ -293,9 +293,6 @@ print(f"Number of validation batches: {len(val_ds)}")
 print(f"Number of test batches: {len(test_ds)}")
 
 # TODO: Add callback function for TensorBoard profiler GUI
-tboard_callback = keras.callbacks.TensorBoard(log_dir = "profile_results",
-                                                 histogram_freq = 1,
-                                                 profile_batch = '500,520')
 
 ### Run training for new models ###
 # TODO: Specify callbacks in `model.fit()`
@@ -306,8 +303,7 @@ if create_new_model:
         epochs=model_config["n_epochs"],
         verbose=True,
         shuffle=False,
-        validation_data=val_ds,
-        callbacks = [tboard_callback]
+        validation_data=val_ds
     )
     history = history_keras.history     # Convert Keras 'history' callback reference to a simple dictionary.
                                         # This will make saving and loading as a pickle easier, i.e. while
