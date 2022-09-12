@@ -20,7 +20,7 @@
 export TMPDIR /glade/scratch/$USER/temp
 mkdir -p $TMPDIR
 
-module load cuda/11.7 conda
+module load cuda/11.7 conda &> /dev/null
 conda activate /glade/work/dhoward/conda/envs/GPU_Workshop/
 
 python magnet_lstm_tutorial.py

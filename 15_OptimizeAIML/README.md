@@ -1,7 +1,7 @@
 ![NCAR UCAR Logo](../NCAR_CISL_NSF_banner.jpeg)
 # Optimizing AI/ML Workflows in Python for GPUs
 
-[Optimizing AI/ML Workflows in Python for GPUs](14_OptimizeAIML.ipynb) is the fourteenth workshop in this series and was presented by Daniel Howard (CISL's Consulting Services Group) on August 25th. The video recording for this session will be uploaded here. Topics covered include:
+[Optimizing AI/ML Workflows in Python for GPUs](15_OptimizeAIML.ipynb) is the fourteenth workshop in this series and was presented by Daniel Howard (CISL's Consulting Services Group) on August 25th. The video recording for this session will be uploaded here. Topics covered include:
 
 1. Background on machine learning research in Earth sciences
 2. Setting up Python virtual `conda` environments

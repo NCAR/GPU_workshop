@@ -22,3 +22,6 @@ __Part 2__ - [Jupyter Notebook](05p2_openACC_miniWeather_Tutorial.ipynb)
 * Interfacing OpenACC with CUDA Examples
 
 This session featured an interactive component in the form of a Jupyter Notebook. The notebook and a completed PDF version of the notebook are available for use and reference in this directory.
+
+## License
+The [license](LICENSE) in this directory applies to the MiniWeather software distributed in this directory. The [Creative Commons license](../LICENSE) for this serie's educational content applies to the Jupyter notebook files and derivatives in this directory.
