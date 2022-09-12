@@ -49,9 +49,11 @@ The full course description detailing learning objectives and material to be cov
 11. [Multi-GPU Programming](11_MultiGPU) (two sessions)
     * Slides, [Part 1](11_MultiGPU/Multi-GPU_Programming_for_Earth_Scientists_Jiri_Kraus_NVIDIA.pdf) & [Part 2](11_MultiGPU_Part2.slides.pdf) - Recordings, [Part 1](https://youtu.be/U7e7R-3pdpk) & Part 2 - Notebook [Part 2](11_MultiGPU/11_MultiGPU_Part2.ipynb)
 13. GPU Python with CuPy and Legate
-    * [Slides](12_CuPyAndLegate/12_CuPyAndLegate.pdf) - Recording - [Notebook](12_CuPyAndLegate/12_CuPyAndLegate.ipynb)
+    * [Slides](12_CuPyAndLegate/12_CuPyAndLegate.pdf) - [Recording](https://www.youtube.com/watch?v=wSWYn0Dos3s) - [Notebook](12_CuPyAndLegate/12_CuPyAndLegate.ipynb)
 14. Multiple GPUs in Python with Dask
+    * [Slides](13_DaskGPU/13_DaskGPU-completed.pdf) - [Recording](https://www.youtube.com/watch?v=p5j16Nj5yQE) - [Notebook](13_DaskGPU/13_DaskGPU-completed.ipynb)
 15. Optimizing AI/ML workflows in Python for GPUs
+    * Slides - Recording - [Notebook](14_OptimizeAIML/14_OptimizeAIML.ipynb)
 16. Co-Design Process Training for Scientists and Project Leads
 
 We have decided to focus primarily on descriptive and directive based programming plus usage of libraries/APIs in this GPU training program given the greater ease of deployment and cost savings in development time while still achieving significant performance. Nonetheless, many of the directive based and/or library implementations can work alongside CUDA kernels for when the greatest control of GPU hardware or performance optimizations are required. We recommend consulting this 9-part [CUDA Training Series](https://www.olcf.ornl.gov/cuda-training-series/ 'CUDA Training') offered by Oak Ridge National Laboratory or other resources for a more in depth training on CUDA code development.
