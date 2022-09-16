@@ -15164,6 +15164,7 @@ horovodrun --check-build
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h3 id="Performance-Improvements-with-Tensor-Cores">Performance Improvements with Tensor Cores<a class="anchor-link" href="#Performance-Improvements-with-Tensor-Cores">&#182;</a></h3><p><img src="img/Tensorcore.png" alt="Tensor Core Arithmetic and Estimated Throughput"></p>
 <p>Per NVIDIA's recommendation on <a href="https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html#opt-tensor-cores">Optimizing for Tensor Cores</a>, setting parameters such as matrix dimension sizes, batch sizes, convolution layer channel counts, etc. as <strong>multiples of 8</strong> is optimal due to tensor core shape constraints.</p>
+<p>Utilizing mixed precision and tensor cores effectively can lead to <a href="https://3s81si1s5ygj3mzby34dq6qf-wpengine.netdna-ssl.com/wp-content/uploads/2020/05/nvidia-pascal-volta-ampere-comparison-table.jpg">theoretical throughput performance</a> of <strong>9.70 TeraFLOPS</strong> for FP64 arithmetic up to <strong>78.0 TeraFLOPS</strong> for FP16 arithmetic on A100 GPUs.</p>
 
 </div>
 </div>
