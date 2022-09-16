@@ -53,7 +53,7 @@ The full course description detailing learning objectives and material to be cov
 14. [Multiple GPUs in Python with Dask](14_DaskGPU)
     * [Slides](14_DaskGPU/14_DaskGPU-completed.pdf) - [Recording](https://www.youtube.com/watch?v=p5j16Nj5yQE) - [Notebook](14_DaskGPU/14_DaskGPU-completed.ipynb)
 15. [Optimizing AI/ML workflows in Python for GPUs](15_OptimizeAIML)
-    * Slides - Recording - [Notebook](15_OptimizeAIML/15_OptimizeAIML.ipynb)
+    * [Slides](15_OptimizeAIML/15_OptimizeAIML.slides.pdf) - Recording - [Notebook](15_OptimizeAIML/15_OptimizeAIML.ipynb)
 16. [Co-Design Process Training for Scientists and Project Leads](16_CoDesign)
     * [Slides](16_CoDesign/16_CoDesign.pdf) - Recording
 
@@ -64,10 +64,13 @@ We have decided to focus primarily on descriptive and directive based programmin
 We will design this course to be self-contained but given the limited time and the ever changing landscape in GPU computing, we recommend you consult additional resources for your own personal development. We have already consolidated a wide set of relevant resources in this [public Google Drive folder](https://drive.google.com/drive/folders/1e5cfjwIIiTogd3n894V6uwtKDs8wdAuo) which you are welcome to explore. Some of this material will be used as references for specific sessions.
 
 ## Instructions and Setting Up Your Environment
-We will primarily be using interactive Jupyter notebooks and Jupyter's built-in development platform to present material and streamline hands-on sessions for users as well as provide other exercices. Each session will have a provided link in the associated session folder to directly open relevant content on NCAR's Casper HPC cluster using the [nbgitpuller](https://jupyterhub.github.io/nbgitpuller/use.html) interface. This allows learners to pull in content automatically to their `$HOME` folder on GLADE, Casper's storage system, without needing to interact with Github. Learners should be able to edit sourced content freely with minimal fear of lost progress or merge issues given nbgitpuller's [automatic merge behavior](https://jupyterhub.github.io/nbgitpuller/topic/automatic-merging.html).
-
-**DISCLAIMER** `nbgitpuller` is presently having some issues on NCAR's Jupyter Hub cluster. In the meantime, we will explain how to source this content through git commands manually.
+We will primarily be using interactive Jupyter notebooks and Jupyter's built-in development platform to present material and streamline hands-on sessions for users as well as provide other exercices.
 
 If you are not using Casper or encounter issues updating your repository to the latest version, please consult the recommended steps in [GIT_INSTRUCTIONS](GIT_INSTRUCTIONS.md) for using git or reach out to workshop organizers. 
 
 For each interactive session, the respective session folder will feature a Jupyter Notebook of the presented material as well as folders named with the language and/or programming style used in any relevant examples presented. Consult the `README.md` file in each session folder for any specifics about running provided code.
+
+## Contributions and Corrections
+We greatly appreciate and encourage contributions to this workshop and GPU learning material. If you have a fix or contribute in any way, feel free to fork this repository and then submit a [pull request](https://github.com/NCAR/GPU_workshop/pulls) to directly contribute to the material.
+
+If you have a suggestion or encounter a problem you'd like to share with workshop organizers, please open a [GitHub issue](https://github.com/NCAR/GPU_workshop/issues). We are more than happy to improve this material in any way. Specifically, if there is a GPU topic which you would like us to cover that is not provided above, opening an issue will help us prioritize making that material available in the future.
