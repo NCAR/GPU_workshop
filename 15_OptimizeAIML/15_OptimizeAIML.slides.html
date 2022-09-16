@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 
-<title>14_OptimizeAIML slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>15_OptimizeAIML slides</title><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 
 <!-- General and theme style sheets -->
 <link rel="stylesheet" href="https://unpkg.com/reveal.js@4.0.2/dist/reveal.css">
@@ -50,7 +50,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 .highlight .m { color: var(--jp-mirror-editor-number-color) } /* Literal.Number */
 .highlight .s { color: var(--jp-mirror-editor-string-color) } /* Literal.String */
 .highlight .ow { color: var(--jp-mirror-editor-operator-color); font-weight: bold } /* Operator.Word */
-.highlight .pm { color: var(--jp-mirror-editor-punctuation-color) } /* Punctuation.Marker */
 .highlight .w { color: var(--jp-mirror-editor-variable-color) } /* Text.Whitespace */
 .highlight .mb { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Bin */
 .highlight .mf { color: var(--jp-mirror-editor-number-color) } /* Literal.Number.Float */
@@ -14496,9 +14495,6 @@ a.anchor-link {
 .reveal {
   font-size: 160%;
 }
-.reveal table {
-  font-size: var(--jp-ui-font-size1);
-}
 .reveal pre {
   width: inherit;
   padding: 0.4em;
@@ -14542,23 +14538,6 @@ div.jp-OutputPrompt {
   margin: 5px 5px 0 0;
 }
 
-.reveal div.highlight {
-  margin: 0;
-}
-
-.reveal div.highlight > pre {
-  margin: 0;
-  width: 100%;
-  font-size: var(--jp-code-font-size);
-}
-
-.reveal div.jp-OutputArea-output > pre {
-  margin: 0;
-  width: 90%;
-  font-size: var(--jp-code-font-size);
-  box-shadow: none;
-}
-
 /* Reveal navigation controls */
 
 .reveal .controls .navigate-left,
@@ -14599,14 +14578,17 @@ div.jp-OutputPrompt {
 
 /* Scrollbars */
 
-::-webkit-scrollbar {
+::-webkit-scrollbar
+{
   width: 6px;
   height: 6px;
 }
-::-webkit-scrollbar * {
-  background: transparent;
+::-webkit-scrollbar *
+{
+  background:transparent;
 }
-::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb
+{
   background: #727272 !important;
 }
 </style>
@@ -14633,12 +14615,12 @@ div.jp-OutputPrompt {
                 },
                 displayAlign: 'center',
                 CommonHTML: {
-                    linebreaks: {
-                    automatic: true
+                    linebreaks: { 
+                    automatic: true 
                     }
                 }
             });
-
+        
             MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         }
     }
@@ -14659,9 +14641,20 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="../NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo" /></p>
+<p><img src="../NCAR_CISL_NSF_banner.jpeg" alt="NCAR UCAR Logo"></p>
 <h1 id="Optimizing-AI/ML-Workflows-in-Python-for-GPUs">Optimizing AI/ML Workflows in Python for GPUs<a class="anchor-link" href="#Optimizing-AI/ML-Workflows-in-Python-for-GPUs">&#182;</a></h1><p>By: Daniel Howard <a href="mailto:dhoward@ucar.edu">dhoward@ucar.edu</a>, Consulting Services Group, CISL &amp; NCAR</p>
 <p>Date: August 25th, 2022</p>
+
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <p>In this notebook we analyse the overall workflow of typical machine learning/deep learning projects, emphasizing how to work towards optimal performance on GPUs. We will NOT cover theory of or how to implement AI based projects. We will cover:</p>
 <ol>
 <li>Background on machine learning research in Earth sciences</li>
@@ -14671,7 +14664,7 @@ div.jp-OutputPrompt {
 </ul>
 </li>
 <li>Enabling tuning and profiling with TensorFlow and PyTorch</li>
-<li>Profiling with DLProf and performance optimizations for NVIDIA Tensor Cores</li>
+<li>Profiling with DLProf/TensorBoard and performance optimizations for NVIDIA Tensor Cores</li>
 </ol>
 
 </div>
@@ -14705,7 +14698,7 @@ div.jp-OutputPrompt {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Start-a-JupyterHub-Session">Start a JupyterHub Session<a class="anchor-link" href="#Start-a-JupyterHub-Session">&#182;</a></h2><p>Head to the <a href="https://jupyterhub.hpc.ucar.edu/stable">NCAR JupyterHub portal</a> and <strong>start a JupyterHub session on Casper PBS Login Node</strong> and open the notebook at <code>14_OptimizeAIML/14_OptimizeAIML.ipynb</code>. Be sure to clone (if needed) and update/pull the NCAR GPU_workshop directory.</p>
+<h2 id="Start-a-JupyterHub-Session">Start a JupyterHub Session<a class="anchor-link" href="#Start-a-JupyterHub-Session">&#182;</a></h2><p>Head to the <a href="https://jupyterhub.hpc.ucar.edu/stable">NCAR JupyterHub portal</a> and <strong>start a JupyterHub session on Casper PBS Login Node</strong> and open the notebook at <code>15_OptimizeAIML/15_OptimizeAIML.ipynb</code>. Be sure to clone (if needed) and update/pull the NCAR GPU_workshop directory. You are welcome to use an interactive GPU node for the final few cells of this notebook</p>
 <div class="highlight"><pre><span></span><span class="c1"># Use the JupyterHub GitHub GUI on the left panel or the below shell commands</span>
 git clone git@github.com:NCAR/GPU_workshop.git
 git pull
@@ -14721,8 +14714,7 @@ git pull
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Notebook-Setup">Notebook Setup<a class="anchor-link" href="#Notebook-Setup">&#182;</a></h2><p>Set the <code>PROJECT</code> code to a currently active project, ie <code>UCIS0004</code> for the GPU workshop, and <code>QUEUE</code> to the appropriate routing queue depending on if during a live workshop session (<code>gpuworkshop</code>), during weekday 8am to 5:30pm MT (<code>gpudev</code>), or all other times (<code>casper</code>).</p>
-<p><strong>The<code>GPU_TYPE=gp100</code> nodes do not have tensor cores!</strong> Thus, the <code>gpuworkshop</code> queue is not useful for this session. Saying as much, please set <code>GPU_TYPE=v100</code> and use the <code>gpudev</code> or <code>casper</code> queue both during the workshop and for independent work. See <a href="https://arc.ucar.edu/knowledge_base/72581396#StartingCasperjobswithPBS-Concurrentresourcelimits">Casper queue documentation</a> for more info.</p>
+<h2 id="Notebook-Setup">Notebook Setup<a class="anchor-link" href="#Notebook-Setup">&#182;</a></h2><p><strong>The<code>GPU_TYPE=gp100</code> nodes do not have tensor cores!</strong> Thus, the <code>gpuworkshop</code> queue is not as useful for this session. Saying as much, please set <code>GPU_TYPE=v100</code> and use the <code>gpudev</code> or <code>casper</code> queue both during the workshop and for independent work. See <a href="https://arc.ucar.edu/knowledge_base/72581396#StartingCasperjobswithPBS-Concurrentresourcelimits">Casper queue documentation</a> for more info.</p>
 
 </div>
 </div>
@@ -14734,9 +14726,9 @@ git pull
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="What-is-Machine-Learning-and-Deep-Learning?">What is Machine Learning and Deep Learning?<a class="anchor-link" href="#What-is-Machine-Learning-and-Deep-Learning?">&#182;</a></h1><p>ML and DL are essentially statistical models that are designed to learn and predict behavior from a large amount of input training data.</p>
-<p><img src="img/Venn_AI.jpg" alt="Venn diagram of AI" /></p>
-<p>The BAMS article &quot;<a href="https://journals.ametsoc.org/view/journals/bams/102/5/BAMS-D-20-0031.1.xml">Outlook for Exploiting Artificial Intelligence in the Earth and Environmental Sciences</a>&quot; by Boukabara, et al highlights additional applications of AI in the Earth Sciences.</p>
+<h1 id="Machine-Learning-and-Deep-Learning?">Machine Learning and Deep Learning?<a class="anchor-link" href="#Machine-Learning-and-Deep-Learning?">&#182;</a></h1><p>ML and DL are statistical models that are designed to learn and predict behavior from a large amount of input training data.</p>
+<p><img src="img/Venn_AI.jpg" alt="Venn diagram of AI" style="width:600px;"/></p>
+<p>The BAMS article "<a href="https://journals.ametsoc.org/view/journals/bams/102/5/BAMS-D-20-0031.1.xml">Outlook for Exploiting Artificial Intelligence in the Earth and Environmental Sciences</a>" by Boukabara, et al highlights additional applications of AI in the Earth Sciences.</p>
 
 </div>
 </div>
@@ -14749,7 +14741,7 @@ git pull
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Overiew-of-an-Earth-Science-AI-Workflow---Remote-Sensing">Overiew of an Earth Science AI Workflow - Remote Sensing<a class="anchor-link" href="#Overiew-of-an-Earth-Science-AI-Workflow---Remote-Sensing">&#182;</a></h2><p>Multiple steps are needed to enable AI for Earth Science. <strong>GPUs are critical in the most expensive step, model building and training</strong>, since they perform well with matrix algebra, foundational to ML methods.</p>
-<p><img src="img/ML_RemoteSensing.png" alt="Conceptual overview of the derivation of digital entities from remotely sensed data using deep-learning techniques" /></p>
+<p><img src="img/ML_RemoteSensing.png" alt="Conceptual overview of the derivation of digital entities from remotely sensed data using deep-learning techniques" style="width:400px;"/></p>
 <p>Image: <a href="https://www.mdpi.com/2072-4292/12/18/3053/htm">Object Detection and Image Segmentation with Deep Learning on Earth Observation Data: A Review—Part II: Applications</a> by Hoeser, et al</p>
 
 </div>
@@ -14762,10 +14754,10 @@ git pull
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Why-Use-AI-for-Earth-Science?">Why Use AI for Earth Science?<a class="anchor-link" href="#Why-Use-AI-for-Earth-Science?">&#182;</a></h2><p>Earth Science is largely built on physics based theories and simulations. Today, these models have scaled to enormous sizes, consuming significant computational resources and data storage.</p>
-<p><img src="img/ECMWF_and_Sat.png" alt="Left, E3SM on ANL-Theta, 2022; Right, ECMWF on ORNL-Summit, 2021" /></p>
+<h2 id="Why-Use-AI-for-Earth-Science?">Why Use AI for Earth Science?<a class="anchor-link" href="#Why-Use-AI-for-Earth-Science?">&#182;</a></h2><p>Earth Science is largely built on physics based theories and dynamical interactions with the biosphere. Today, these models have scaled to enormous sizes, consuming significant computational resources and data storage.</p>
+<p><img src="img/ECMWF_and_Sat.png" alt="Left, E3SM on ANL-Theta, 2022; Right, ECMWF on ORNL-Summit, 2021"></p>
 <p>4km global runs of <a href="https://e3sm.org/">E3SM</a> (left) over 100 forecast years uses 120M core-hours and 250 GB/forecast day, or 12 PB. 1km ECMWF runs (right), as <a href="https://climatemodeling.science.energy.gov/news/nils-wedi-1-km-resolution-ecmwf-esm-simulation">in this article</a> and by Nils Wedi <a href="https://acme-climate.atlassian.net/wiki/download/attachments/1929707601/WEDI_Nils_D1S1_2020-1026.pdf?api=v2">keynote at ESMD 2020</a>.</p>
-<p><strong>AI offers an opportunity to reduce computational resources required</strong>. Feel free to consult <a href="https://www.sciencedirect.com/science/article/pii/S0098300422000036">A Review of Earth Artificial Intelligence</a> for current &quot;Grand Challenges&quot;</p>
+<p><strong>AI offers an opportunity to reduce computational resources required</strong>. Feel free to consult <a href="https://www.sciencedirect.com/science/article/pii/S0098300422000036">A Review of Earth Artificial Intelligence</a> for current "Grand Challenges"</p>
 
 </div>
 </div>
@@ -14777,9 +14769,9 @@ git pull
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Surrogate-Models">Surrogate Models<a class="anchor-link" href="#Surrogate-Models">&#182;</a></h2><p>Novel ways are being explored to more efficiently utilize Earth Science data and reduce required computational resources. A <strong>surrogate model</strong> in machine learning is a <strong>statistical model</strong> designed to more efficiently approximate the output of a physics based model.</p>
-<p><img src="img/Surrogate_Modeling.png" alt="Surrogate Modeling, Guo" />
-Image: <a href="https://towardsdatascience.com/an-introduction-to-surrogate-modeling-part-i-fundamentals-84697ce4d241">Introduction to Surrogate Modeling</a>, Shuai Guo. See &quot;<a href="https://anl.app.box.com/s/hvrk3t8qpg2u218ynggjn87jw1864h12">Learning Nonlinear Dynamical Systems from Data Using Scientific Machine Learning</a>&quot; by Maulik, ANL.</p>
+<h2 id="Surrogate-Models">Surrogate Models<a class="anchor-link" href="#Surrogate-Models">&#182;</a></h2><p>Novel ways can be explored to use Earth Science data to reduce required computational resources. A <strong>surrogate model</strong> in machine learning is a <strong>statistical model</strong> designed to more efficiently approximate the output of a physics based model.</p>
+<p><img src="img/Surrogate_Modeling.png" alt="Surrogate Modeling, Guo" style="width:650px;"/></p>
+<p>Image: <a href="https://towardsdatascience.com/an-introduction-to-surrogate-modeling-part-i-fundamentals-84697ce4d241">Introduction to Surrogate Modeling</a>, Shuai Guo. See "<a href="https://anl.app.box.com/s/hvrk3t8qpg2u218ynggjn87jw1864h12">Learning Nonlinear Dynamical Systems from Data Using Scientific Machine Learning</a>" by Maulik, ANL.</p>
 
 </div>
 </div>
@@ -14792,8 +14784,8 @@ Image: <a href="https://towardsdatascience.com/an-introduction-to-surrogate-mode
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="Neural-Ordinary-Differential-Equations">Neural Ordinary Differential Equations<a class="anchor-link" href="#Neural-Ordinary-Differential-Equations">&#182;</a></h2><p>For example, a stabilized neural ODE can be designed to accurately simulate shocks and chaotic dynamics.</p>
-<p><img src="img/Neural_ODE.png" alt="Neural ODE with Neural Networks" /></p>
-<p>See paper by Linot, et al &quot;<a href="https://arxiv.org/abs/2203.15706">Stabilized Neural Ordinary Differential Equations for Long-Time Forecasting of Dynamical Systems</a>&quot;.</p>
+<p><img src="img/Neural_ODE.png" alt="Neural ODE with Neural Networks"></p>
+<p>See paper by Linot, et al "<a href="https://arxiv.org/abs/2203.15706">Stabilized Neural Ordinary Differential Equations for Long-Time Forecasting of Dynamical Systems</a>".</p>
 
 </div>
 </div>
@@ -14805,10 +14797,9 @@ Image: <a href="https://towardsdatascience.com/an-introduction-to-surrogate-mode
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Physics-Informed-Neural-Networks-(PINNs)">Physics Informed Neural Networks (PINNs)<a class="anchor-link" href="#Physics-Informed-Neural-Networks-(PINNs)">&#182;</a></h2><p>Other applications to consider are Physics Informed Neural Networks. PINNs attempt to embed known physics relationships into the design of a machine learning model.</p>
-<p><img src="img/PINN_NS.png" alt="Physics Informed Neural Networks with Navier Stokes" />
-Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">Wikipedia</a></p>
-<p>This may include defining the Navier-Stokes conservation laws as conditiona to minimize in a ML model's loss function.</p>
+<h2 id="Physics-Informed-Neural-Networks-(PINNs)">Physics Informed Neural Networks (PINNs)<a class="anchor-link" href="#Physics-Informed-Neural-Networks-(PINNs)">&#182;</a></h2><p>Other applications to consider are <strong>Physics Informed Neural Networks</strong>. PINNs attempt to embed known physics relationships into the design of a machine learning model. This may include defining the Navier-Stokes conservation laws as conditions to minimize in a ML model's loss function.</p>
+<p><img src="img/PINN_NS.png" alt="Physics Informed Neural Networks with Navier Stokes" style="width:700px;"/></p>
+<p>Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">Wikipedia - Physics Informed Nearal Networks</a></p>
 
 </div>
 </div>
@@ -14820,14 +14811,14 @@ Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Resources-for-Engaging-and-Learning-AI-in-Earth-Sciences">Resources for Engaging and Learning AI in Earth Sciences<a class="anchor-link" href="#Resources-for-Engaging-and-Learning-AI-in-Earth-Sciences">&#182;</a></h2><p>Feel free to reach out to <a href="mailto:rchelp@ucar.edu">rchelp@ucar.edu</a> if you want assistance recreating environments for any code examples.</p>
+<h2 id="Resources-for-Engaging-and-Learning-AI-in-Earth-Sciences">Resources for Engaging and Learning AI in Earth Sciences<a class="anchor-link" href="#Resources-for-Engaging-and-Learning-AI-in-Earth-Sciences">&#182;</a></h2><p>Feel free to reach out to <a href="mailto:rchelp@ucar.edu">rchelp@ucar.edu</a> if you want assistance recreating environments for any below code examples.</p>
 <ol>
 <li>OLCF AI 4 Science Fluid Flow Tutorial (<a href="https://github.com/muralikrishnangm/tutorial-ai4science-fluidflow">GitHub</a>) - Uses <a href="https://github.com/mrnorman/miniWeatherML">MiniWeatherML</a></li>
 <li>OpenHackathons GPU Bootcamp (<a href="https://github.com/openhackathons-org/gpubootcamp/">GitHub</a>) - <a href="https://github.com/openhackathons-org/gpubootcamp/tree/master/hpc_ai">HPC AI Examples</a> for PINNs, CFD, and Climate</li>
 <li>NSF AI Institute for Research on Trustworthy AI in Weather, Climate, and Coastal Oceanography (<a href="https://www.ai2es.org/">AI2ES.org</a>) - <a href="https://www.ai2es.org/products/education/">Education Materials</a> and <a href="https://github.com/ai2es/tai4es-trustathon-2022">2022 Trust-a-thon GitHub</a></li>
 <li>Argonne ALCF<ul>
-<li><a href="https://www.alcf.anl.gov/events/2021-alcf-simulation-data-and-learning-workshop">2021 Simulation, Data, and Learning Workshop for AI</a> (<a href="https://github.com/argonne-lcf/sdl_ai_workshop">GitHub</a>)- Has detailed <a href="https://github.com/argonne-lcf/sdl_ai_workshop/tree/master/04_profilingDeepLearning">DL profiling tutorial notebooks</a> plus <a href="https://www.youtube.com/watch?v=cdLIlOUnRCU">video</a></li>
-<li>2022 Introduction to AI-driven Science on Supercomputers (<a href="https://github.com/argonne-lcf/ai-science-training-series">GitHub</a>)</li>
+<li><a href="https://www.alcf.anl.gov/events/2021-alcf-simulation-data-and-learning-workshop">2021 Simulation, Data, and Learning Workshop for AI</a> (<a href="https://github.com/argonne-lcf/sdl_ai_workshop">GitHub</a>)- Detailed <a href="https://github.com/argonne-lcf/sdl_ai_workshop/tree/master/04_profilingDeepLearning">DL profiling tutorial notebooks</a> &amp; <a href="https://www.youtube.com/watch?v=cdLIlOUnRCU">video</a></li>
+<li><a href="https://www.alcf.anl.gov/alcf-ai-science-training-series">2022 Introduction to AI-driven Science on Supercomputers</a> (<a href="https://github.com/argonne-lcf/ai-science-training-series">GitHub</a>)</li>
 </ul>
 </li>
 <li>Data Driven Atmospheric and Water Dynamics Beucler Lab (U. of Lausanne - Switzerland)<ul>
@@ -14835,8 +14826,8 @@ Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">
 </ul>
 </li>
 <li><a href="https://www.noaa.gov/ai/events/4th-noaa-ai-workshop">NOAA Workshop on Leveraging Artificial Intelligence in Environmental Sciences</a> - 4th Workshop free to register, virtual Sept 6-9 2022</li>
-<li><a href="http://www.climateinformatics.org/">Climate Informatics</a> community - <a href="http://www.climateinformatics.org/conferences/">Conferences</a> and <a href="http://www.climateinformatics.org/hackathons/">Hackathons</a></li>
 <li>National Academies - 2022 workshop <a href="https://www.nationalacademies.org/event/02-07-2022/machine-learning-and-artificial-intelligence-to-advance-earth-system-science-opportunities-and-challenges-a-workshop">Machine Learning and Artificial Intelligence to Advance Earth System Science: Opportunities and Challenges</a></li>
+<li><a href="http://www.climateinformatics.org/">Climate Informatics</a> community - <a href="http://www.climateinformatics.org/conferences/">Conferences</a> and <a href="http://www.climateinformatics.org/hackathons/">Hackathons</a></li>
 <li>Book - <a href="https://github.com/DL4ES/DL4ES">Deep learning for the Earth Sciences -- A comprehensive approach to remote sensing, climate science and geosciences</a></li>
 <li><a href="https://www.climatechange.ai/">climatechange.ai</a> - Global initiative to catalyze impactful work at the intersection of climate change and machine learning.</li>
 </ol>
@@ -14903,15 +14894,15 @@ Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">
 </div>
 </div>
 </div>
-</div></section><section>
+</div></section></section><section><section>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="RAPIDS-AI-Environment">RAPIDS AI Environment<a class="anchor-link" href="#RAPIDS-AI-Environment">&#182;</a></h2><p><code>rapidsai</code> channel provides <a href="https://rapids.ai/about.html">RAPIDS</a>, an open source and NVIDIA maintained suite to execute end-to-end data science and analytics pipelines entirely on GPUs. Feel free to explore RAPIDS <a href="https://docs.rapids.ai/start">Getting Started Notebooks</a>.</p>
-<p><img src="img/ScaleUpOut_RAPIDS.png" alt="Scale Up and Out in Python" /></p>
+<h2 id="RAPIDS-AI-Environment">RAPIDS AI Environment<a class="anchor-link" href="#RAPIDS-AI-Environment">&#182;</a></h2><p><code>rapidsai</code> channel provides <a href="https://rapids.ai/about.html">RAPIDS</a>, an open source, NVIDIA maintained suite for end-to-end data science and analytics pipelines on GPUs. Feel free to explore RAPIDS <a href="https://docs.rapids.ai/start">Getting Started Notebooks</a>.</p>
+<p><img src="img/ScaleUpOut_RAPIDS.png" alt="Scale Up and Out in Python" style="width:700px;"/></p>
 <p><strong>Scale Up with RAPIDS</strong> tools and <strong>Scale Out with Dask/UCX or Horovod</strong> tools.</p>
 
 </div>
@@ -14924,8 +14915,19 @@ Image: <a href="https://en.wikipedia.org/wiki/Physics-informed_neural_networks">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Python-Packages-and-RAPIDS-Equivalents">Python Packages and RAPIDS Equivalents<a class="anchor-link" href="#Python-Packages-and-RAPIDS-Equivalents">&#182;</a></h3><p><img src="img/PythonPackages_CPUtoGPU.png" alt="Python Packages and RAPIDS Equivalents" /></p>
-<p>Setting <code>conda config --set channel_priority flexible</code> in <code>~/.condarc</code>, follow install directions <a href="https://rapids.ai/start.html">here</a> or by:</p>
+<h3 id="Python-Packages-and-RAPIDS-Equivalents">Python Packages and RAPIDS Equivalents<a class="anchor-link" href="#Python-Packages-and-RAPIDS-Equivalents">&#182;</a></h3><p><img src="img/PythonPackages_CPUtoGPU.png" alt="Python Packages and RAPIDS Equivalents"></p>
+
+</div>
+</div>
+</div>
+</div></section><section>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h3 id="Install-RAPIDS-environment">Install RAPIDS environment<a class="anchor-link" href="#Install-RAPIDS-environment">&#182;</a></h3><p>Setting flexible channel priority via <code>conda config --set channel_priority flexible</code> or in <code>~/.condarc</code>, follow install directions <a href="https://rapids.ai/start.html">here</a> or by running:</p>
 <div class="highlight"><pre><span></span>conda create -n rapids-22.08 -c rapidsai -c nvidia -c conda-forge  <span class="se">\</span>
 <span class="nv">rapids</span><span class="o">=</span><span class="m">22</span>.08 <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9 <span class="nv">cudatoolkit</span><span class="o">=</span><span class="m">11</span>.5
 </pre></div>
@@ -14956,6 +14958,8 @@ mamba install numpy scipy pandas scikit-learn xarray <span class="s2">&quot;libb
 <span class="c1"># Useful to pin packages in `/path/to/env/conda-meta/pinned` file.</span>
 mamba install mpi4py <span class="nv">fftw</span><span class="o">=</span>*<span class="o">=</span>mpi* <span class="nv">h5py</span><span class="o">=</span>*<span class="o">=</span>mpi* <span class="nv">netcdf4</span><span class="o">=</span>*<span class="o">=</span>mpi*
 </pre></div>
+<p>To highlight, adding <code>&lt;package-name&gt;=&lt;version&gt;=&lt;build-type&gt;</code> is important to ensure you install the most relevant and performant version for your needs.</p>
+<p>For example, <code>libblas=*=*mkl</code> guarantees you get the Intel MKL optimized versions of packages that utilize the BLAS library. The <code>*</code> is a wildcard for the latest version or other build specifications/hashes.</p>
 
 </div>
 </div>
@@ -14980,7 +14984,8 @@ pip install nvidia-pyindex
 pip install nvidia-dlprof nvidia-dlprof-pytorch-nvtx
 pip install tensorboard_plugin_profile
 </pre></div>
-<p>Each library's documentation linked above has more info about installation options. As of this workshop, TensorFlow guarantees support up to CUDA v11.2 and PyTorch up to CUDA v11.6 so we specified builds with <code>=cuda112*</code>.</p>
+<p>Each library's documentation linked above has more info about installation options. As of this workshop, TensorFlow guarantees support up to CUDA v11.2 and PyTorch up to CUDA v11.6 so we specified builds with <code>=cuda112*</code>. Run <code>mamba search &lt;package&gt;</code> to view all available packages given available channels.</p>
+<p>TensorFlow recommends installation via <code>pip</code> for their offical versions but the community does tend to maintain similar quality releases via <code>conda-forge</code>. Combining <code>pip</code> with <code>conda/mamba</code> installs should be avoided if possible due to greater difficulty in maintaining environments.</p>
 
 </div>
 </div>
@@ -14992,7 +14997,7 @@ pip install tensorboard_plugin_profile
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Horovod-for-Distributed-Deep-Learning">Horovod for Distributed Deep Learning<a class="anchor-link" href="#Horovod-for-Distributed-Deep-Learning">&#182;</a></h3><p>For distributed deep learning with <a href="https://horovod.ai/">Horovod</a> instead of Dask, see below or <a href="https://horovod.readthedocs.io/en/stable/install_include.html">link</a> for how to use pip to install Horovod from PyPI on Casper.</p>
+<h3 id="Horovod-for-Distributed-Deep-Learning">Horovod for Distributed Deep Learning<a class="anchor-link" href="#Horovod-for-Distributed-Deep-Learning">&#182;</a></h3><p>For distributed deep learning with <a href="https://horovod.ai/">Horovod</a> instead of Dask, see below or <a href="https://horovod.readthedocs.io/en/stable/install_include.html">Horovod installation documentation</a> for how to use pip to install Horovod from PyPI on Casper.</p>
 <div class="highlight"><pre><span></span>module load cuda/11.7 gnu/10.1.0
 mamba install pip gxx_linux-64 cmake nccl
 <span class="nb">export</span> <span class="nv">HOROVOD_NCCL_HOME</span><span class="o">=</span><span class="nv">$CONDA_PREFIX</span>
@@ -15000,6 +15005,7 @@ mamba install pip gxx_linux-64 cmake nccl
 <span class="nv">HOROVOD_GPU_OPERATIONS</span><span class="o">=</span>NCCL pip install horovod<span class="o">[</span>tensorflow,keras,pytorch<span class="o">]</span>
 horovodrun --check-build
 </pre></div>
+<p>Note the specification of <code>HOROVOD_GPU_OPERATIONS=NCCL</code> to use NVIDIA's Collective Communication Library. An <code>MPI</code> option is also selectable for CUDA-aware MPI libraries. Find more details about Horovod's GPU tensor operations and <a href="https://github.com/horovod/horovod/blob/master/docs/gpus.rst">GPU install options here</a>.</p>
 <p>A useful tutorial for Horovod was given as part of the <a href="https://extremecomputingtraining.anl.gov/agenda-2022/">Argonne Training Program on Extreme-Scale Computing</a> (ATPESC) - <a href="https://anl.app.box.com/s/ujkvbb8glmq7n6gzjhxza7vx7n3wa86u">Data Parallel Deep Learning</a></p>
 
 </div>
@@ -15012,7 +15018,7 @@ horovodrun --check-build
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Sharing-Package-Environments">Sharing Package Environments<a class="anchor-link" href="#Sharing-Package-Environments">&#182;</a></h2><p>Once setup, you can share or give access to your Python virtual environments, which is vitally important to consider towards enabling reproducible science.</p>
+<h2 id="Sharing-Package-Environments">Sharing Package Environments<a class="anchor-link" href="#Sharing-Package-Environments">&#182;</a></h2><p>Once your environment is setup, you can share or give access to your Python virtual environments, which is vitally important to consider towards <strong>enabling reproducible science</strong>.</p>
 <ol>
 <li>On a shared cluster, share a path to your environment, see <code>mamba env list</code>. Make sure you provide read access plus write access if you want others to be able to modify the environment. Then run <code>mamba activate /path/to/env</code></li>
 <li>Others may instead clone a readable environment with <code>mamba create --name cloned_env --clone /path/to/original_env</code></li>
@@ -15029,7 +15035,7 @@ horovodrun --check-build
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h1 id="Running-a-Profiler-on-TensorFlow-and-PyTorch-Models">Running a Profiler on TensorFlow and PyTorch Models<a class="anchor-link" href="#Running-a-Profiler-on-TensorFlow-and-PyTorch-Models">&#182;</a></h1><p>Both <code>tensorflow</code> and <code>pytorch</code> have built in tools and <code>tensorboard</code> GUI interface for DL profiling, most typically during the training portion of a deep learning model. Base guides for using these built-in tools follow:</p>
+<h1 id="Running-a-Profiler-on-TensorFlow-and-PyTorch-Models">Running a Profiler on TensorFlow and PyTorch Models<a class="anchor-link" href="#Running-a-Profiler-on-TensorFlow-and-PyTorch-Models">&#182;</a></h1><p>Both <code>tensorflow</code> and <code>pytorch</code> have built in tools and <code>tensorboard</code> GUI interface for DL profiling, which typically run profiles during the training portion of a deep learning model. Base guides for using these built-in tools follow:</p>
 <ul>
 <li>PyTorch<ul>
 <li><a href="https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html">Profiler Tutorial</a></li>
@@ -15038,7 +15044,7 @@ horovodrun --check-build
 </ul>
 </li>
 <li>TensorFlow<ul>
-<li><a href="https://www.tensorflow.org/guide/profiler">TensorFlow Profiler Guide</a></li>
+<li><a href="https://www.tensorflow.org/guide/profiler">TensorFlow Profiler Guide</a> </li>
 <li><a href="https://www.tensorflow.org/tensorboard/tensorboard_profiling_keras">TensorBoard Profiler Analysis Guide</a></li>
 </ul>
 </li>
@@ -15066,6 +15072,7 @@ horovodrun --check-build
 
 <span class="nb">print</span><span class="p">(</span><span class="n">prof</span><span class="o">.</span><span class="n">key_averages</span><span class="p">()</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;cuda_time_total&quot;</span><span class="p">,</span> <span class="n">row_limit</span><span class="o">=</span><span class="mi">10</span><span class="p">))</span>
 </pre></div>
+<p>The <code>record_shapes</code> parameter ensures the profiler collects data on the data pipeline types, notably tensor shapes.</p>
 <p><strong>TensorFlow</strong> - See <a href="https://www.tensorflow.org/api_docs/python/tf/profiler/experimental/start">API</a> for additional options</p>
 <div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="nn">tf</span>
 
@@ -15086,7 +15093,7 @@ horovodrun --check-build
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Using-NVIDIA-Tools-for-Profiling-DL-Models">Using NVIDIA Tools for Profiling DL Models<a class="anchor-link" href="#Using-NVIDIA-Tools-for-Profiling-DL-Models">&#182;</a></h2><p>The tools <code>nsys</code> and <code>ncu</code> are similarly adaptable to run against DL Python codes. The <a href="https://docs.nvidia.com/deeplearning/frameworks/dlprof-user-guide/"><code>dlprof</code> tool</a> was previously developed to run <code>nsys</code> on DL models then output a TensorBoard interface. However, <code>dlprof</code> is no longer being developed in favor of previous built in profiling methods.</p>
+<h2 id="Using-NVIDIA-Tools-for-Profiling-DL-Models">Using NVIDIA Tools for Profiling DL Models<a class="anchor-link" href="#Using-NVIDIA-Tools-for-Profiling-DL-Models">&#182;</a></h2><p>The tools <code>nsys</code> and <code>ncu</code> are similarly adaptable to run against DL Python codes. The <a href="https://docs.nvidia.com/deeplearning/frameworks/dlprof-user-guide/"><code>dlprof</code> tool</a> was previously developed to run <code>nsys</code> on DL models then output a TensorBoard interface. However, <code>dlprof</code> is no longer being developed in favor of the previous built in profiling methods.</p>
 <ul>
 <li>PyTorch<ul>
 <li>DNN Layer annotations are disabled by default</li>
@@ -15096,7 +15103,7 @@ horovodrun --check-build
 </ul>
 </li>
 <li>TensorFlow<ul>
-<li>Annotated by default with NVTX, <em>only in <code>nvidia-pyindex</code> TF 1.X containers</em><ul>
+<li>Annotated by default with NVTX, <em>only in <a href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/tensorflow">NVIDIA NGC containers</a> or <code>nvidia-pyindex</code> TF 1.X containers</em><ul>
 <li><code>export TF_DISABLE_NVTX_RANGES=1</code> to disable for production</li>
 </ul>
 </li>
@@ -15123,7 +15130,7 @@ horovodrun --check-build
 <li>PyTorch - <a href="https://pytorch.org/tutorials/beginner/basics/data_tutorial.html">Datasets &amp; Dataloaders</a></li>
 </ul>
 </li>
-<li>Multithreading</li>
+<li>Multithreading, eg <a href="https://www.tensorflow.org/tutorials/distribute/multi_worker_with_keras">Multi-Worker Training with Keras</a></li>
 </ul>
 </li>
 <li>CPU to/from GPU data copies<ul>
@@ -15132,7 +15139,7 @@ horovodrun --check-build
 </ul>
 </li>
 <li>Batch size - Increase batch size up to GPU is saturated</li>
-<li>Precision<ul>
+<li>Precision (Background: See Theo Mary's <a href="https://www.youtube.com/watch?v=9ZnwfPvAlHM">Mixed Precision Artithmetic</a> talk at London Math Society)<ul>
 <li>Consider mixed precision, <a href="https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html">NVIDIA Mixed Precision Training Guide</a></li>
 <li>Automatic Mixed Precision (AMP) settings<ul>
 <li><a href="https://pytorch.org/docs/stable/notes/amp_examples.html">PT Guide</a>: <code>scaler = torch.cuda.amp.GradScaler()</code></li>
@@ -15143,6 +15150,7 @@ horovodrun --check-build
 </ul>
 </li>
 </ol>
+<p>TensorFlow provides a comprehensive guide, <a href="https://www.tensorflow.org/guide/gpu_performance_analysis">Optimize TensorFlow GPU performance with the TensorFlow Profiler</a></p>
 
 </div>
 </div>
@@ -15154,7 +15162,8 @@ horovodrun --check-build
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Performance-Improvements-with-Tensor-Cores">Performance Improvements with Tensor Cores<a class="anchor-link" href="#Performance-Improvements-with-Tensor-Cores">&#182;</a></h3><p><img src="img/Tensorcore.png" alt="Tensor Core Arithmetic and Estimated Throughput" /></p>
+<h3 id="Performance-Improvements-with-Tensor-Cores">Performance Improvements with Tensor Cores<a class="anchor-link" href="#Performance-Improvements-with-Tensor-Cores">&#182;</a></h3><p><img src="img/Tensorcore.png" alt="Tensor Core Arithmetic and Estimated Throughput"></p>
+<p>Per NVIDIA's recommendation on <a href="https://docs.nvidia.com/deeplearning/performance/mixed-precision-training/index.html#opt-tensor-cores">Optimizing for Tensor Cores</a>, setting parameters such as matrix dimension sizes, batch sizes, convolution layer channel counts, etc. as <strong>multiples of 8</strong> is optimal due to tensor core shape constraints.</p>
 
 </div>
 </div>
@@ -15183,9 +15192,9 @@ horovodrun --check-build
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%capture</span> captured_io
 <span class="o">%%</span><span class="n">bash</span>
 
-<span class="c1"># Download data we need. If a directory "data/" already exists, we'll assume the data are already downloaded.</span>
-<span class="c1">#      The above "magic" statements are used to capture shell in/out and to run the following Bash commands.</span>
-<span class="k">if</span> <span class="p">[</span> <span class="err">!</span> <span class="o">-</span><span class="n">d</span> <span class="s2">"data"</span> <span class="p">];</span> <span class="n">then</span>
+<span class="c1"># Download data we need. If a directory &quot;data/&quot; already exists, we&#39;ll assume the data are already downloaded.</span>
+<span class="c1">#      The above &quot;magic&quot; statements are used to capture shell in/out and to run the following Bash commands.</span>
+<span class="k">if</span> <span class="p">[</span> <span class="err">!</span> <span class="o">-</span><span class="n">d</span> <span class="s2">&quot;data&quot;</span> <span class="p">];</span> <span class="n">then</span>
   <span class="n">wget</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">ngdc</span><span class="o">.</span><span class="n">noaa</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">geomag</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">geomag</span><span class="o">/</span><span class="n">magnet</span><span class="o">/</span><span class="n">public</span><span class="o">.</span><span class="n">zip</span>
   <span class="n">wget</span> <span class="o">--</span><span class="n">verbose</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">ngdc</span><span class="o">.</span><span class="n">noaa</span><span class="o">.</span><span class="n">gov</span><span class="o">/</span><span class="n">geomag</span><span class="o">/</span><span class="n">data</span><span class="o">/</span><span class="n">geomag</span><span class="o">/</span><span class="n">magnet</span><span class="o">/</span><span class="n">private</span><span class="o">.</span><span class="n">zip</span>
   <span class="n">unzip</span> <span class="n">public</span><span class="o">.</span><span class="n">zip</span>
@@ -15225,7 +15234,7 @@ horovodrun --check-build
     <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="n">tboard_callback</span><span class="p">]</span>
 <span class="p">)</span>
 </pre></div>
-<p><strong>Question</strong>: How else could you minimize runtime of a &quot;profile run&quot; but still maintain model configuration parameters equivalent to production runs?</p>
+<p><strong>Question</strong>: How else could you minimize runtime of a "profile run" but still maintain model configuration parameters equivalent to production runs?</p>
 
 </div>
 </div>
@@ -15294,7 +15303,7 @@ qsub pbs_job.sh
 <div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># If on a local machine with GPU, use thsee commands to open the profile.</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># If on a local machine with GPU, use these commands to open the profile.</span>
 <span class="c1"># Otherwise, port forwarding is needed on Casper</span>
 <span class="c1"># %load_ext tensorboard</span>
 <span class="c1"># %tensorboard --logdir=profile_results</span>
@@ -15312,8 +15321,8 @@ qsub pbs_job.sh
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h2 id="Analyizing-Profiles-in-TensorBoard">Analyizing Profiles in TensorBoard<a class="anchor-link" href="#Analyizing-Profiles-in-TensorBoard">&#182;</a></h2><p><img src="img/TensorBoard_PerformanceSummary.png" alt="TensorBoard Performance Summary" />
-Performance improvement heuristics are often provided with links to more detailed information.</p>
+<h2 id="Analyizing-Profiles-in-TensorBoard">Analyizing Profiles in TensorBoard<a class="anchor-link" href="#Analyizing-Profiles-in-TensorBoard">&#182;</a></h2><p><img src="img/TensorBoard_PerformanceSummary.png" alt="TensorBoard Performance Summary" style="width:900px;"/></p>
+<p>Performance improvement heuristics are often provided with links to more detailed information.</p>
 
 </div>
 </div>
@@ -15325,7 +15334,7 @@ Performance improvement heuristics are often provided with links to more detaile
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="img/TensorBoard_KernelStats.png" alt="TensorBoard Kernel Stats" /></p>
+<p><img src="img/TensorBoard_KernelStats.png" alt="TensorBoard Kernel Stats"></p>
 <p>Important to emphasize <strong>where Tensor Core use is eligible</strong> in your model and determine if it's appropriate for employing reduced precision.</p>
 
 </div>
@@ -15338,7 +15347,8 @@ Performance improvement heuristics are often provided with links to more detaile
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="img/TensorBoard_Trace.png" alt="TensorBoard Trace Timeline" /></p>
+<p><img src="img/TensorBoard_Trace.png" alt="TensorBoard Trace Timeline"></p>
+<p>Use the <code>trace_viewer</code> to get an overall timeline of your deep learning model.</p>
 
 </div>
 </div>
@@ -15374,7 +15384,9 @@ require(
             history: true,
             transition: "slide",
             slideNumber: "",
-            plugins: [RevealNotes]
+            plugins: [RevealNotes],
+			width: 1280,
+			height: 720
         });
 
         var update = function(event){
